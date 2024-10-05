@@ -3,7 +3,7 @@ module.exports = {
 
   purge: [
 
-    './src/**/*.html',
+    './*.html',
 
     './src/**/*.js',
 
