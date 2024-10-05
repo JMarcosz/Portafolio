@@ -8,7 +8,7 @@ module.exports = {
     './src/**/*.js',
 
   ],
-   darkMode: true, // or 'media' or 'class'
+   darkMode: 'class', // or 'media' or 'class'
    theme: {
     colors: {
       'primary': '#4B7CF9',
