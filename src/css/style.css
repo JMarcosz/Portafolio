@@ -744,6 +744,10 @@ video {
   width: 100%;
 }
 
+.w-\[60\%\] {
+  width: 60%;
+}
+
 .max-w-screen-lg {
   max-width: 1024px;
 }
@@ -959,6 +963,11 @@ video {
   line-height: 1rem;
 }
 
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
 .font-bold {
   font-weight: 700;
 }
@@ -1085,6 +1094,10 @@ video {
     margin-top: 100px;
   }
 
+  .sm\:flex {
+    display: flex;
+  }
+
   .sm\:w-\[40\%\] {
     width: 40%;
   }
@@ -1113,6 +1126,16 @@ video {
   .sm\:text-lg {
     font-size: 1.125rem;
     line-height: 1.75rem;
+  }
+
+  .sm\:text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  .sm\:text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
   }
 }
 
