@@ -2,54 +2,70 @@
 @tailwind components;
 @tailwind utilities;
 
+.carousel {
+  margin: 80px auto;
+  padding: 20px 5px;
+  overflow: hidden;
+  display: flex;
+  > * {
+    flex: 0 0 auto;
+  }
 
-@keyframes slide {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(-100%);
-    }
-  }
-  
-  .logos {
-    overflow: hidden;
-    padding: 60px 0;
-    background: white;
-    white-space: nowrap;
-    position: relative;
-  }
-  
-  .logos:before,
-  .logos:after {
-    position: absolute;
-    top: 0;
-    width: 250px;
-    height: 100%;
-    content: "";
-    z-index: 2;
-  }
-  
-  .logos:before {
-    left: 0;
-    background: linear-gradient(to left, rgba(255, 255, 255, 0), white);
-  }
-  
-  .logos:after {
-    right: 0;
-    background: linear-gradient(to right, rgba(255, 255, 255, 0), white);
-  }
-  
-  .logos:hover .logos-slide {
+  &:hover .group {
     animation-play-state: paused;
   }
-  
-  .logos-slide {
-    display: inline-block;
-    animation: 35s slide infinite linear;
+}
+
+@media (min-width: 992px){
+  .carousel{
+    max-width: 100%;
+    > * {
+      flex: 0 0 100%;
+    }
   }
-  
-  .logos-slide img {
-    height: 50px;
-    margin: 0 40px;
+}
+
+.card { 
+  display: flex;
+  margin: 0;
+  width: 100%;
+  border-radius: 24px;
+  box-shadow: rgba(0, 0, 0, 10%) 5px 5px 20px 0;
+  padding: 20px;
+  font-size: xx-large;
+  justify-content: center;
+  align-items: center;
+  min-height: 150px;
+
+}
+
+@media (min-width: 992px){
+  .card { 
+    min-height: 175px;
   }
+}
+
+@media (min-width: 1440px){
+  .card { 
+    min-height:200px;
+  }
+}
+
+.group {
+  display: flex;
+  gap: 20px;
+  /* Agrega padding a la derecha para crear un espacio entre la última y la primera tarjeta. */
+  padding-right: 20px;
+  will-change: transform; /* Deberíamos ser amables con el navegador: hazle saber qué vamos a animar. */
+  animation: scrolling 20s linear infinite;
+
+}
+
+@keyframes scrolling {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
