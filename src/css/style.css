@@ -1160,3 +1160,11 @@ video {
 .dark\:\[\&\>\.card\]\:bg-opacity-5>.card:is(.dark *) {
   --tw-bg-opacity: 0.05;
 }
+
+.dark\:\[\&\>\.card\]\:bg-opacity-20>.card:is(.dark *) {
+  --tw-bg-opacity: 0.2;
+}
+
+.dark\:\[\&\>\.card\]\:bg-opacity-50>.card:is(.dark *) {
+  --tw-bg-opacity: 0.5;
+}
