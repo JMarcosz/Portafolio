@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .carousel {
-  margin: 80px auto;
+  margin: 40px auto;
   padding: 20px 5px;
   overflow: hidden;
   display: flex;
@@ -11,13 +11,23 @@
     flex: 0 0 auto;
   }
 
-  &:hover .group {
+  &:hover .group-skills {
+    animation-play-state: paused;
+  }
+
+  &:hover .group-tools {
     animation-play-state: paused;
   }
 }
 
-@media (min-width: 992px){
-  .carousel{
+
+@media (min-width: 768px){
+  .carousel {
+    margin: 60px auto;
+  }
+}
+@media (min-width: 992px) {
+  .carousel {
     max-width: 100%;
     > * {
       flex: 0 0 100%;
@@ -25,7 +35,7 @@
   }
 }
 
-.card { 
+.card {
   display: flex;
   margin: 0;
   width: 100%;
@@ -36,29 +46,31 @@
   justify-content: center;
   align-items: center;
   min-height: 150px;
-
 }
 
-@media (min-width: 992px){
-  .card { 
+.card img {
+  width: 96px;
+}
+
+@media (min-width: 992px) {
+  .card {
     min-height: 175px;
   }
 }
 
-@media (min-width: 1440px){
-  .card { 
-    min-height:200px;
+@media (min-width: 1440px) {
+  .card {
+    min-height: 200px;
   }
 }
 
-.group {
+.group-skills {
   display: flex;
   gap: 20px;
   /* Agrega padding a la derecha para crear un espacio entre la última y la primera tarjeta. */
   padding-right: 20px;
   will-change: transform; /* Deberíamos ser amables con el navegador: hazle saber qué vamos a animar. */
   animation: scrolling 20s linear infinite;
-
 }
 
 @keyframes scrolling {
@@ -67,5 +79,23 @@
   }
   100% {
     transform: translateX(-100%);
+  }
+}
+
+.group-tools {
+  display: flex;
+  gap: 20px;
+  /* Agrega padding a la derecha para crear un espacio entre la última y la primera tarjeta. */
+  padding-right: 20px;
+  will-change: transform; /* Deberíamos ser amables con el navegador: hazle saber qué vamos a animar. */
+  animation: scrolling-right 20s linear infinite;
+}
+
+@keyframes scrolling-right {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
   }
 }
