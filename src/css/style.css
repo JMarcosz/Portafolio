@@ -873,14 +873,14 @@ video {
   font-style: italic;
 }
 
+.text-b-black {
+  --tw-text-opacity: 1;
+  color: rgb(24 23 23 / var(--tw-text-opacity));
+}
+
 .text-g-gray {
   --tw-text-opacity: 1;
   color: rgb(41 44 47 / var(--tw-text-opacity));
-}
-
-.text-gray-500 {
-  --tw-text-opacity: 1;
-  color: rgb(107 114 128 / var(--tw-text-opacity));
 }
 
 .text-primary {
@@ -896,11 +896,6 @@ video {
 .text-secondary {
   --tw-text-opacity: 1;
   color: rgb(55 58 61 / var(--tw-text-opacity));
-}
-
-.text-b-black {
-  --tw-text-opacity: 1;
-  color: rgb(24 23 23 / var(--tw-text-opacity));
 }
 
 .shadow-2xl {
@@ -1072,11 +1067,6 @@ video {
   --tw-bg-opacity: 0.2;
 }
 
-.dark\:text-gray-400:is(.dark *) {
-  --tw-text-opacity: 1;
-  color: rgb(156 163 175 / var(--tw-text-opacity));
-}
-
 .dark\:text-s-white:is(.dark *) {
   --tw-text-opacity: 1;
   color: rgb(243 244 246 / var(--tw-text-opacity));
@@ -1166,18 +1156,10 @@ video {
   background-color: rgb(55 58 61 / var(--tw-bg-opacity));
 }
 
-.dark\:\[\&\>\.card\]\:bg-opacity-5>.card:is(.dark *) {
-  --tw-bg-opacity: 0.05;
-}
-
-.dark\:\[\&\>\.card\]\:bg-opacity-20>.card:is(.dark *) {
-  --tw-bg-opacity: 0.2;
-}
-
-.dark\:\[\&\>\.card\]\:bg-opacity-50>.card:is(.dark *) {
-  --tw-bg-opacity: 0.5;
-}
-
 .dark\:\[\&\>\.card\]\:bg-opacity-30>.card:is(.dark *) {
   --tw-bg-opacity: 0.3;
+}
+
+.dark\:\[\&\>\.card\]\:bg-opacity-40>.card:is(.dark *) {
+  --tw-bg-opacity: 0.4;
 }
