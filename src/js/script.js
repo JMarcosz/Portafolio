@@ -11,3 +11,8 @@ const darkMode = () => {
     htmlElement.classList.remove('dark') :
     htmlElement.classList.add('dark')
 } 
+
+
+function abrirPDF() {
+  window.open('./src/files/cv.pdf', '_blank');
+}

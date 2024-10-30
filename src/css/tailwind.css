@@ -107,10 +107,21 @@ html {
   }
 }
 
-.bg-custom{
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("../img/2.jpg");
+.bg-custom {
+  background: 
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+    url("../img/2.jpg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  animation: ease-in-out;
+
+}
+.bg-custom:hover {
+  background: 
+    linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), 
+    url("../img/2.jpg");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
 }
-
