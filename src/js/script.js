@@ -11,6 +11,3 @@ const darkMode = () => {
     htmlElement.classList.remove('dark') :
     htmlElement.classList.add('dark')
 } 
-// esta función verifica si la etiqueta html posee la clase dark. Si la posee, la remueve, si no la posee la añade.
-var copy = document.querySelector(".logos-slide").cloneNode(true);
-      document.querySelector(".logos").appendChild(copy);
