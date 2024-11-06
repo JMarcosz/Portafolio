@@ -1387,6 +1387,11 @@ html {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
+.dark\:text-primary:is(.dark *) {
+  --tw-text-opacity: 1;
+  color: rgb(75 124 249 / var(--tw-text-opacity));
+}
+
 .dark\:hover\:bg-b-black:hover:is(.dark *) {
   --tw-bg-opacity: 1;
   background-color: rgb(24 23 23 / var(--tw-bg-opacity));
@@ -1640,6 +1645,11 @@ html {
 .dark\:\[\&\>p\]\:bg-secondary>p:is(.dark *) {
   --tw-bg-opacity: 1;
   background-color: rgb(55 58 61 / var(--tw-bg-opacity));
+}
+
+.dark\:\[\&\>p\]\:text-s-white>p:is(.dark *) {
+  --tw-text-opacity: 1;
+  color: rgb(243 244 246 / var(--tw-text-opacity));
 }
 
 .\[\&\]\:my-1 {
