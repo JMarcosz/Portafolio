@@ -10,7 +10,7 @@ module.exports = {
         "s-white": "#F3F4F6",
         "b-black": "#181717",
         "g-gray": "#292C2F",
-        yellow: "#facc15",
+        "yellow": "#facc15",
       },
 
       animation: {
