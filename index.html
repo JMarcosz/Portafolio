@@ -1,13 +1,19 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth sm:mt-24">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jean Marte</title>
   <link rel="prefetch" href="https://kit.fontawesome.com/4c49a8e13d.jss" as="icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Beau+Rivage&family=Bonheur+Royale&family=Imperial+Script&family=Open+Sans:ital@0;1&display=swap"
+    rel="stylesheet">
   <script src="https://kit.fontawesome.com/4c49a8e13d.js" crossorigin="anonymous" async></script>
   <link rel="stylesheet" href="./src/css/style.css">
+
 </head>
 
 
@@ -15,11 +21,11 @@
   <header class="m-4">
     <div class="w-full max-w-screen-lg 2xl:max-w-screen-xl mx-auto">
       <nav
-        class="flex flex-col sm:flex-row gap-5 items-center justify-between bg-s-white dark:bg-g-gray rounded-lg shadow-lg p-4 md:p-8">
+        class="sm:fixed sm:w-full sm:max-w-screen-lg sm:2xl:max-w-screen-xl mx-auto sm:left-0 sm:right-0 sm:top-1 z-10 flex flex-col sm:flex-row gap-3 items-center justify-between bg-s-white dark:bg-g-gray rounded-lg shadow-lg p-3 md:p-6">
         <div>
           <a href="/">
-            <p class="text-center italic text-g-gray text-base font-bold dark:text-s-white">
-              Portfolio.
+            <p class="firma-name text-center text-g-gray text-3xl font-bold dark:text-s-white">
+              Jean Marte
             </p>
           </a>
 
@@ -27,11 +33,11 @@
 
         <ul class="flex font-bold text-secondary text-center dark:text-s-white">
           <li class="me-8 hover:text-primary hover:underline hover:underline-offset-[10px]">
-            <a href="#skills">Skills & Tools</a>
+            <a href="#projects">Projects</a>
           </li>
 
           <li class="me-8 hover:text-primary hover:underline hover:underline-offset-[10px]">
-            <a href="#">Projects</a>
+            <a href="#skills">Skills</a>
           </li>
 
           <li class="hover:text-primary hover:underline hover:underline-offset-[10px]">
@@ -73,7 +79,8 @@
 
   <main class="w-full max-w-screen-lg 2xl:max-w-screen-xl mx-auto p-4">
     <div class="mb-24">
-      <h1 class="text-center text-xl text-primary dark:text-s-white font-bold my-24">Projects</h1>
+      <h1 id="projects" class="scroll-mt-32 text-center text-xl text-primary dark:text-s-white font-bold my-16">Projects
+      </h1>
       <div
         class="flex flex-col md:flex-row justify-center items-center md:items-stretch sm:justify-center flex-wrap gap-8">
         <div class="flex-1 max-w-80 [&>*]:my-5 shadow-xl p-3 rounded-lg dark:bg-secondary dark:bg-opacity-30">
@@ -141,12 +148,13 @@
 
 
     </div>
-    <div id="skills">
+    <div id="skills" class="z-0 scroll-mt-32">
       <h2 class="text-center text-xl font-bold text-g-gray dark:text-s-white">Programming<span class="text-primary">
           Skills</span></h2>
 
       <div class="carousel">
-        <div class="group-skills dark:[&>.card]:bg-secondary dark:[&>.card]:bg-opacity-30 [&>.card]:shadow-xl dark:[&>.card]:shadow-lg dark:[&>.card]:shadow-g-gray">
+        <div
+          class="group-skills dark:[&>.card]:bg-secondary dark:[&>.card]:bg-opacity-30 [&>.card]:shadow-xl dark:[&>.card]:shadow-lg dark:[&>.card]:shadow-g-gray">
           <div class="card">
             <img src="src/img/skills/html.svg" />
           </div>
@@ -169,7 +177,8 @@
 
         </div>
         <!-- Añade `aria-hidden` para ocultar las tarjetas duplicadas de los lectores de pantalla. -->
-        <div aria-hidden class="group-skills dark:[&>.card]:bg-secondary dark:[&>.card]:bg-opacity-30 [&>.card]:shadow-xl dark:[&>.card]:shadow-lg dark:[&>.card]:shadow-g-gray">
+        <div aria-hidden
+          class="group-skills dark:[&>.card]:bg-secondary dark:[&>.card]:bg-opacity-30 [&>.card]:shadow-xl dark:[&>.card]:shadow-lg dark:[&>.card]:shadow-g-gray">
           <div class="card">
             <img src="src/img/skills/html.svg" />
           </div>
@@ -194,7 +203,8 @@
           class="text-g-gray dark:text-primary">&
           Tools</span></h2>
       <div class="carousel">
-        <div class="group-tools dark:[&>.card]:bg-secondary dark:[&>.card]:bg-opacity-30 [&>.card]:shadow-xl dark:[&>.card]:shadow-lg dark:[&>.card]:shadow-g-gray">
+        <div
+          class="group-tools dark:[&>.card]:bg-secondary dark:[&>.card]:bg-opacity-30 [&>.card]:shadow-xl dark:[&>.card]:shadow-lg dark:[&>.card]:shadow-g-gray">
           <div class="card ">
             <img src="src/img/tools/git.svg" />
           </div>
@@ -218,7 +228,8 @@
           </div>
         </div>
         <!-- Añade `aria-hidden` para ocultar las tarjetas duplicadas de los lectores de pantalla. -->
-        <div aria-hidden class="group-tools dark:[&>.card]:bg-secondary dark:[&>.card]:bg-opacity-30 [&>.card]:shadow-xl dark:[&>.card]:shadow-lg dark:[&>.card]:shadow-g-gray">
+        <div aria-hidden
+          class="group-tools dark:[&>.card]:bg-secondary dark:[&>.card]:bg-opacity-30 [&>.card]:shadow-xl dark:[&>.card]:shadow-lg dark:[&>.card]:shadow-g-gray">
           <div class="card ">
             <img src="src/img/tools/git.svg" />
           </div>
@@ -243,10 +254,10 @@
         </div>
       </div>
 
-      <h2 class="text-center text-primary text-xl font-bold m-16" id="contact">Contact Me</h2>
+      <h2 class="text-center text-primary text-xl font-bold m-16 scroll-mt-32" id="contact">Contact Me</h2>
       <div class="md:flex my-4">
         <div class="md:w-[50%] lg:w-[55%] 2xl:w-[60%] bg-custom py-[50px]">
-          <div class="flex flex-col px-10 2xl:py-8">
+          <div class="flex flex-col px-5 2xl:py-4">
             <h1 class="text-xl font-bold my-3 text-s-white">Software & Web Developer</h1>
             <p class="text-s-white text-base my-1">Are you interested in developing software or web platform for your
               business?
@@ -257,22 +268,22 @@
             <div class="py-4">
               <div class="flex items-center">
                 <i class="fa-solid fa-location-dot text-s-white text-l me-2"></i>
-                <p class="inline-block text-s-white text-xs font-semibold my-3">Distrito Nacional, Republica
+                <p class="inline-block text-s-white text-sm font-semibold my-3">Distrito Nacional, Republica
                   Dominicana</p>
               </div>
               <div class="flex items-center">
                 <i class="fa-solid fa-envelope text-s-white text-lg me-2"></i>
-                <p class="inline-block text-s-white text-xs font-semibold my-3">jeanmarte22@gmail.com</p>
+                <p class="inline-block text-s-white text-sm font-semibold my-3">jeanmarte22@gmail.com</p>
               </div>
               <div class="flex items-center">
                 <i class="fa-solid fa-phone-volume text-s-white text-l me-2"></i>
-                <p class="inline-block text-s-white text-xs font-semibold my-3">+1 (829)-906-9256</p>
+                <p class="inline-block text-s-white text-sm font-semibold my-3">+1 (829)-906-9256</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="md:w-[50%] lg:w-[45%] 2xl:w-[40%] bg-white dark:bg-b-black p-8 shadow-2xl mt-[50px] md:mt-[0]">
+        <div class="md:w-[50%] lg:w-[45%] 2xl:w-[40%] bg-white dark:bg-b-black px-8 shadow-2xl mt-[50px] md:mt-[0]">
           <h2 class="text-center text-g-gray dark:text-s-white text-xl font-semibold m-4">Send a Messange:</h2>
           <form name="contact" method="POST" data-netlify="true"
             class="[&>input]:bg-white dark:[&>input]:bg-b-black [&>input]:border-g-gray dark:[&>input]:border-b-white [&>input]:border-b-[1px]">
@@ -286,12 +297,14 @@
             <input class="block w-full p-2  dark:text-s-white" type="text" name="email">
 
             <label class="block text-g-gray dark:text-s-white my-6" for="message">Message:</label>
-            <textarea class="block w-full h-[100px] rounded-lg dark:text-s-white bg-s-white dark:bg-g-gray"
+            <textarea class="block w-full h-[50px] rounded-lg dark:text-s-white bg-s-white dark:bg-g-gray p-2"
               name="message" id=""></textarea>
+            <div class="flex justify-end my-2">
+              <button
+                class="px-12 py-2 rounded-sm my-6 bg-primary hover:bg-g-gray dark:hover:bg-b-black text-s-white font-bold text-sm"
+                type="submit">Send</button>
+            </div>
 
-            <button
-              class="px-16 py-2 rounded-lg my-6 bg-primary hover:bg-g-gray dark:hover:bg-b-black text-s-white font-bold text-sm"
-              type="submit">Send</button>
           </form>
         </div>
       </div>
@@ -322,8 +335,9 @@
       </nav>
 
       <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700" />
-      <span class="block text-sm text-b-black text-center font-semibold dark:text-s-white">© 2024 <a
-          href="https://flowbite.com/" class="hover:underline">Jean Marte</a>. All Rights Reserved.</span>
+      <span class="block text-sm text-b-black text-center font-semibold dark:text-s-white"><a
+          href="https://www.linkedin.com/in/jean-marte-a6b070178/" class="hover:underline">Developer by Jean Marte</a>.
+        <br>© 2024 All Rights Reserved. </span>
     </div>
   </footer>
 

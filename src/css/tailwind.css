@@ -125,3 +125,15 @@ html {
   background-position: center center;
   background-size: cover;
 }
+
+
+input, textarea {
+
+  outline: none;
+}
+
+.firma-name{
+  font-family: "Beau Rivage", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
