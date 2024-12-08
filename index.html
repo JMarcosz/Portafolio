@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  title>Portfolio - Jean Marte</title>
+  <title>Portfolio - Jean Marte</title>
   <meta name="description"
     content="Custom web development (frontend/backend). Boost your brand with us and join the trend.">
   <link rel="canonical" href="https://jeanmarte.com/">
@@ -13,7 +13,6 @@
   <meta property="og:description"
     content="Custom web development (frontend/backend). Boost your brand with us and join the trend.">
   <meta property="og:url" content="https://jeanmarte.com/">
-
   <link rel="prefetch" href="https://kit.fontawesome.com/4c49a8e13d.jss" as="icon">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,7 +23,6 @@
   <link rel="stylesheet" href="./src/css/style.css">
 
 </head>
-
 
 <body class="dark:bg-b-black">
   <header class="m-4">
@@ -37,9 +35,7 @@
               Jean Marte
             </p>
           </a>
-
         </div>
-
         <ul class="flex font-bold text-secondary text-center dark:text-s-white">
           <li class="me-8 hover:text-primary hover:underline hover:underline-offset-[10px]">
             <a href="#projects">Projects</a>
@@ -54,17 +50,13 @@
           </li>
 
         </ul>
-
         <div
           class="rounded-full w-[45px] h-[45px] cursor-pointer flex items-center justify-center border-2 border-secondary dark:border-s-white"
           id="toggle">
           <i class="fa-solid fa-moon text-3xl text-secondary dark:text-yellow text-center"></i>
         </div>
       </nav>
-
       <div class="flex items-center sm:justify-between w-full max-w-screen-xl my-10">
-
-
         <div class="div w-[80%] sm:w-[40%]">
           <p class="text-3xl sm:text-5xl text-secondary mx-0 mb-3 dark:text-s-white">Hello, I'm <span
               class="font-bold">Jean Marte</span>
@@ -77,7 +69,6 @@
           <button
             class="px-12 py-2 rounded-lg my-6  hover:bg-secondary hover:text-s-white dark:bg-b-black dark:hover:bg-primary text-secondary dark:text-s-white font-bold text-sm border-g-gray dark:border-primary border-2"
             onclick="abrirPDF()">Resume</button>
-
         </div>
         <div class="w-[35%] sm:w-[40%]">
           <img class="w-full" src="./src/img/figuras.png" alt="">
@@ -85,82 +76,58 @@
       </div>
     </div>
   </header>
-
   <main class="w-full max-w-screen-lg 2xl:max-w-screen-xl mx-auto p-4">
     <div class="mb-24">
       <h1 id="projects" class="scroll-mt-32 text-center text-xl text-primary dark:text-s-white font-bold my-16">Projects
       </h1>
-      <div
-        class="flex flex-col md:flex-row justify-center items-center md:items-stretch sm:justify-center flex-wrap gap-8">
-        <div class="flex-1 max-w-80 [&>*]:my-5 shadow-xl p-3 rounded-lg dark:bg-secondary dark:bg-opacity-30">
-          <img src="src/img/projects/portfolio.jpeg" alt="Aqui va un texto">
-          <h3 class="text-g-gray dark:text-white text-lg font-bold px-3">My Portfolio</h3>
+      <div class="">
+        <div class="project-content shadow-xl rounded-lg dark:bg-secondary dark:bg-opacity-30">
+          <div class="project-image">
+            <img src="src/img/projects/bienesraices.jpeg" alt="Apartament images">
+          </div>
+          <div class="project-description text-secondary dark:text-s-white [&>*]:mb-2">
+            <h2>Bienes Raices</h2>
+            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aspernatur voluptate totam optio possimus
+              quibusdam aliquam dolores modi porro provident in.</p>
 
-          <p class="text-g-gray dark:text-white px-3">Personal website in order to showcase my technical skills.</p>
-          <div
-            class="flex justify-between [&>p]:bg-s-white dark:[&>p]:bg-secondary [&>p]:text-primary dark:[&>p]:text-s-white [&>p]:font-semibold [&>p]:p-1 [&>p]:px-2 [&>p]:me-1 px-3">
-            <p>HTML</p>
-            <p>CSS</p>
-            <p>Tailwind</p>
-            <p>JS</p>
+            <div class="project-tools">
+              <h3 class="font-semibold">Tecnologias:</h3>
+              <div class="flex flex-row sm:flex-col justify-around [&>*]:mb-3 [&>*]:gap-2">
+                <div class="tools flex items-center">
+                  <i class="fa-brands fa-html5 text-xl"></i>
+                  <p class="text-base">HTML</p>
+                </div>
+                <div class="tools flex items-center">
+                  <i class="fa-brands fa-css3-alt text-xl"></i>
+                  <p class="text-base">CSS</p>
+                </div>
+                <div class="tools flex items-center">
+                  <i class="fa-brands fa-sass text-xl"></i>
+                  <p class="text-base">SASS</p>
+                </div>
+                <div class="tools flex items-center">
+                  <i class="fa-brands fa-square-js text-xl"></i>
+                  <p class="text-base">JS</p>
+                </div>
+              </div>
+            </div>
+            <div class="project-links ">
+              <div
+                class="btn rounded-lg hover:bg-secondary hover:text-s-white dark:bg-b-black dark:hover:bg-primary text-secondary dark:text-s-white font-bold text-sm border-g-gray dark:border-primary border-2">
+                <a target="_blank" href="https://github.com/JMarcosz/bienesraices-web">Link Repository</a>
+              </div>
+              <div
+                class="btn rounded-lg bg-secondary text-s-white dark:bg-b-black dark:hover:bg-primary dark:text-s-white font-bold text-sm border-g-gray dark:border-primary border-2">
+                <a target="_blank" href="https://bk-app.netlify.app/">Live Demo</a>
+              </div>
+            </div>
           </div>
         </div>
-
-        <div class="flex-1 max-w-80 [&>*]:my-5 shadow-xl p-3 rounded-lg dark:bg-secondary dark:bg-opacity-30">
-          <img src="src/img/projects/bienesraices.jpeg" alt="Aqui va un texto">
-          <h3 class="text-g-gray dark:text-white text-lg font-bold px-3">Bienes Raices</h3>
-
-          <p class="text-g-gray dark:text-white px-3">Frontend project about sales and real estate. Initial design and
-            layout..</p>
-          <div
-            class="flex justify-between [&>p]:bg-s-white dark:[&>p]:bg-secondary [&>p]:text-primary dark:[&>p]:text-s-white [&>p]:font-semibold [&>p]:p-1 [&>p]:px-2 [&>p]:me-1 px-3">
-            <p>HTML</p>
-            <p>CSS</p>
-            <p>SASS</p>
-            <p>JS</p>
-          </div>
-        </div>
-
-
-        <div class="flex-1 max-w-80 [&>*]:my-5 shadow-xl p-3 rounded-lg dark:bg-secondary dark:bg-opacity-30">
-          <img src="src/img/projects/blogcafe.jpeg" alt="Aqui va un texto">
-          <h3 class="text-g-gray dark:text-white text-lg font-bold px-3">Blog Cafe</h3>
-
-          <p class="text-g-gray dark:text-white px-3">Basic frontend project to demonstrate my design and layout skills.
-          </p>
-          <div
-            class="flex justify-between [&>p]:bg-s-white dark:[&>p]:bg-secondary [&>p]:text-primary dark:[&>p]:text-s-white [&>p]:font-semibold [&>p]:p-1 [&>p]:px-2 [&>p]:me-1 px-3">
-            <p>HTML</p>
-            <p>CSS</p>
-            <p>SASS</p>
-            <p>JS</p>
-          </div>
-        </div>
-
-
-        <div class="flex-1 max-w-80 [&>*]:my-5 shadow-xl p-3 rounded-lg dark:bg-secondary dark:bg-opacity-30">
-          <img src="src/img/projects/rockdm.jpeg" alt="Aqui va un texto">
-          <h3 class="text-g-gray dark:text-white text-lg font-bold px-3">Rock & EDM</h3>
-
-          <p class="text-g-gray dark:text-white px-3">Basic frontend project to demonstrate my design and layout skills.
-          </p>
-          <div
-            class="flex justify-between [&>p]:bg-s-white dark:[&>p]:bg-secondary [&>p]:text-primary dark:[&>p]:text-s-white [&>p]:font-semibold [&>p]:p-1 [&>p]:px-2 [&>p]:me-1 px-3">
-            <p>HTML</p>
-            <p>CSS</p>
-            <p>SASS</p>
-            <p>JS</p>
-          </div>
-        </div>
-
       </div>
-
-
     </div>
     <div id="skills" class="z-0 scroll-mt-32">
       <h2 class="text-center text-xl font-bold text-g-gray dark:text-s-white">Programming<span class="text-primary">
           Skills</span></h2>
-
       <div class="carousel">
         <div
           class="group-skills dark:[&>.card]:bg-secondary dark:[&>.card]:bg-opacity-30 [&>.card]:shadow-xl dark:[&>.card]:shadow-lg dark:[&>.card]:shadow-g-gray">
@@ -306,7 +273,7 @@
             <input class="block w-full p-2  dark:text-s-white" type="text" name="email">
 
             <label class="block text-g-gray dark:text-s-white my-6" for="message">Message:</label>
-            <textarea class="block w-full h-[50px] rounded-lg dark:text-s-white bg-s-white dark:bg-g-gray p-2"
+            <textarea class="block w-full h-[100px] rounded-lg dark:text-s-white bg-s-white dark:bg-g-gray p-2"
               name="message" id=""></textarea>
             <div class="flex justify-end my-2">
               <button
