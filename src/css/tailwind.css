@@ -154,6 +154,7 @@ textarea {
 
 .project-description h3 {
   margin-bottom: 15px;
+  font-weight: 600;
 }
 
 .project-links {

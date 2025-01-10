@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" class="scroll-smooth sm:mt-24">
+<html lang="es" class="scroll-smooth">
 
 <head>
   <meta charset="UTF-8">
@@ -28,7 +28,7 @@
   <header class="m-4">
     <div class="w-full max-w-screen-lg 2xl:max-w-screen-xl mx-auto">
       <nav
-        class="sm:fixed sm:w-full sm:max-w-screen-lg sm:2xl:max-w-screen-xl mx-auto sm:left-0 sm:right-0 sm:top-1 z-10 flex flex-col sm:flex-row gap-3 items-center justify-between bg-s-white dark:bg-g-gray rounded-lg shadow-lg p-3 md:p-6">
+        class="sm:w-full sm:max-w-screen-lg sm:2xl:max-w-screen-xl mx-auto sm:left-0 sm:right-0 sm:top-1 z-10 flex flex-col sm:flex-row gap-3 items-center justify-between bg-s-white dark:bg-g-gray rounded-lg shadow-lg p-3 md:p-6">
         <div>
           <a href="/">
             <p class="firma-name text-center text-g-gray text-3xl font-bold dark:text-s-white">
@@ -77,35 +77,79 @@
     </div>
   </header>
   <main class="w-full max-w-screen-lg 2xl:max-w-screen-xl mx-auto p-4">
-    <div class="mb-24">
-      <h1 id="projects" class="scroll-mt-32 text-center text-xl text-primary dark:text-s-white font-bold my-16">Projects
+    <div class="[&>*]:mb-24">
+      <h1 id="projects" class="text-center text-xl text-primary dark:text-s-white font-bold my-16">Projects
       </h1>
-      <div class="">
+      <div> <!-- Proyecto 1 -->
+        <div class="project-content shadow-xl rounded-lg dark:bg-secondary dark:bg-opacity-30">
+          <div class="project-image">
+            <img src="src/img/projects/portfolio.jpeg" alt="Apartament images">
+          </div>
+          <div class="project-description text-secondary dark:text-s-white [&>*]:mb-2">
+            <h2>My Portfolio</h2>
+            <p>Professional web portfolio designed to showcase my skills and a curated collection of projects developed over the years. Dive into my journey and discover how passion meets expertise!</p>
+
+            <div class="project-tools">
+              <h3>Tecnologias:</h3>
+              <div class="flex flex-row sm:flex-col justify-around [&>*]:mb-3 [&>*]:gap-2">
+                <div class="flex items-center">
+                  <i class="fa-brands fa-html5 text-xl"></i>
+                  <p class="text-base">HTML</p>
+                </div>
+                <div class="flex items-center">
+                  <i class="fa-brands fa-css3-alt text-xl"></i>
+                  <p class="text-base">CSS</p>
+                </div>
+                <div class="flex items-center">
+                  <i class="fa-brands fa-sass text-xl"></i>
+                  <p class="text-base">SASS</p>
+                </div>
+                <div class="flex items-center">
+                  <i class="fa-brands fa-square-js text-xl"></i>
+                  <p class="text-base">JS</p>
+                </div>
+              </div>
+            </div>
+            <div class="project-links ">
+              <div
+                class="btn rounded-lg hover:bg-secondary hover:text-s-white dark:bg-b-black dark:hover:bg-primary text-secondary dark:text-s-white font-bold text-sm border-g-gray dark:border-primary border-2">
+                <a target="_blank" href="https://github.com/JMarcosz/Portafolio">Link Repository</a>
+              </div>
+              <div
+                class="btn rounded-lg bg-secondary text-s-white dark:bg-b-black dark:hover:bg-primary dark:text-s-white font-bold text-sm border-g-gray dark:border-primary border-2">
+                <a href="/">Live Demo</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> <!-- fin proyecto  -->
+
+      <div> <!-- Proyecto -->
         <div class="project-content shadow-xl rounded-lg dark:bg-secondary dark:bg-opacity-30">
           <div class="project-image">
             <img src="src/img/projects/bienesraices.jpeg" alt="Apartament images">
           </div>
           <div class="project-description text-secondary dark:text-s-white [&>*]:mb-2">
             <h2>Bienes Raices</h2>
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aspernatur voluptate totam optio possimus
-              quibusdam aliquam dolores modi porro provident in.</p>
+            <p>
+              Freelance project crafted for practical purposes, featuring a dynamic website dedicated to real estate. Explore a seamless blend of functionality and design tailored to the industry!</p>
 
             <div class="project-tools">
-              <h3 class="font-semibold">Tecnologias:</h3>
+              <h3>Tecnologias:</h3>
               <div class="flex flex-row sm:flex-col justify-around [&>*]:mb-3 [&>*]:gap-2">
-                <div class="tools flex items-center">
+                <div class="flex items-center">
                   <i class="fa-brands fa-html5 text-xl"></i>
                   <p class="text-base">HTML</p>
                 </div>
-                <div class="tools flex items-center">
+                <div class="flex items-center">
                   <i class="fa-brands fa-css3-alt text-xl"></i>
                   <p class="text-base">CSS</p>
                 </div>
-                <div class="tools flex items-center">
+                <div class="flex items-center">
                   <i class="fa-brands fa-sass text-xl"></i>
                   <p class="text-base">SASS</p>
                 </div>
-                <div class="tools flex items-center">
+                <div class="flex items-center">
                   <i class="fa-brands fa-square-js text-xl"></i>
                   <p class="text-base">JS</p>
                 </div>
@@ -123,9 +167,55 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> <!-- fin proyecto  -->
+
+      <div> <!-- Proyecto -->
+        <div class="project-content shadow-xl rounded-lg dark:bg-secondary dark:bg-opacity-30">
+          <div class="project-image">
+            <img src="src/img/projects/rockdm.jpeg" alt="Apartament images">
+          </div>
+          <div class="project-description text-secondary dark:text-s-white [&>*]:mb-2">
+            <h2>Rock & EDM</h2>
+            <p>A captivating landing page designed to promote a one-of-a-kind event in the city, crafted exclusively for informational purposes. Engage, inform, and inspire!</p>
+
+            <div class="project-tools">
+              <h3>Tecnologias:</h3>
+              <div class="flex flex-row sm:flex-col justify-around [&>*]:mb-3 [&>*]:gap-2">
+                <div class="flex items-center">
+                  <i class="fa-brands fa-html5 text-xl"></i>
+                  <p class="text-base">HTML</p>
+                </div>
+                <div class="flex items-center">
+                  <i class="fa-brands fa-css3-alt text-xl"></i>
+                  <p class="text-base">CSS</p>
+                </div>
+                <div class="flex items-center">
+                  <i class="fa-brands fa-sass text-xl"></i>
+                  <p class="text-base">SASS</p>
+                </div>
+                <div class="flex items-center">
+                  <i class="fa-brands fa-square-js text-xl"></i>
+                  <p class="text-base">JS</p>
+                </div>
+              </div>
+            </div>
+            <div class="project-links ">
+              <div
+                class="btn rounded-lg hover:bg-secondary hover:text-s-white dark:bg-b-black dark:hover:bg-primary text-secondary dark:text-s-white font-bold text-sm border-g-gray dark:border-primary border-2">
+                <a target="_blank" href="https://github.com/JMarcosz/bienesraices-web">Link Repository</a>
+              </div>
+              <div
+                class="btn rounded-lg bg-secondary text-s-white dark:bg-b-black dark:hover:bg-primary dark:text-s-white font-bold text-sm border-g-gray dark:border-primary border-2">
+                <a target="_blank" href="https://bk-app.netlify.app/">Live Demo</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> <!-- fin proyecto  -->
     </div>
-    <div id="skills" class="z-0 scroll-mt-32">
+
+
+    <div id="skills" class="z-0">
       <h2 class="text-center text-xl font-bold text-g-gray dark:text-s-white">Programming<span class="text-primary">
           Skills</span></h2>
       <div class="carousel">
@@ -230,7 +320,7 @@
         </div>
       </div>
 
-      <h2 class="text-center text-primary text-xl font-bold m-16 scroll-mt-32" id="contact">Contact Me</h2>
+      <h2 class="text-center text-primary text-xl font-bold m-16" id="contact">Contact Me</h2>
       <div class="md:flex my-4">
         <div class="md:w-[50%] lg:w-[55%] 2xl:w-[60%] bg-custom py-[50px]">
           <div class="flex flex-col px-5 2xl:py-4">
