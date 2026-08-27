@@ -48,12 +48,15 @@ async function buildIcon(size, outFile, { padding = 0 } = {}) {
 
 // ---------- tarjeta de Open Graph, CUADRADA (1200x1200) ----------
 //
-// WhatsApp decide entre su tarjeta "grande" (imagen arriba, todo el ancho) y la
-// "chica" (miniatura recortada al costado) según la proporción de og:image: con
-// panorámicas tipo 1200x630 (el estándar 1.91:1 de Facebook/Twitter/LinkedIn)
-// WhatsApp específicamente recorta un cuadrado y muestra la tarjeta chica —
-// verificado: así se veía. Con una imagen ya cuadrada, WhatsApp la muestra grande.
-// Facebook/Twitter/LinkedIn aceptan cuadrada igual de bien (solo usan el mínimo).
+// Probado dos veces: con 1200x630 (el estándar 1.91:1 de Facebook/Twitter/
+// LinkedIn) WhatsApp seguía mostrando la tarjeta chica incluso con la URL
+// cache-busteada (?v=2), así que no era caché. La prueba que lo confirmó: el
+// HTML fuente de yoelbaez.com (la referencia que sí se ve grande) no tiene NI
+// UN tag Open Graph — WhatsApp cae de vuelta a su <link rel="icon">, que mide
+// 2134x2134 (cuadrado). Conclusión verificada, no supuesta: para el crawler de
+// WhatsApp la imagen tiene que ser cuadrada, sin importar lo que diga el spec
+// de Open Graph que usan Facebook/Twitter/LinkedIn — esas tres plataformas
+// aceptan cuadrada igual de bien (solo exigen un mínimo).
 
 async function buildOgImage() {
   const size = 1200;
