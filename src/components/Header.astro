@@ -100,13 +100,27 @@ import { nav } from "../data/site";
   const iconOpen = document.getElementById("menu-icon-open");
   const iconClose = document.getElementById("menu-icon-close");
 
+  // El fondo del header (.header-bg) es opaco/con blur si se cumple CUALQUIERA de
+  // las dos condiciones: se scrolleó pasado el umbral, o el menú móvil está abierto.
+  // Antes sólo dependía del scroll — si lo abrías en scrollY:0 (muy común: entrar a
+  // la página y tocar el menú antes de scrollear) el header quedaba transparente y
+  // el Hero se veía a través del menú desplegado.
+  const headerBg = document.querySelector<HTMLElement>(".header-bg");
+  let scrolledPastThreshold = false;
+  let menuOpen = false;
+
+  const syncHeaderBg = () => {
+    headerBg?.classList.toggle("is-active", scrolledPastThreshold || menuOpen);
+  };
+
   toggle?.addEventListener("click", () => {
-    const isOpen = !menu?.classList.contains("hidden");
+    menuOpen = menu?.classList.contains("hidden") ?? false;
     menu?.classList.toggle("hidden");
     menu?.classList.toggle("flex");
     iconOpen?.classList.toggle("hidden");
     iconClose?.classList.toggle("hidden");
-    toggle.setAttribute("aria-expanded", String(!isOpen));
+    toggle.setAttribute("aria-expanded", String(menuOpen));
+    syncHeaderBg();
   });
 
   document.querySelectorAll<HTMLAnchorElement>('#mobile-menu [data-nav-link]').forEach((link) => {
@@ -116,6 +130,8 @@ import { nav } from "../data/site";
       iconOpen?.classList.remove("hidden");
       iconClose?.classList.add("hidden");
       toggle?.setAttribute("aria-expanded", "false");
+      menuOpen = false;
+      syncHeaderBg();
     });
   });
 
@@ -194,7 +210,6 @@ import { nav } from "../data/site";
   // así que el navegador recalculaba el desenfoque de todo lo que pasaba por detrás
   // en cada frame de scroll — justo cuando se notaba el tirón. Ahora el blur sólo
   // existe mientras la clase está puesta, y el fundido lo hace una transición CSS.
-  const headerBg = document.querySelector<HTMLElement>(".header-bg");
   if (headerBg) {
     if (prefersReducedMotion()) {
       headerBg.classList.add("is-active");
@@ -202,8 +217,14 @@ import { nav } from "../data/site";
       ScrollTrigger.create({
         trigger: document.body,
         start: "top -60",
-        onEnter: () => headerBg.classList.add("is-active"),
-        onLeaveBack: () => headerBg.classList.remove("is-active"),
+        onEnter: () => {
+          scrolledPastThreshold = true;
+          syncHeaderBg();
+        },
+        onLeaveBack: () => {
+          scrolledPastThreshold = false;
+          syncHeaderBg();
+        },
       });
     }
   }
