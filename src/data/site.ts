@@ -19,7 +19,7 @@ export const hero = {
   description:
     "Ingeniero enfocado en construir soluciones digitales que resuelven problemas concretos. Combino criterio técnico con atención al detalle para entregar proyectos que funcionan bien y se ven bien.",
   cta: "Contáctame",
-  photo: "/foto_personal.jpeg",
+  photo: "/foto_personal.webp",
   cvLabel: "Ver CV",
   cvFile: "/CV Jean Marte Full Stack Spanish Version.pdf",
 };
@@ -89,7 +89,7 @@ export const projects = {
     tags: ["Vue 3", "NestJS", "PostgreSQL", "Gemini AI"],
     link: "https://github.com/JMarcosz/FacturasRD",
     demo: "https://zentra.jeanmarte.com",
-    image: "/zentrav2.jpeg",
+    image: "/zentrav2.webp",
   },
   client: {
     badge: "Cliente",
@@ -100,7 +100,7 @@ export const projects = {
     tags: ["Laravel 12", "React 19", "PostgreSQL"],
     link: "https://github.com/JMarcosz/SantoralLogistic",
     demo: "https://santorallogistics.jeanmarte.com",
-    image: "/santorallogisticsv2.jpeg",
+    image: "/santorallogisticsv2.webp",
   },
   toolset: {
     title: "Herramientas que uso",
