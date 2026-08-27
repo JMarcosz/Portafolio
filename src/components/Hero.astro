@@ -12,7 +12,12 @@ import { hero } from "../data/site";
   <div class="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-16 px-6 py-24 md:grid-cols-2">
     <div>
       <p class="eyebrow mb-4" data-hero-eyebrow>{hero.eyebrow}</p>
-      <h1 class="text-5xl font-bold leading-[1.05] tracking-tight md:text-6xl">
+      <!-- aria-label lleva el nombre completo + rol para SEO/lectores de pantalla,
+           sin tocar el copy visual diseñado ("Hola, soy Jean Marco"). -->
+      <h1
+        aria-label="Jean Marco Marte — Ingeniero de Software Full Stack"
+        class="text-5xl font-bold leading-[1.05] tracking-tight md:text-6xl"
+      >
         <span class="block overflow-hidden">
           <span class="block text-white/90" data-hero-line1>{hero.title1}</span>
         </span>

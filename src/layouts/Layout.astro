@@ -7,12 +7,53 @@ import interLatin from "@fontsource-variable/inter/files/inter-latin-wght-normal
 interface Props {
   title?: string;
   description?: string;
+  /** Ruta absoluta o relativa al sitio de la imagen para compartir (Open Graph / Twitter). */
+  image?: string;
 }
 
 const {
-  title = "Jean Marco — Ingeniero de Software",
-  description = "Portafolio profesional de Jean Marco: proyectos, experiencia, certificaciones y contacto.",
+  title = "Jean Marco Marte — Ingeniero de Software Full Stack | RD",
+  description = "Portafolio de Jean Marco Marte, Ingeniero de Software Full Stack en República Dominicana. Angular, Vue/Nuxt, React/Next, .NET, Laravel y Docker — proyectos, experiencia y contacto.",
+  image = "/og-image.jpg",
 } = Astro.props;
+
+// Astro.site viene de `site` en astro.config.mjs — hace falta para que canonical
+// y las imágenes de Open Graph sean URLs absolutas (las relativas no funcionan
+// al compartir el enlace en WhatsApp/LinkedIn, que no resuelven contra el HTML).
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageURL = new URL(image, Astro.site);
+
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Jean Marco Marte",
+  jobTitle: "Ingeniero de Software Full Stack",
+  url: Astro.site?.toString(),
+  image: ogImageURL.toString(),
+  email: "mailto:jeanmarte22@gmail.com",
+  address: { "@type": "PostalAddress", addressCountry: "DO" },
+  sameAs: [
+    "https://www.linkedin.com/in/jean-marte-a6b070178/",
+    "https://github.com/JMarcosz",
+    "https://www.instagram.com/jeanwebdesing/",
+  ],
+  alumniOf: [
+    { "@type": "CollegeOrUniversity", name: "Universidad Domínico Americana (UNICDA)" },
+    { "@type": "CollegeOrUniversity", name: "Instituto Tecnológico de las Américas (ITLA)" },
+  ],
+  knowsAbout: [
+    "Angular",
+    "Vue.js",
+    "Nuxt.js",
+    "React",
+    "Next.js",
+    "TypeScript",
+    "Node.js",
+    ".NET",
+    "Laravel",
+    "Docker",
+  ],
+};
 ---
 
 <!doctype html>
@@ -20,10 +61,40 @@ const {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Favicon + íconos de app: generados desde la foto real con scripts/generate-assets.mjs -->
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#050505" />
+
     <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin />
-    <meta name="description" content={description} />
+
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Jean Marco Marte" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="profile" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:site_name" content="Jean Marco Marte" />
+    <meta property="og:locale" content="es_DO" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Jean Marco Marte — Ingeniero de Software Full Stack" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
   </head>
   <!-- overflow-x-clip (no -hidden): `hidden` obligaría a overflow-y a `auto` y
        convertiría al body en contenedor de scroll, interfiriendo con Lenis. -->
