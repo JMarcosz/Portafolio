@@ -4,9 +4,10 @@
 export const nav = [
   { label: "Inicio", href: "#inicio" },
   { label: "Sobre mí", href: "#sobre-mi" },
-  { label: "Certificados", href: "#certificados" },
   { label: "Proyectos", href: "#proyectos" },
   { label: "Experiencia", href: "#experiencia" },
+  { label: "Formación", href: "#formacion" },
+  { label: "Certificados", href: "#certificados" },
   { label: "Habilidades", href: "#habilidades" },
   { label: "Contacto", href: "#contacto" },
 ];
@@ -157,6 +158,25 @@ export const experience: ExperienceItem[] = [
   },
 ];
 
+export type EducationItem = {
+  period: string;
+  degree: string;
+  institution: string;
+};
+
+export const education: EducationItem[] = [
+  {
+    period: "2025 — 2027",
+    degree: "Ingeniería de Software",
+    institution: "Universidad Domínico Americana (UNICDA)",
+  },
+  {
+    period: "2022 — 2024",
+    degree: "Tecnólogo en Desarrollo de Software",
+    institution: "Instituto Tecnológico de las Américas (ITLA)",
+  },
+];
+
 export type SkillItem = { label: string; percent: number };
 export type SkillCategory = {
   index: string;
@@ -229,6 +249,19 @@ export const contact = {
   email: "jeanmarte22@gmail.com",
   location: "República Dominicana · Remoto",
 };
+
+export type SocialLink = {
+  label: string;
+  href: string;
+  icon: "linkedin" | "instagram" | "whatsapp" | "email";
+};
+
+export const socials: SocialLink[] = [
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/jean-marte-a6b070178/", icon: "linkedin" },
+  { label: "Instagram", href: "https://www.instagram.com/jeanwebdesing/", icon: "instagram" },
+  { label: "WhatsApp", href: "https://wa.me/18299069256", icon: "whatsapp" },
+  { label: "Email", href: "mailto:jeanmarte22@gmail.com", icon: "email" },
+];
 
 export const footer = {
   name: "Jean Marco",
