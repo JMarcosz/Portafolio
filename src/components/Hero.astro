@@ -2,7 +2,11 @@
 import { hero } from "../data/site";
 ---
 
-<section id="inicio" class="relative flex min-h-screen items-center overflow-hidden pt-16" data-hero-section>
+<!-- overflow-x-clip, no overflow-hidden: `overflow-hidden` afecta ambos ejes y
+     convierte al Hero en contenedor de scroll, de modo que un gesto táctil que
+     empieza acá (justo donde cae el primer scroll al cargar) lo consume él en vez
+     de desplazar la página. Sólo hace falta contener el eje horizontal. -->
+<section id="inicio" class="relative flex min-h-screen items-center overflow-x-clip pt-16" data-hero-section>
   <canvas data-hero-particles class="absolute inset-0 -z-10 h-full w-full" aria-hidden="true"></canvas>
 
   <div class="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-16 px-6 py-24 md:grid-cols-2">

@@ -25,7 +25,9 @@ const {
     <meta name="description" content={description} />
     <title>{title}</title>
   </head>
-  <body class="overflow-x-hidden bg-bg text-ink">
+  <!-- overflow-x-clip (no -hidden): `hidden` obligaría a overflow-y a `auto` y
+       convertiría al body en contenedor de scroll, interfiriendo con Lenis. -->
+  <body class="overflow-x-clip bg-bg text-ink">
     <div id="preloader" aria-hidden="true">
       <div class="preloader-panel l"></div>
       <div class="preloader-panel r"></div>
