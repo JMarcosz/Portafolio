@@ -10,7 +10,7 @@ const items = [featured, client];
     Mis <span class="font-extrabold">Proyectos</span>
   </h2>
 
-  <div class="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2" style="perspective: 900px;">
+  <div data-projects-grid class="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2">
     {
       items.map((project) => (
         <article data-project-card class="card flex flex-col overflow-hidden">
@@ -114,27 +114,43 @@ const items = [featured, client];
 
 <script>
   import { gsap, hasFinePointer, floatIdle, prefersReducedMotion } from "../scripts/motion";
+  import { onSectionRevealed } from "../scripts/section-transitions";
 
   const cards = document.querySelectorAll<HTMLElement>("[data-project-card]");
+  const grid = document.querySelector<HTMLElement>("[data-projects-grid]");
+
+  // La perspectiva sólo hace falta mientras el tilt 3D puede activarse. Aplicarla
+  // siempre metía la grilla en contexto de render 3D permanente, también en mobile
+  // (90% del tráfico), donde el tilt ni siquiera existe.
+  if (grid && hasFinePointer() && !prefersReducedMotion()) {
+    grid.style.perspective = "900px";
+  }
 
   // Familia de entrada: profundidad ascendente — scale + translateY a la vez,
   // no una traslación plana como el resto de las secciones.
+  //
+  // Se encadena a `section:revealed` en vez de a su propio ScrollTrigger: antes el
+  // slide de la sección (top 88%) y esta animación (top 78%) se solapaban, y el
+  // navegador terminaba componiendo transformaciones anidadas sobre un subárbol con
+  // las dos imágenes más pesadas del sitio. Ese solapamiento era el tirón.
   if (!prefersReducedMotion()) {
     gsap.set(cards, { autoAlpha: 0, y: 30, scale: 0.92 });
-    gsap.set("[data-project-img]", { scale: 1.08 });
 
-    gsap.to(cards, {
-      autoAlpha: 1,
-      y: 0,
-      scale: 1,
-      duration: 0.8,
-      stagger: 0.12,
-      ease: "power3.out",
-      scrollTrigger: { trigger: "#proyectos", start: "top 78%", once: true },
-      onComplete: () => {
-        gsap.to("[data-project-img]", { scale: 1, duration: 0.8, ease: "power3.out" });
-        cards.forEach((card) => floatIdle(card, 2.5));
-      },
+    onSectionRevealed(document.getElementById("proyectos"), () => {
+      gsap.to(cards, {
+        autoAlpha: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.8,
+        stagger: 0.12,
+        ease: "power3.out",
+        force3D: true,
+        onStart: () => cards.forEach((card) => (card.style.willChange = "transform, opacity")),
+        onComplete: () => {
+          cards.forEach((card) => (card.style.willChange = ""));
+          cards.forEach((card) => floatIdle(card, 2.5));
+        },
+      });
     });
   }
 

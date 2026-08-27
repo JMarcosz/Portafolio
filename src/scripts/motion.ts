@@ -42,9 +42,27 @@ export function onScrollIn(
   });
 }
 
-/** Flotación ambiental continua: se pausa fuera de viewport y respeta reduced-motion. */
+/**
+ * Registro de las flotaciones ambientales activas.
+ *
+ * Un tween sólo corre si se cumplen las dos condiciones a la vez: el elemento está
+ * en viewport (`inView`) y su sección no está oculta (`sectionVisible`). Hacen falta
+ * las dos porque `autoAlpha: 0` deja `visibility: hidden`, y IntersectionObserver no
+ * detecta eso — sólo detecta `display: none`.
+ */
+type FloatEntry = { tween: gsap.core.Tween; inView: boolean; sectionVisible: boolean };
+const floats = new Map<Element, FloatEntry>();
+
+function syncFloat(entry: FloatEntry) {
+  if (entry.inView && entry.sectionVisible) entry.tween.play();
+  else entry.tween.pause();
+}
+
+/** Flotación ambiental continua. Desactivada en touch y bajo reduced-motion. */
 export function floatIdle(el: Element, amplitude = 3) {
-  if (prefersReducedMotion()) return;
+  // En mobile el efecto casi no se percibe y es donde más cuesta: son hasta 10 tweens
+  // infinitos simultáneos sobre subárboles que incluyen imágenes grandes.
+  if (prefersReducedMotion() || !hasFinePointer()) return;
 
   const tween = gsap.to(el, {
     yPercent: amplitude,
@@ -55,16 +73,39 @@ export function floatIdle(el: Element, amplitude = 3) {
     delay: gsap.utils.random(0, 1),
   });
 
+  const entry: FloatEntry = { tween, inView: false, sectionVisible: true };
+  floats.set(el, entry);
+
   const io = new IntersectionObserver(
-    ([entry]) => {
-      if (entry.isIntersecting) tween.play();
-      else tween.pause();
+    ([observed]) => {
+      entry.inView = observed.isIntersecting;
+      syncFloat(entry);
     },
     { threshold: 0.1 }
   );
   io.observe(el);
 
   return tween;
+}
+
+/** Pausa las flotaciones dentro de `root` (lo llama section-transitions al ocultar una sección). */
+export function pauseFloatsIn(root: Element) {
+  floats.forEach((entry, el) => {
+    if (root.contains(el)) {
+      entry.sectionVisible = false;
+      syncFloat(entry);
+    }
+  });
+}
+
+/** Reanuda las flotaciones dentro de `root` cuando su sección vuelve a mostrarse. */
+export function resumeFloatsIn(root: Element) {
+  floats.forEach((entry, el) => {
+    if (root.contains(el)) {
+      entry.sectionVisible = true;
+      syncFloat(entry);
+    }
+  });
 }
 
 export { gsap, ScrollTrigger, SplitText, Flip };
