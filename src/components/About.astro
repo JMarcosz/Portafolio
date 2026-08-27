@@ -2,32 +2,114 @@
 import { about } from "../data/site";
 ---
 
-<section id="sobre-mi" class="mx-auto max-w-6xl px-6 py-24">
+<section id="sobre-mi" data-slide-section class="mx-auto max-w-6xl px-6 py-24">
   <div class="grid grid-cols-1 gap-12 md:grid-cols-2">
     <div>
       <p class="eyebrow mb-4">{about.eyebrow}</p>
-      <h2 class="text-4xl font-bold tracking-tight">
+      <h2 data-about-heading class="text-4xl font-bold tracking-tight">
         <span class="block text-white/90">{about.title1}</span>
         <span class="block font-extrabold">{about.title2}</span>
       </h2>
     </div>
 
-    <div class="space-y-4 text-sm leading-relaxed text-white/50">
+    <div data-about-copy class="space-y-4 text-sm leading-relaxed text-white/50">
       {about.paragraphs.map((p) => <p>{p}</p>)}
       <p>
-        Me interesa el punto donde <span class="font-semibold text-white">{about.highlight}</span>{about.paragraphAfterHighlight}
+        Me interesa el punto donde <span data-about-highlight class="font-semibold text-white">{about.highlight}</span>{about.paragraphAfterHighlight}
       </p>
     </div>
   </div>
 
   <div class="mt-20 grid grid-cols-2 gap-8 border-t border-white/10 pt-10 md:grid-cols-4">
     {
-      about.stats.map((stat) => (
-        <div>
-          <p class="text-3xl font-bold tracking-tight">{stat.value}</p>
-          <p class="mt-1 text-[11px] uppercase tracking-wider text-white/40">{stat.label}</p>
-        </div>
-      ))
+      about.stats.map((stat) => {
+        const match = stat.value.match(/^(\d+)(.*)$/);
+        const numeric = match ? match[1] : "0";
+        const suffix = match ? match[2] : "";
+        return (
+          <div data-stat>
+            <p class="text-3xl font-bold tracking-tight" data-stat-value data-target={numeric} data-suffix={suffix}>
+              0{suffix}
+            </p>
+            <p class="mt-1 text-[11px] uppercase tracking-wider text-white/40">{stat.label}</p>
+          </div>
+        );
+      })
     }
   </div>
 </section>
+
+<script>
+  import { gsap, ScrollTrigger, SplitText, prefersReducedMotion } from "../scripts/motion";
+
+  const heading = document.querySelector<HTMLElement>("[data-about-heading]");
+  const copy = document.querySelector<HTMLElement>("[data-about-copy]");
+
+  // Familia de entrada: máscara de línea (nunca por carácter — eso ya lo usó el Hero).
+  if (heading && copy && !prefersReducedMotion()) {
+    const headingSplit = new SplitText(heading, { type: "lines", mask: "lines" });
+    const copySplit = new SplitText(copy.querySelectorAll("p"), { type: "lines", mask: "lines" });
+
+    gsap.set([...headingSplit.lines, ...copySplit.lines], { yPercent: 105 });
+
+    gsap
+      .timeline({
+        scrollTrigger: { trigger: "#sobre-mi", start: "top 75%", once: true },
+        defaults: { ease: "expo.out", duration: 0.85 },
+      })
+      .to(headingSplit.lines, { yPercent: 0, stagger: 0.04 })
+      .to(copySplit.lines, { yPercent: 0, stagger: 0.04 }, "-=0.55");
+  }
+
+  // Importante: se vuelve a consultar el DOM recién acá — SplitText reconstruye el
+  // interior del <p> al partirlo en líneas, así que una referencia capturada antes
+  // de ese punto quedaría apuntando a un nodo huérfano ya desprendido del documento.
+  const highlight = document.querySelector<HTMLElement>("[data-about-highlight]");
+  if (highlight) {
+    if (prefersReducedMotion()) {
+      highlight.style.textDecoration = "underline";
+    } else {
+      gsap.set(highlight, {
+        backgroundImage: "linear-gradient(currentColor, currentColor)",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "0 100%",
+        backgroundSize: "0% 2px",
+      });
+      gsap.to(highlight, {
+        backgroundSize: "100% 2px",
+        duration: 0.6,
+        ease: "power2.out",
+        delay: 0.5,
+        scrollTrigger: { trigger: "#sobre-mi", start: "top 75%", once: true },
+      });
+    }
+  }
+
+  // Stats: cuentan de 0 al valor real, arranque escalonado entre cada uno.
+  document.querySelectorAll<HTMLElement>("[data-stat-value]").forEach((el, i) => {
+    const target = parseInt(el.dataset.target || "0", 10);
+    const suffix = el.dataset.suffix || "";
+
+    ScrollTrigger.create({
+      trigger: el,
+      start: "top 85%",
+      once: true,
+      onEnter: () => {
+        if (prefersReducedMotion()) {
+          el.textContent = target + suffix;
+          return;
+        }
+        const counter = { val: 0 };
+        gsap.to(counter, {
+          val: target,
+          duration: 1.1,
+          delay: i * 0.1,
+          ease: "power3.out",
+          onUpdate: () => {
+            el.textContent = Math.round(counter.val) + suffix;
+          },
+        });
+      },
+    });
+  });
+</script>

@@ -11,8 +11,13 @@
 
 @layer base {
   html {
-    scroll-behavior: smooth;
+    /* El scroll suave lo maneja Lenis (src/scripts/smooth-scroll.ts); scroll-behavior
+       nativo se deja fuera a propósito para que no compita con el rAF de Lenis. */
     scroll-padding-top: 5.5rem;
+    /* El scroll horizontal de la página ocurre acá (en <html>), no en <body> —
+       overflow-x-hidden en body solo no alcanza para contener las secciones que
+       se traducen fuera de pantalla en su salida animada (section-transitions.ts). */
+    overflow-x: hidden;
   }
 
   body {
@@ -43,4 +48,52 @@
   .btn-primary {
     @apply inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-black transition-opacity hover:opacity-85;
   }
+}
+
+/* ---------- Preloader: "primera carga", una sola vez por visita ---------- */
+
+#preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.preloader-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background: var(--color-bg);
+}
+.preloader-panel.l {
+  left: 0;
+}
+.preloader-panel.r {
+  right: 0;
+}
+
+.preloader-mark {
+  position: relative;
+  z-index: 1;
+  font-weight: 700;
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+  opacity: 0;
+  transform: scale(0.85);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #preloader {
+    display: none;
+  }
+}
+
+/* ---------- Hero: campo de partículas dispersas (src/scripts/particle-field.ts) ---------- */
+
+[data-hero-particles] {
+  pointer-events: none;
 }

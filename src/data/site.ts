@@ -19,7 +19,9 @@ export const hero = {
   description:
     "Ingeniero enfocado en construir soluciones digitales que resuelven problemas concretos. Combino criterio técnico con atención al detalle para entregar proyectos que funcionan bien y se ven bien.",
   cta: "Contáctame",
-  initials: "JM",
+  photo: "/foto_personal.jpeg",
+  cvLabel: "Ver CV",
+  cvFile: "/CV Jean Marte Full Stack Spanish Version.pdf",
 };
 
 export type Certificate = {

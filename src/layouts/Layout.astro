@@ -22,6 +22,42 @@ const {
     <title>{title}</title>
   </head>
   <body class="overflow-x-hidden bg-bg text-ink">
+    <div id="preloader" aria-hidden="true">
+      <div class="preloader-panel l"></div>
+      <div class="preloader-panel r"></div>
+      <span class="preloader-mark">JM</span>
+    </div>
+
     <slot />
+
+    <script>
+      import "../scripts/smooth-scroll";
+      import { gsap, prefersReducedMotion } from "../scripts/motion";
+      import { initSectionTransitions } from "../scripts/section-transitions";
+
+      initSectionTransitions();
+
+      const preloader = document.getElementById("preloader");
+      const mark = preloader?.querySelector<HTMLElement>(".preloader-mark");
+      const panelL = preloader?.querySelector<HTMLElement>(".preloader-panel.l");
+      const panelR = preloader?.querySelector<HTMLElement>(".preloader-panel.r");
+
+      const finish = () => {
+        preloader?.remove();
+        window.dispatchEvent(new CustomEvent("preloader:done"));
+      };
+
+      if (!preloader || !mark || !panelL || !panelR || prefersReducedMotion()) {
+        finish();
+      } else {
+        gsap
+          .timeline({ onComplete: finish })
+          .to(mark, { opacity: 1, scale: 1, duration: 0.5, ease: "expo.out" })
+          .to({}, { duration: 0.25 }) // breve pausa antes de abrir la cortina
+          .to([panelL], { xPercent: -100, duration: 0.7, ease: "expo.inOut" }, "open")
+          .to([panelR], { xPercent: 100, duration: 0.7, ease: "expo.inOut" }, "open")
+          .to(mark, { opacity: 0, duration: 0.3, ease: "power2.out" }, "open");
+      }
+    </script>
   </body>
 </html>

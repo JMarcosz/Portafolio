@@ -2,7 +2,7 @@
 import { certificates } from "../data/site";
 ---
 
-<section id="certificados" class="mx-auto max-w-6xl px-6 py-24">
+<section id="certificados" data-slide-section class="mx-auto max-w-6xl px-6 py-24">
   <p class="eyebrow mb-4 text-center">Logros alcanzados</p>
   <h2 class="text-center text-4xl font-bold tracking-tight">
     Mis <span class="font-extrabold">Certificados</span>
@@ -11,11 +11,11 @@ import { certificates } from "../data/site";
   <div class="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
     {
       certificates.map((cert) => (
-        <article class="card flex flex-col justify-between p-6">
+        <article data-cert-card class="card flex flex-col justify-between p-6 transition-[border-color,transform] duration-300 hover:-translate-y-1 hover:border-white/25">
           <div>
             <div class="flex items-center justify-between">
               <span class="text-xs font-medium text-white/40">{cert.year}</span>
-              <span class="pill">Verificado</span>
+              <span data-cert-badge class="pill">Verificado</span>
             </div>
 
             <h3 class="mt-4 text-base font-semibold leading-snug">{cert.title}</h3>
@@ -33,3 +33,47 @@ import { certificates } from "../data/site";
     }
   </div>
 </section>
+
+<script>
+  import { gsap, ScrollTrigger, floatIdle, prefersReducedMotion } from "../scripts/motion";
+
+  const cards = document.querySelectorAll<HTMLElement>("[data-cert-card]");
+
+  if (prefersReducedMotion()) {
+    gsap.set(cards, { clipPath: "inset(0 0% 0 0)", autoAlpha: 1 });
+  } else {
+    // Familia de entrada: persiana — clip-path que se descorre, no fade/translate.
+    // Revela por fila (no todas a la vez) con ScrollTrigger.batch().
+    gsap.set(cards, { clipPath: "inset(0 100% 0 0)" });
+
+    ScrollTrigger.batch(cards, {
+      start: "top 82%",
+      once: true,
+      onEnter: (batch) => {
+        gsap.to(batch, {
+          clipPath: "inset(0 0% 0 0)",
+          duration: 0.7,
+          stagger: 0.08,
+          ease: "power3.out",
+          onComplete: () => {
+            batch.forEach((card) => {
+              card.querySelector<HTMLElement>("[data-cert-badge]") &&
+                gsap.fromTo(
+                  card.querySelector("[data-cert-badge]"),
+                  { scale: 1 },
+                  { scale: 1.08, duration: 0.2, yoyo: true, repeat: 1, ease: "power2.out" }
+                );
+            });
+          },
+        });
+      },
+    });
+
+    // Flotación ambiental en reposo; se pausa en hover para no pelear con la elevación de 4px.
+    cards.forEach((card) => {
+      const tween = floatIdle(card, 2.5);
+      card.addEventListener("mouseenter", () => tween?.pause());
+      card.addEventListener("mouseleave", () => tween?.play());
+    });
+  }
+</script>

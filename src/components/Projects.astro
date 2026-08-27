@@ -4,22 +4,25 @@ const { featured, client, toolset } = projects;
 const items = [featured, client];
 ---
 
-<section id="proyectos" class="mx-auto max-w-6xl px-6 py-24">
+<section id="proyectos" data-slide-section class="mx-auto max-w-6xl px-6 py-24">
   <p class="eyebrow mb-4">Trabajo seleccionado</p>
   <h2 class="text-4xl font-bold tracking-tight">
     Mis <span class="font-extrabold">Proyectos</span>
   </h2>
 
-  <div class="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2">
+  <div class="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2" style="perspective: 900px;">
     {
       items.map((project) => (
-        <article class="card flex flex-col overflow-hidden">
-          <img
-            src={project.image}
-            alt={`Captura de pantalla de ${project.title}`}
-            class="aspect-video w-full border-b border-white/10 object-cover object-top"
-            loading="lazy"
-          />
+        <article data-project-card class="card flex flex-col overflow-hidden">
+          <div class="overflow-hidden">
+            <img
+              data-project-img
+              src={project.image}
+              alt={`Captura de pantalla de ${project.title}`}
+              class="aspect-video w-full border-b border-white/10 object-cover object-top"
+              loading="lazy"
+            />
+          </div>
 
           <div class="flex flex-1 flex-col justify-between p-6">
             <div>
@@ -39,10 +42,12 @@ const items = [featured, client];
                 href={project.demo}
                 target="_blank"
                 rel="noopener noreferrer"
+                data-magnetic
+                data-demo-link
                 class="btn-primary flex-1 justify-center text-sm"
               >
                 Ver Demo
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg data-demo-arrow width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M7 17L17 7M17 7H9M17 7v8" />
                 </svg>
               </a>
@@ -50,6 +55,7 @@ const items = [featured, client];
                 href={project.link}
                 target="_blank"
                 rel="noopener noreferrer"
+                data-code-link
                 aria-label={`Ver código de ${project.title}`}
                 class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 text-white/60 transition-colors hover:border-white/30 hover:text-white"
               >
@@ -104,4 +110,77 @@ const items = [featured, client];
       // portapapeles no disponible; se ignora silenciosamente
     }
   });
+</script>
+
+<script>
+  import { gsap, hasFinePointer, floatIdle, prefersReducedMotion } from "../scripts/motion";
+
+  const cards = document.querySelectorAll<HTMLElement>("[data-project-card]");
+
+  // Familia de entrada: profundidad ascendente — scale + translateY a la vez,
+  // no una traslación plana como el resto de las secciones.
+  if (!prefersReducedMotion()) {
+    gsap.set(cards, { autoAlpha: 0, y: 30, scale: 0.92 });
+    gsap.set("[data-project-img]", { scale: 1.08 });
+
+    gsap.to(cards, {
+      autoAlpha: 1,
+      y: 0,
+      scale: 1,
+      duration: 0.8,
+      stagger: 0.12,
+      ease: "power3.out",
+      scrollTrigger: { trigger: "#proyectos", start: "top 78%", once: true },
+      onComplete: () => {
+        gsap.to("[data-project-img]", { scale: 1, duration: 0.8, ease: "power3.out" });
+        cards.forEach((card) => floatIdle(card, 2.5));
+      },
+    });
+  }
+
+  cards.forEach((card) => {
+    const img = card.querySelector<HTMLElement>("[data-project-img]");
+    const codeLink = card.querySelector<HTMLElement>("[data-code-link]");
+
+    if (hasFinePointer() && !prefersReducedMotion()) {
+      card.addEventListener("mousemove", (event) => {
+        const rect = card.getBoundingClientRect();
+        const px = (event.clientX - rect.left) / rect.width - 0.5;
+        const py = (event.clientY - rect.top) / rect.height - 0.5;
+        gsap.to(card, { rotateY: px * 6, rotateX: py * -6, duration: 0.4, ease: "power2.out" });
+        gsap.to(img, { scale: 1.06, duration: 0.5, ease: "power2.out" });
+      });
+      card.addEventListener("mouseleave", () => {
+        gsap.to(card, { rotateY: 0, rotateX: 0, duration: 0.5, ease: "power2.out" });
+        gsap.to(img, { scale: 1, duration: 0.5, ease: "power2.out" });
+      });
+      codeLink?.addEventListener("mouseenter", () => {
+        gsap.to(codeLink, { rotate: 8, duration: 0.3, ease: "back.out(1.7)" });
+      });
+      codeLink?.addEventListener("mouseleave", () => {
+        gsap.to(codeLink, { rotate: 0, duration: 0.3, ease: "power2.out" });
+      });
+    }
+  });
+
+  // Botón "Ver Demo" magnético + flecha que se desplaza en diagonal.
+  if (hasFinePointer() && !prefersReducedMotion()) {
+    document.querySelectorAll<HTMLElement>("[data-demo-link]").forEach((link) => {
+      const arrow = link.querySelector<HTMLElement>("[data-demo-arrow]");
+      const moveX = gsap.quickTo(link, "x", { duration: 0.4, ease: "power3" });
+      const moveY = gsap.quickTo(link, "y", { duration: 0.4, ease: "power3" });
+
+      link.addEventListener("mousemove", (event) => {
+        const rect = link.getBoundingClientRect();
+        moveX((event.clientX - rect.left - rect.width / 2) * 0.25);
+        moveY((event.clientY - rect.top - rect.height / 2) * 0.25);
+        gsap.to(arrow, { x: 2, y: -2, duration: 0.3 });
+      });
+      link.addEventListener("mouseleave", () => {
+        moveX(0);
+        moveY(0);
+        gsap.to(arrow, { x: 0, y: 0, duration: 0.3 });
+      });
+    });
+  }
 </script>

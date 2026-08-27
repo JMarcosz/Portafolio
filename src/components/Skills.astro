@@ -2,14 +2,14 @@
 import { skillCategories } from "../data/site";
 ---
 
-<section id="habilidades" class="mx-auto max-w-6xl px-6 py-24">
+<section id="habilidades" data-slide-section class="mx-auto max-w-6xl px-6 py-24">
   <p class="eyebrow mb-4">Mi experiencia</p>
   <h2 class="text-4xl font-bold tracking-tight">
     Habilidades &<br />
     <span class="font-extrabold">Tecnologías</span>
   </h2>
 
-  <div class="mt-14 divide-y divide-white/10 border-y border-white/10">
+  <div data-skills-block class="mt-14 divide-y divide-white/10 border-y border-white/10">
     {
       skillCategories.map((cat, i) => (
         <div class="skill-item" data-open={i === 1 ? "true" : "false"}>
@@ -24,7 +24,7 @@ import { skillCategories } from "../data/site";
             </div>
             <span class="flex shrink-0 items-center gap-3 text-xs text-white/40">
               [ {cat.index} ]
-              <svg class="skill-chevron h-4 w-4 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg class="skill-chevron h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M6 9l6 6 6-6" />
               </svg>
             </span>
@@ -60,38 +60,68 @@ import { skillCategories } from "../data/site";
   .skill-item[data-open="true"] .skill-panel {
     grid-template-rows: 1fr;
   }
-  .skill-item[data-open="true"] .skill-chevron {
-    transform: rotate(180deg);
-  }
 </style>
 
 <script>
+  import { gsap, prefersReducedMotion } from "../scripts/motion";
+
+  const block = document.querySelector<HTMLElement>("[data-skills-block]");
   const items = document.querySelectorAll<HTMLElement>(".skill-item");
 
-  const animateBars = (item: HTMLElement) => {
-    item.querySelectorAll<HTMLElement>(".skill-bar").forEach((bar) => {
-      const percent = bar.dataset.percent ?? "0";
-      requestAnimationFrame(() => {
-        bar.style.width = `${percent}%`;
+  // Familia de entrada: desenrollado por altura — un solo movimiento de contenedor,
+  // sin stagger de hijos (a diferencia de cualquier otra sección).
+  if (block) {
+    if (prefersReducedMotion()) {
+      gsap.set(block, { clipPath: "inset(0 0 0% 0)" });
+    } else {
+      gsap.set(block, { clipPath: "inset(0 0 100% 0)" });
+      gsap.to(block, {
+        clipPath: "inset(0 0 0% 0)",
+        duration: 0.9,
+        ease: "expo.inOut",
+        scrollTrigger: { trigger: block, start: "top 78%", once: true },
       });
+    }
+  }
+
+  const animateBars = (item: HTMLElement) => {
+    const bars = item.querySelectorAll<HTMLElement>(".skill-bar");
+    if (prefersReducedMotion()) {
+      bars.forEach((bar) => (bar.style.width = `${bar.dataset.percent ?? 0}%`));
+      return;
+    }
+    gsap.to(bars, {
+      width: (index, target) => `${target.dataset.percent ?? 0}%`,
+      duration: 0.9,
+      stagger: 0.08,
+      ease: "power3.out",
     });
   };
 
   items.forEach((item) => {
     const trigger = item.querySelector<HTMLButtonElement>(".skill-trigger");
+    const chevron = item.querySelector<HTMLElement>(".skill-chevron");
 
     if (item.dataset.open === "true") animateBars(item);
+    if (item.dataset.open === "true" && chevron) gsap.set(chevron, { rotate: 180 });
 
     trigger?.addEventListener("click", () => {
       const isOpen = item.dataset.open === "true";
+
+      // El reflow de los encabezados vecinos ya lo anima suavemente la transición
+      // CSS de grid-template-rows del panel — acá solo se anima lo que esa
+      // transición no cubre: la rotación del chevron y las barras de progreso.
       items.forEach((other) => {
+        const otherChevron = other.querySelector<HTMLElement>(".skill-chevron");
         other.dataset.open = "false";
         other.querySelector(".skill-trigger")?.setAttribute("aria-expanded", "false");
+        if (otherChevron && !prefersReducedMotion()) gsap.to(otherChevron, { rotate: 0, duration: 0.5, ease: "elastic.out(1,0.6)" });
       });
 
       if (!isOpen) {
         item.dataset.open = "true";
         trigger.setAttribute("aria-expanded", "true");
+        if (chevron && !prefersReducedMotion()) gsap.to(chevron, { rotate: 180, duration: 0.5, ease: "elastic.out(1,0.6)" });
         animateBars(item);
       }
     });

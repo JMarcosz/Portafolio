@@ -2,7 +2,7 @@
 import { footer } from "../data/site";
 ---
 
-<footer class="border-t border-white/10">
+<footer data-footer class="border-t border-white/10">
   <div class="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-8 sm:flex-row sm:items-center sm:justify-between">
     <div>
       <p class="text-sm font-bold tracking-tight">{footer.name.toUpperCase()}</p>
@@ -16,3 +16,19 @@ import { footer } from "../data/site";
     </div>
   </div>
 </footer>
+
+<script>
+  import { gsap, prefersReducedMotion } from "../scripts/motion";
+
+  const el = document.querySelector<HTMLElement>("[data-footer]");
+  if (el && !prefersReducedMotion()) {
+    gsap.set(el, { autoAlpha: 0, y: 16 });
+    gsap.to(el, {
+      autoAlpha: 1,
+      y: 0,
+      duration: 0.7,
+      ease: "power2.out",
+      scrollTrigger: { trigger: el, start: "top 92%", once: true },
+    });
+  }
+</script>

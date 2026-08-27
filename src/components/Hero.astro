@@ -2,31 +2,161 @@
 import { hero } from "../data/site";
 ---
 
-<section id="inicio" class="relative flex min-h-screen items-center pt-16">
+<section id="inicio" class="relative flex min-h-screen items-center overflow-hidden pt-16" data-hero-section>
+  <canvas data-hero-particles class="absolute inset-0 -z-10 h-full w-full" aria-hidden="true"></canvas>
+
   <div class="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-16 px-6 py-24 md:grid-cols-2">
     <div>
-      <p class="eyebrow mb-4">{hero.eyebrow}</p>
+      <p class="eyebrow mb-4" data-hero-eyebrow>{hero.eyebrow}</p>
       <h1 class="text-5xl font-bold leading-[1.05] tracking-tight md:text-6xl">
-        <span class="block text-white/90">{hero.title1}</span>
-        <span class="block">{hero.title2}</span>
+        <span class="block overflow-hidden">
+          <span class="block text-white/90" data-hero-line1>{hero.title1}</span>
+        </span>
+        <span class="block overflow-hidden">
+          <span class="block" data-hero-line2>{hero.title2}</span>
+        </span>
       </h1>
-      <p class="mt-6 max-w-md text-sm leading-relaxed text-white/50">
+      <p class="mt-6 max-w-md text-sm leading-relaxed text-white/50" data-hero-paragraph>
         {hero.description}
       </p>
-      <a href="#contacto" class="btn-primary mt-8">
-        {hero.cta}
-      </a>
+      <div class="mt-8 flex flex-wrap items-center gap-3">
+        <a href="#contacto" class="btn-primary" data-hero-cta>
+          {hero.cta}
+        </a>
+        <a
+          href={encodeURI(hero.cvFile)}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-hero-cta
+          class="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-sm font-semibold text-white/80 transition-colors hover:border-white/30 hover:text-white"
+        >
+          {hero.cvLabel}
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <path d="M14 2v6h6M9 15h6M9 11h2" />
+          </svg>
+        </a>
+      </div>
     </div>
 
-    <div class="relative flex items-center justify-center">
+    <div class="relative flex items-center justify-center" data-hero-visual>
       <div
-        class="absolute h-72 w-72 rounded-full opacity-60 blur-2xl md:h-96 md:w-96"
-        style="background: radial-gradient(circle, rgba(255,255,255,0.12), transparent 70%);"
+        class="relative h-72 w-72 overflow-hidden rounded-full border border-white/10 md:h-80 md:w-80 lg:h-96 lg:w-96"
+        data-hero-circle
       >
-      </div>
-      <div class="relative flex h-56 w-56 items-center justify-center rounded-full border border-white/10 md:h-72 md:w-72">
-        <span class="text-6xl font-bold tracking-tight md:text-7xl">{hero.initials}</span>
+        <img src={hero.photo} alt="Foto de Jean Marco" class="h-full w-full object-cover object-top" />
       </div>
     </div>
   </div>
+
+  <button
+    type="button"
+    data-scroll-cue
+    class="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-white/30 transition-colors hover:text-white/60"
+    aria-label="Bajar a la siguiente sección"
+  >
+    <span>Scroll</span>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M12 5v14M5 12l7 7 7-7"></path>
+    </svg>
+  </button>
 </section>
+
+<script>
+  import { gsap, hasFinePointer, prefersReducedMotion } from "../scripts/motion";
+  import { initParticleField } from "../scripts/particle-field";
+
+  // Campo de partículas dispersas: huyen del cursor y vuelven a su lugar al soltarlo.
+  const particleCanvas = document.querySelector<HTMLCanvasElement>("[data-hero-particles]");
+  if (particleCanvas) {
+    initParticleField(particleCanvas);
+  }
+
+  const eyebrow = document.querySelector<HTMLElement>("[data-hero-eyebrow]");
+  const line1 = document.querySelector<HTMLElement>("[data-hero-line1]");
+  const line2 = document.querySelector<HTMLElement>("[data-hero-line2]");
+  const paragraph = document.querySelector<HTMLElement>("[data-hero-paragraph]");
+  const ctas = document.querySelectorAll<HTMLElement>("[data-hero-cta]");
+  const circle = document.querySelector<HTMLElement>("[data-hero-circle]");
+  const scrollCue = document.querySelector<HTMLElement>("[data-scroll-cue]");
+
+  const playHeroIntro = () => {
+    const els = [eyebrow, line1, line2, paragraph, ...Array.from(ctas), circle].filter(Boolean);
+
+    if (prefersReducedMotion()) {
+      els.forEach((el) => gsap.set(el, { clearProps: "all" }));
+      return;
+    }
+
+    gsap.set([line1, line2], { yPercent: 115 });
+    gsap.set(paragraph, { yPercent: 105, autoAlpha: 0 });
+    gsap.set([eyebrow, circle], { autoAlpha: 0 });
+    gsap.set(ctas, { autoAlpha: 0, scale: 0.9 });
+    gsap.set(circle, { scale: 0.92 });
+
+    gsap
+      .timeline({ defaults: { ease: "expo.out" } })
+      .to(eyebrow, { autoAlpha: 1, duration: 0.5 })
+      .to(line1, { yPercent: 0, duration: 1 }, "<0.05")
+      .to(line2, { yPercent: 0, duration: 1 }, "<0.15")
+      .to(paragraph, { yPercent: 0, autoAlpha: 1, duration: 0.85 }, "-=0.6")
+      .to(ctas, { autoAlpha: 1, scale: 1, duration: 0.5, stagger: 0.08, ease: "back.out(1.4)" }, "-=0.3")
+      .to(circle, { autoAlpha: 1, scale: 1, duration: 0.7 }, "-=0.4");
+  };
+
+  if (document.getElementById("preloader")) {
+    window.addEventListener("preloader:done", playHeroIntro, { once: true });
+  } else {
+    playHeroIntro();
+  }
+
+  // Botón magnético en la foto: sigue el cursor con inercia (gsap.quickTo), no en teletransporte.
+  const heroSection = document.querySelector<HTMLElement>("[data-hero-section]");
+
+  if (heroSection && circle && hasFinePointer() && !prefersReducedMotion()) {
+    const moveCircle = gsap.quickTo(circle, "x", { duration: 0.6, ease: "power3" });
+    const moveCircleY = gsap.quickTo(circle, "y", { duration: 0.6, ease: "power3" });
+
+    heroSection.addEventListener("mousemove", (event) => {
+      const rect = heroSection.getBoundingClientRect();
+      const px = (event.clientX - rect.left) / rect.width; // 0..1 sobre TODO el hero
+      const py = (event.clientY - rect.top) / rect.height;
+
+      moveCircle((px - 0.5) * 20);
+      moveCircleY((py - 0.5) * 20);
+    });
+
+    heroSection.addEventListener("mouseleave", () => {
+      moveCircle(0);
+      moveCircleY(0);
+    });
+  }
+
+  // Parallax sutil del campo de partículas con el scroll.
+  if (particleCanvas && !prefersReducedMotion()) {
+    gsap.to(particleCanvas, {
+      y: -60,
+      ease: "none",
+      scrollTrigger: { trigger: "#inicio", start: "top top", end: "bottom top", scrub: true },
+    });
+  }
+
+  // Indicador de scroll: se desvanece tras el primer scroll del usuario.
+  if (scrollCue) {
+    let dismissed = false;
+    const dismiss = () => {
+      if (dismissed) return;
+      dismissed = true;
+      if (prefersReducedMotion()) {
+        scrollCue.style.opacity = "0";
+      } else {
+        gsap.to(scrollCue, { autoAlpha: 0, duration: 0.4 });
+      }
+      window.removeEventListener("scroll", dismiss);
+    };
+    window.addEventListener("scroll", dismiss, { passive: true });
+    scrollCue.addEventListener("click", () => {
+      document.getElementById("sobre-mi")?.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth" });
+    });
+  }
+</script>

@@ -13,17 +13,17 @@ const iconPaths: Record<string, string> = {
 };
 ---
 
-<section id="contacto" class="mx-auto max-w-6xl px-6 py-24">
+<section id="contacto" data-slide-section class="mx-auto max-w-6xl px-6 py-24">
   <div class="grid grid-cols-1 gap-12 md:grid-cols-2">
     <div>
-      <p class="eyebrow mb-4">{contact.eyebrow}</p>
-      <h2 class="text-4xl font-bold tracking-tight">
+      <p data-focus-item class="eyebrow mb-4">{contact.eyebrow}</p>
+      <h2 data-focus-item class="text-4xl font-bold tracking-tight">
         <span class="block text-white/90">{contact.title1}</span>
         <span class="block font-extrabold">{contact.title2}</span>
       </h2>
-      <p class="mt-6 max-w-sm text-sm leading-relaxed text-white/50">{contact.description}</p>
+      <p data-focus-item class="mt-6 max-w-sm text-sm leading-relaxed text-white/50">{contact.description}</p>
 
-      <dl class="mt-10 space-y-3 text-sm">
+      <dl data-focus-item class="mt-10 space-y-3 text-sm">
         <div class="flex gap-3">
           <dt class="w-24 shrink-0 text-[11px] uppercase tracking-wider text-white/40">[ Correo ]</dt>
           <dd>
@@ -36,7 +36,7 @@ const iconPaths: Record<string, string> = {
         </div>
       </dl>
 
-      <div class="mt-8 flex gap-3">
+      <div data-focus-item class="mt-8 flex gap-3">
         {
           socials.map((social) => (
             <a
@@ -44,15 +44,19 @@ const iconPaths: Record<string, string> = {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={social.label}
-              class="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-white/60 transition-colors hover:border-white/30 hover:text-white"
+              data-social-btn
+              class="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-white/10 text-white/60 transition-colors"
             >
+              <span data-social-fill class="absolute inset-0 origin-bottom scale-y-0 rounded-full bg-white" />
               <svg
+                data-social-icon
                 width="16"
                 height="16"
                 viewBox="0 0 24 24"
                 fill={filledIcons.has(social.icon) ? "currentColor" : "none"}
                 stroke={filledIcons.has(social.icon) ? "none" : "currentColor"}
                 stroke-width={filledIcons.has(social.icon) ? undefined : "2"}
+                class="relative"
                 set:html={iconPaths[social.icon]}
               />
             </a>
@@ -65,7 +69,7 @@ const iconPaths: Record<string, string> = {
       <input type="hidden" name="access_key" value={import.meta.env.PUBLIC_WEB3FORMS_KEY ?? ""} />
       <input type="checkbox" name="botcheck" class="hidden" style="display: none;" tabindex="-1" autocomplete="off" />
 
-      <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+      <div data-focus-item class="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div>
           <label for="name" class="mb-2 block text-[11px] uppercase tracking-wider text-white/40">Nombre</label>
           <input
@@ -90,7 +94,7 @@ const iconPaths: Record<string, string> = {
         </div>
       </div>
 
-      <div>
+      <div data-focus-item>
         <label for="message" class="mb-2 block text-[11px] uppercase tracking-wider text-white/40">Mensaje</label>
         <textarea
           id="message"
@@ -102,10 +106,22 @@ const iconPaths: Record<string, string> = {
         ></textarea>
       </div>
 
-      <button type="submit" id="contact-submit" class="btn-primary">
+      <button type="submit" id="contact-submit" data-focus-item data-magnetic class="btn-primary">
         <span data-submit-label>Enviar mensaje</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg data-submit-arrow width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M5 12h14M12 5l7 7-7 7"></path>
+        </svg>
+        <svg
+          data-submit-check
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          style="display: none;"
+        >
+          <path d="M20 6 9 17l-5-5"></path>
         </svg>
       </button>
 
@@ -119,12 +135,34 @@ const iconPaths: Record<string, string> = {
   const status = document.getElementById("contact-status");
   const submitBtn = document.getElementById("contact-submit") as HTMLButtonElement | null;
   const submitLabel = submitBtn?.querySelector("[data-submit-label]");
+  const submitArrow = document.querySelector<HTMLElement>("[data-submit-arrow]");
+  const submitCheck = document.querySelector<HTMLElement>("[data-submit-check]");
 
   const setStatus = (message: string, tone: "error" | "success") => {
     if (!status) return;
     status.textContent = message;
     status.classList.remove("hidden", "text-red-400", "text-emerald-400");
     status.classList.add(tone === "error" ? "text-red-400" : "text-emerald-400");
+  };
+
+  const showCheck = async () => {
+    const { gsap, prefersReducedMotion } = await import("../scripts/motion");
+    if (!submitArrow || !submitCheck) return;
+    if (prefersReducedMotion()) {
+      submitArrow.style.display = "none";
+      submitCheck.style.display = "";
+      return;
+    }
+    gsap.to(submitArrow, {
+      autoAlpha: 0,
+      scale: 0.6,
+      duration: 0.2,
+      onComplete: () => {
+        submitArrow.style.display = "none";
+        submitCheck.style.display = "";
+        gsap.fromTo(submitCheck, { autoAlpha: 0, scale: 0.6 }, { autoAlpha: 1, scale: 1, duration: 0.3, ease: "back.out(1.7)" });
+      },
+    });
   };
 
   form?.addEventListener("submit", async (event) => {
@@ -154,15 +192,82 @@ const iconPaths: Record<string, string> = {
 
       if (result.success) {
         setStatus("¡Mensaje enviado! Te responderé pronto.", "success");
+        submitLabel.textContent = "Enviado";
+        await showCheck();
         form.reset();
       } else {
         setStatus("No se pudo enviar el mensaje. Intenta de nuevo.", "error");
+        submitLabel.textContent = originalLabel;
       }
     } catch {
       setStatus("Error de conexión. Intenta de nuevo en unos minutos.", "error");
+      submitLabel.textContent = originalLabel;
     } finally {
       submitBtn.disabled = false;
-      submitLabel.textContent = originalLabel;
     }
   });
+</script>
+
+<script>
+  import { gsap, hasFinePointer, prefersReducedMotion } from "../scripts/motion";
+
+  // Familia de entrada: enfoque de cámara — blur + scale en vez de traslación.
+  const focusItems = document.querySelectorAll<HTMLElement>("#contacto [data-focus-item]");
+  const socialBtns = document.querySelectorAll<HTMLElement>("[data-social-btn]");
+
+  if (prefersReducedMotion()) {
+    gsap.set(focusItems, { clearProps: "all" });
+    gsap.set(socialBtns, { clearProps: "all" });
+  } else {
+    gsap.set(focusItems, { autoAlpha: 0, filter: "blur(6px)", scale: 1.03 });
+    gsap.set(socialBtns, { autoAlpha: 0, scale: 0.7 });
+
+    const tl = gsap.timeline({
+      scrollTrigger: { trigger: "#contacto", start: "top 75%", once: true },
+    });
+    tl.to(focusItems, {
+      autoAlpha: 1,
+      filter: "blur(0px)",
+      scale: 1,
+      duration: 0.8,
+      stagger: 0.08,
+      ease: "power2.out",
+    }).to(
+      socialBtns,
+      { autoAlpha: 1, scale: 1, duration: 0.4, stagger: 0.06, ease: "back.out(1.7)" },
+      "-=0.5"
+    );
+  }
+
+  // Botones sociales: relleno que sube desde abajo + ícono que gira, al hover.
+  if (hasFinePointer() && !prefersReducedMotion()) {
+    socialBtns.forEach((btn) => {
+      const fill = btn.querySelector<HTMLElement>("[data-social-fill]");
+      const icon = btn.querySelector<HTMLElement>("[data-social-icon]");
+      btn.addEventListener("mouseenter", () => {
+        gsap.to(fill, { scaleY: 1, duration: 0.35, ease: "power2.out" });
+        gsap.to(icon, { color: "#000000", rotate: 8, duration: 0.35, ease: "power2.out" });
+      });
+      btn.addEventListener("mouseleave", () => {
+        gsap.to(fill, { scaleY: 0, duration: 0.3, ease: "power2.out" });
+        gsap.to(icon, { color: "currentColor", rotate: 0, duration: 0.3, ease: "power2.out" });
+      });
+    });
+  }
+
+  // Botón "Enviar mensaje" magnético.
+  const submit = document.getElementById("contact-submit");
+  if (submit && hasFinePointer() && !prefersReducedMotion()) {
+    const moveX = gsap.quickTo(submit, "x", { duration: 0.4, ease: "power3" });
+    const moveY = gsap.quickTo(submit, "y", { duration: 0.4, ease: "power3" });
+    submit.addEventListener("mousemove", (event) => {
+      const rect = submit.getBoundingClientRect();
+      moveX((event.clientX - rect.left - rect.width / 2) * 0.25);
+      moveY((event.clientY - rect.top - rect.height / 2) * 0.25);
+    });
+    submit.addEventListener("mouseleave", () => {
+      moveX(0);
+      moveY(0);
+    });
+  }
 </script>
