@@ -1,0 +1,71 @@
+---
+import { experience } from "../data/site";
+---
+
+<section id="experiencia" class="mx-auto max-w-6xl px-6 py-24">
+  <p class="eyebrow mb-4">Experiencia profesional</p>
+  <h2 class="text-4xl font-bold tracking-tight">
+    Where I've <span class="font-extrabold">Worked</span>
+  </h2>
+
+  <div class="relative mt-14">
+    <div class="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-white/10 md:block"></div>
+
+    <div class="flex flex-col gap-10">
+      {
+        experience.map((item, i) => (
+          <div class={`relative grid grid-cols-1 md:grid-cols-2 md:gap-x-10 ${i % 2 === 1 ? "" : ""}`}>
+            <span class="absolute left-1/2 top-8 hidden h-2.5 w-2.5 -translate-x-1/2 rounded-full bg-white md:block" />
+
+            <div class={i % 2 === 0 ? "md:col-start-1" : "md:col-start-2"}>
+              <article class="card p-6">
+                <div class="mb-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] font-medium uppercase tracking-wider text-white/40">
+                  <span class="inline-flex items-center gap-1.5">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="4" width="18" height="18" rx="2" />
+                      <path d="M16 2v4M8 2v4M3 10h18" />
+                    </svg>
+                    {item.period}
+                  </span>
+                </div>
+
+                <h3 class="text-base font-semibold">{item.role}</h3>
+                <div class="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-white/50">
+                  <span class="inline-flex items-center gap-1.5">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="2" y="7" width="20" height="14" rx="2" />
+                      <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                    </svg>
+                    {item.company}
+                  </span>
+                  <span class="inline-flex items-center gap-1.5">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                    {item.location}
+                  </span>
+                </div>
+
+                <ul class="mt-4 space-y-2">
+                  {item.bullets.map((bullet) => (
+                    <li class="flex gap-2 text-sm leading-relaxed text-white/50">
+                      <span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-white/30" />
+                      {bullet}
+                    </li>
+                  ))}
+                </ul>
+
+                <div class="mt-5 flex flex-wrap gap-2 border-t border-white/10 pt-4">
+                  {item.tags.map((tag) => (
+                    <span class="rounded-md bg-white/5 px-2 py-1 text-[11px] text-white/60">{tag}</span>
+                  ))}
+                </div>
+              </article>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,27 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Jean Marco — Ingeniero de Software",
+  description = "Portafolio profesional de Jean Marco: proyectos, experiencia, certificaciones y contacto.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body class="overflow-x-hidden bg-bg text-ink">
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,133 @@
+---
+import { contact } from "../data/site";
+---
+
+<section id="contacto" class="mx-auto max-w-6xl px-6 py-24">
+  <div class="grid grid-cols-1 gap-12 md:grid-cols-2">
+    <div>
+      <p class="eyebrow mb-4">{contact.eyebrow}</p>
+      <h2 class="text-4xl font-bold tracking-tight">
+        <span class="block text-white/90">{contact.title1}</span>
+        <span class="block font-extrabold">{contact.title2}</span>
+      </h2>
+      <p class="mt-6 max-w-sm text-sm leading-relaxed text-white/50">{contact.description}</p>
+
+      <dl class="mt-10 space-y-3 text-sm">
+        <div class="flex gap-3">
+          <dt class="w-24 shrink-0 text-[11px] uppercase tracking-wider text-white/40">[ Correo ]</dt>
+          <dd>
+            <a href={`mailto:${contact.email}`} class="text-white/80 hover:text-white">{contact.email}</a>
+          </dd>
+        </div>
+        <div class="flex gap-3">
+          <dt class="w-24 shrink-0 text-[11px] uppercase tracking-wider text-white/40">[ Ubicación ]</dt>
+          <dd class="text-white/80">{contact.location}</dd>
+        </div>
+      </dl>
+    </div>
+
+    <form id="contact-form" class="space-y-5">
+      <input type="hidden" name="access_key" value={import.meta.env.PUBLIC_WEB3FORMS_KEY ?? ""} />
+      <input type="checkbox" name="botcheck" class="hidden" style="display: none;" tabindex="-1" autocomplete="off" />
+
+      <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+        <div>
+          <label for="name" class="mb-2 block text-[11px] uppercase tracking-wider text-white/40">Nombre</label>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            required
+            placeholder="Tu nombre"
+            class="w-full rounded-lg border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:border-white/30 focus:outline-none"
+          />
+        </div>
+        <div>
+          <label for="email" class="mb-2 block text-[11px] uppercase tracking-wider text-white/40">Correo</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            placeholder="tucorreo@ejemplo.com"
+            class="w-full rounded-lg border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:border-white/30 focus:outline-none"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label for="message" class="mb-2 block text-[11px] uppercase tracking-wider text-white/40">Mensaje</label>
+        <textarea
+          id="message"
+          name="message"
+          required
+          rows="4"
+          placeholder="Cuéntame sobre tu proyecto..."
+          class="w-full resize-none rounded-lg border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:border-white/30 focus:outline-none"
+        ></textarea>
+      </div>
+
+      <button type="submit" id="contact-submit" class="btn-primary">
+        <span data-submit-label>Enviar mensaje</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"></path>
+        </svg>
+      </button>
+
+      <p id="contact-status" class="hidden text-xs" role="status"></p>
+    </form>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById("contact-form") as HTMLFormElement | null;
+  const status = document.getElementById("contact-status");
+  const submitBtn = document.getElementById("contact-submit") as HTMLButtonElement | null;
+  const submitLabel = submitBtn?.querySelector("[data-submit-label]");
+
+  const setStatus = (message: string, tone: "error" | "success") => {
+    if (!status) return;
+    status.textContent = message;
+    status.classList.remove("hidden", "text-red-400", "text-emerald-400");
+    status.classList.add(tone === "error" ? "text-red-400" : "text-emerald-400");
+  };
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!submitBtn || !submitLabel) return;
+
+    const accessKey = (form.elements.namedItem("access_key") as HTMLInputElement)?.value;
+    if (!accessKey) {
+      setStatus(
+        "El formulario aún no está conectado (falta configurar la Access Key de Web3Forms).",
+        "error"
+      );
+      return;
+    }
+
+    submitBtn.disabled = true;
+    const originalLabel = submitLabel.textContent;
+    submitLabel.textContent = "Enviando...";
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(Object.fromEntries(new FormData(form))),
+      });
+      const result = await response.json();
+
+      if (result.success) {
+        setStatus("¡Mensaje enviado! Te responderé pronto.", "success");
+        form.reset();
+      } else {
+        setStatus("No se pudo enviar el mensaje. Intenta de nuevo.", "error");
+      }
+    } catch {
+      setStatus("Error de conexión. Intenta de nuevo en unos minutos.", "error");
+    } finally {
+      submitBtn.disabled = false;
+      submitLabel.textContent = originalLabel;
+    }
+  });
+</script>

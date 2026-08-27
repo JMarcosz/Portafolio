@@ -1,0 +1,33 @@
+---
+import { about } from "../data/site";
+---
+
+<section id="sobre-mi" class="mx-auto max-w-6xl px-6 py-24">
+  <div class="grid grid-cols-1 gap-12 md:grid-cols-2">
+    <div>
+      <p class="eyebrow mb-4">{about.eyebrow}</p>
+      <h2 class="text-4xl font-bold tracking-tight">
+        <span class="block text-white/90">{about.title1}</span>
+        <span class="block font-extrabold">{about.title2}</span>
+      </h2>
+    </div>
+
+    <div class="space-y-4 text-sm leading-relaxed text-white/50">
+      {about.paragraphs.map((p) => <p>{p}</p>)}
+      <p>
+        Me interesa el punto donde <span class="font-semibold text-white">{about.highlight}</span>{about.paragraphAfterHighlight}
+      </p>
+    </div>
+  </div>
+
+  <div class="mt-20 grid grid-cols-2 gap-8 border-t border-white/10 pt-10 md:grid-cols-4">
+    {
+      about.stats.map((stat) => (
+        <div>
+          <p class="text-3xl font-bold tracking-tight">{stat.value}</p>
+          <p class="mt-1 text-[11px] uppercase tracking-wider text-white/40">{stat.label}</p>
+        </div>
+      ))
+    }
+  </div>
+</section>

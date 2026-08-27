@@ -1,0 +1,99 @@
+---
+import { skillCategories } from "../data/site";
+---
+
+<section id="habilidades" class="mx-auto max-w-6xl px-6 py-24">
+  <p class="eyebrow mb-4">Mi experiencia</p>
+  <h2 class="text-4xl font-bold tracking-tight">
+    Habilidades &<br />
+    <span class="font-extrabold">Tecnologías</span>
+  </h2>
+
+  <div class="mt-14 divide-y divide-white/10 border-y border-white/10">
+    {
+      skillCategories.map((cat, i) => (
+        <div class="skill-item" data-open={i === 1 ? "true" : "false"}>
+          <button
+            type="button"
+            class="skill-trigger flex w-full items-center justify-between gap-6 py-6 text-left"
+            aria-expanded={i === 1 ? "true" : "false"}
+          >
+            <div>
+              <h3 class="text-base font-semibold">{cat.title}</h3>
+              <p class="mt-1 text-xs text-white/40">{cat.description}</p>
+            </div>
+            <span class="flex shrink-0 items-center gap-3 text-xs text-white/40">
+              [ {cat.index} ]
+              <svg class="skill-chevron h-4 w-4 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </span>
+          </button>
+
+          <div class="skill-panel grid overflow-hidden transition-[grid-template-rows] duration-300 ease-out">
+            <div class="min-h-0">
+              <div class="grid grid-cols-1 gap-x-10 gap-y-5 pb-8 sm:grid-cols-2">
+                {cat.skills.map((skill) => (
+                  <div>
+                    <div class="mb-2 flex items-center justify-between text-xs">
+                      <span class="text-white/70">{skill.label}</span>
+                      <span class="text-white/40">{skill.percent}%</span>
+                    </div>
+                    <div class="h-px w-full bg-white/10">
+                      <div class="skill-bar h-px bg-white" data-percent={skill.percent} style="width: 0%;" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .skill-panel {
+    grid-template-rows: 0fr;
+  }
+  .skill-item[data-open="true"] .skill-panel {
+    grid-template-rows: 1fr;
+  }
+  .skill-item[data-open="true"] .skill-chevron {
+    transform: rotate(180deg);
+  }
+</style>
+
+<script>
+  const items = document.querySelectorAll<HTMLElement>(".skill-item");
+
+  const animateBars = (item: HTMLElement) => {
+    item.querySelectorAll<HTMLElement>(".skill-bar").forEach((bar) => {
+      const percent = bar.dataset.percent ?? "0";
+      requestAnimationFrame(() => {
+        bar.style.width = `${percent}%`;
+      });
+    });
+  };
+
+  items.forEach((item) => {
+    const trigger = item.querySelector<HTMLButtonElement>(".skill-trigger");
+
+    if (item.dataset.open === "true") animateBars(item);
+
+    trigger?.addEventListener("click", () => {
+      const isOpen = item.dataset.open === "true";
+      items.forEach((other) => {
+        other.dataset.open = "false";
+        other.querySelector(".skill-trigger")?.setAttribute("aria-expanded", "false");
+      });
+
+      if (!isOpen) {
+        item.dataset.open = "true";
+        trigger.setAttribute("aria-expanded", "true");
+        animateBars(item);
+      }
+    });
+  });
+</script>

@@ -1,0 +1,107 @@
+---
+import { projects } from "../data/site";
+const { featured, client, toolset } = projects;
+const items = [featured, client];
+---
+
+<section id="proyectos" class="mx-auto max-w-6xl px-6 py-24">
+  <p class="eyebrow mb-4">Trabajo seleccionado</p>
+  <h2 class="text-4xl font-bold tracking-tight">
+    Mis <span class="font-extrabold">Proyectos</span>
+  </h2>
+
+  <div class="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2">
+    {
+      items.map((project) => (
+        <article class="card flex flex-col overflow-hidden">
+          <img
+            src={project.image}
+            alt={`Captura de pantalla de ${project.title}`}
+            class="aspect-video w-full border-b border-white/10 object-cover object-top"
+            loading="lazy"
+          />
+
+          <div class="flex flex-1 flex-col justify-between p-6">
+            <div>
+              <p class="eyebrow mb-3">{project.badge}</p>
+              <h3 class="text-lg font-semibold">{project.title}</h3>
+              {project.subtitle && <p class="mt-0.5 text-xs text-white/40">{project.subtitle}</p>}
+              <p class="mt-2 text-sm leading-relaxed text-white/50">{project.description}</p>
+              <div class="mt-4 flex flex-wrap gap-2">
+                {project.tags.map((tag) => (
+                  <span class="rounded-md bg-white/5 px-2 py-1 text-[11px] text-white/60">{tag}</span>
+                ))}
+              </div>
+            </div>
+
+            <div class="mt-6 flex items-center gap-3 border-t border-white/10 pt-5">
+              <a
+                href={project.demo}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-primary flex-1 justify-center text-sm"
+              >
+                Ver Demo
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M7 17L17 7M17 7H9M17 7v8" />
+                </svg>
+              </a>
+              <a
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Ver código de ${project.title}`}
+                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 text-white/60 transition-colors hover:border-white/30 hover:text-white"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M8 3L4 12l4 9M16 3l4 9-4 9" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+
+  <div class="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+    <article class="card p-6">
+      <h3 class="text-sm font-semibold">{toolset.title}</h3>
+      <div class="mt-4 flex flex-wrap gap-2">
+        {toolset.tags.map((tag) => <span class="rounded-md bg-white/5 px-2 py-1 text-[11px] text-white/60">{tag}</span>)}
+      </div>
+    </article>
+
+    <article class="card flex flex-col justify-between p-6">
+      <h3 class="text-sm font-semibold">¿Tienes un proyecto en mente?</h3>
+      <button type="button" id="copy-email-projects" class="btn-primary mt-4 self-start !bg-white/10 !text-white">
+        <span data-copy-label>Copiar correo</span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+      </button>
+    </article>
+  </div>
+</section>
+
+<script>
+  import { contact } from "../data/site";
+
+  const btn = document.getElementById("copy-email-projects");
+  btn?.addEventListener("click", async () => {
+    const label = btn.querySelector("[data-copy-label]");
+    try {
+      await navigator.clipboard.writeText(contact.email);
+      if (label) {
+        const original = label.textContent;
+        label.textContent = "¡Copiado!";
+        setTimeout(() => {
+          label.textContent = original;
+        }, 1800);
+      }
+    } catch {
+      // portapapeles no disponible; se ignora silenciosamente
+    }
+  });
+</script>

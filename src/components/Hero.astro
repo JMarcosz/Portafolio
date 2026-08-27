@@ -1,0 +1,32 @@
+---
+import { hero } from "../data/site";
+---
+
+<section id="inicio" class="relative flex min-h-screen items-center pt-16">
+  <div class="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-16 px-6 py-24 md:grid-cols-2">
+    <div>
+      <p class="eyebrow mb-4">{hero.eyebrow}</p>
+      <h1 class="text-5xl font-bold leading-[1.05] tracking-tight md:text-6xl">
+        <span class="block text-white/90">{hero.title1}</span>
+        <span class="block">{hero.title2}</span>
+      </h1>
+      <p class="mt-6 max-w-md text-sm leading-relaxed text-white/50">
+        {hero.description}
+      </p>
+      <a href="#contacto" class="btn-primary mt-8">
+        {hero.cta}
+      </a>
+    </div>
+
+    <div class="relative flex items-center justify-center">
+      <div
+        class="absolute h-72 w-72 rounded-full opacity-60 blur-2xl md:h-96 md:w-96"
+        style="background: radial-gradient(circle, rgba(255,255,255,0.12), transparent 70%);"
+      >
+      </div>
+      <div class="relative flex h-56 w-56 items-center justify-center rounded-full border border-white/10 md:h-72 md:w-72">
+        <span class="text-6xl font-bold tracking-tight md:text-7xl">{hero.initials}</span>
+      </div>
+    </div>
+  </div>
+</section>
