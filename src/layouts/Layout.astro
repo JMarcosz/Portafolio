@@ -1,5 +1,8 @@
 ---
 import "../styles/global.css";
+// Se importa con ?url para que Vite devuelva la ruta final con hash: sin esto la
+// fuente recién se descubre al parsear el CSS, provocando FOUT en la primera pintura.
+import interLatin from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url";
 
 interface Props {
   title?: string;
@@ -18,6 +21,7 @@ const {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin />
     <meta name="description" content={description} />
     <title>{title}</title>
   </head>
