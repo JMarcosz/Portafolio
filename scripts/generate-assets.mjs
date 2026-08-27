@@ -1,5 +1,6 @@
 // Genera, a partir de la foto real, todos los assets de "app" que pide SEO/compartir:
-// favicon, apple-touch-icon, íconos de PWA y la tarjeta de Open Graph (1200x630).
+// favicon, apple-touch-icon, íconos de PWA y la tarjeta de Open Graph (1200x1200,
+// cuadrada — ver nota en buildOgImage sobre por qué no panorámica).
 // Se corre a mano cuando la foto cambie: `node scripts/generate-assets.mjs`.
 import sharp from "sharp";
 import { readFile, writeFile } from "node:fs/promises";
@@ -45,36 +46,33 @@ async function buildIcon(size, outFile, { padding = 0 } = {}) {
   console.log(`✓ ${outFile} (${size}x${size})`);
 }
 
-// ---------- tarjeta de Open Graph 1200x630 (1.91:1) ----------
+// ---------- tarjeta de Open Graph, CUADRADA (1200x1200) ----------
 //
-// Se había cambiado a cuadrada por una suposición sin verificar sobre cómo decide
-// WhatsApp entre tarjeta grande y chica — resultó incorrecta. La documentación real
-// (developers.facebook.com/documentation/business-messaging/whatsapp/link-previews)
-// pide exactamente esto para la tarjeta grande: ancho ≥300px, relación de aspecto
-// ≤4:1, y recomienda 1200x630 (1.91:1) — el mismo estándar de Facebook/Twitter/
-// LinkedIn, así que una sola imagen sirve para las cuatro plataformas. Confirmado
-// además que el archivo pesa 77KB, muy por debajo del límite de 600KB.
-//
-// Si WhatsApp sigue mostrando la tarjeta chica después de esto, no es la imagen:
-// es el caché de WhatsApp para esa URL exacta, que no tiene forma de limpiarse a
-// mano y puede tardar días en vencer por su cuenta.
+// WhatsApp decide entre su tarjeta "grande" (imagen arriba, todo el ancho) y la
+// "chica" (miniatura recortada al costado) según la proporción de og:image: con
+// panorámicas tipo 1200x630 (el estándar 1.91:1 de Facebook/Twitter/LinkedIn)
+// WhatsApp específicamente recorta un cuadrado y muestra la tarjeta chica —
+// verificado: así se veía. Con una imagen ya cuadrada, WhatsApp la muestra grande.
+// Facebook/Twitter/LinkedIn aceptan cuadrada igual de bien (solo usan el mínimo).
 
 async function buildOgImage() {
-  const photoSize = 400;
+  const size = 1200;
+  const photoSize = 520;
+
   // PNG, no WebP: el rasterizador de SVG que usa sharp (resvg) no decodifica WebP
   // embebido como data URI en <image>, así que salía en blanco.
   const photoBuf = await sharp(PHOTO).resize(photoSize, photoSize, { fit: "cover" }).png().toBuffer();
   const photoB64 = photoBuf.toString("base64");
 
-  const cx = 975;
-  const cy = 315;
+  const cx = size / 2;
+  const cy = 430;
   const r = photoSize / 2;
 
   const svg = `
-    <svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+    <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <radialGradient id="glow" cx="75%" cy="50%" r="60%">
-          <stop offset="0%" stop-color="#ffffff" stop-opacity="0.08"/>
+        <radialGradient id="glow" cx="50%" cy="34%" r="55%">
+          <stop offset="0%" stop-color="#ffffff" stop-opacity="0.09"/>
           <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
         </radialGradient>
         <clipPath id="circle">
@@ -82,26 +80,26 @@ async function buildOgImage() {
         </clipPath>
       </defs>
 
-      <rect width="1200" height="630" fill="${BG}"/>
-      <rect width="1200" height="630" fill="url(#glow)"/>
+      <rect width="${size}" height="${size}" fill="${BG}"/>
+      <rect width="${size}" height="${size}" fill="url(#glow)"/>
 
-      <text x="90" y="260" font-family="Arial, sans-serif" font-size="26" letter-spacing="6"
-            fill="${INK_DIM}">PORTAFOLIO PROFESIONAL</text>
-      <text x="90" y="330" font-family="Arial, sans-serif" font-weight="700" font-size="60"
-            fill="${INK}">Jean Marco Marte</text>
-      <text x="90" y="382" font-family="Arial, sans-serif" font-size="30"
-            fill="${INK_DIM}">Ingeniero de Software Full Stack</text>
-      <text x="90" y="428" font-family="Arial, sans-serif" font-size="25"
-            fill="${INK_DIM}">República Dominicana · Remoto</text>
-
-      <circle cx="${cx}" cy="${cy}" r="${r + 3}" fill="none" stroke="rgba(242,241,236,0.15)" stroke-width="2"/>
+      <circle cx="${cx}" cy="${cy}" r="${r + 4}" fill="none" stroke="rgba(242,241,236,0.15)" stroke-width="2"/>
       <image x="${cx - r}" y="${cy - r}" width="${photoSize}" height="${photoSize}"
              href="data:image/png;base64,${photoB64}" clip-path="url(#circle)"/>
+
+      <text x="${cx}" y="810" font-family="Arial, sans-serif" font-size="26" letter-spacing="6"
+            text-anchor="middle" fill="${INK_DIM}">PORTAFOLIO PROFESIONAL</text>
+      <text x="${cx}" y="880" font-family="Arial, sans-serif" font-weight="700" font-size="66"
+            text-anchor="middle" fill="${INK}">Jean Marco Marte</text>
+      <text x="${cx}" y="935" font-family="Arial, sans-serif" font-size="34"
+            text-anchor="middle" fill="${INK_DIM}">Ingeniero de Software Full Stack</text>
+      <text x="${cx}" y="985" font-family="Arial, sans-serif" font-size="27"
+            text-anchor="middle" fill="${INK_DIM}">República Dominicana · Remoto</text>
     </svg>
   `;
 
   await sharp(Buffer.from(svg)).jpeg({ quality: 90 }).toFile(path.join(PUBLIC_DIR, "og-image.jpg"));
-  console.log("✓ og-image.jpg (1200x630)");
+  console.log(`✓ og-image.jpg (${size}x${size})`);
 }
 
 // ---------- manifest ----------
