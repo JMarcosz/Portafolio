@@ -28,7 +28,11 @@ export function initParticleField(canvas: HTMLCanvasElement, opts: ParticleField
 
   const { count = 220, color = "242, 241, 236", repelRadius = 170, repelStrength = 64, returnEase = 0.055 } = opts;
 
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  // En pantallas chicas se bajan densidad y resolución: es donde menos se aprecia
+  // el detalle y donde más cuesta pintar cada frame.
+  const isSmall = window.matchMedia("(max-width: 768px)").matches;
+  const particleCount = isSmall ? Math.round(count * 0.55) : count;
+  const dpr = Math.min(window.devicePixelRatio || 1, isSmall ? 1.5 : 2);
   let w = 0;
   let h = 0;
   let particles: Particle[] = [];
@@ -45,7 +49,7 @@ export function initParticleField(canvas: HTMLCanvasElement, opts: ParticleField
   };
 
   const seed = () => {
-    particles = Array.from({ length: count }, () => {
+    particles = Array.from({ length: particleCount }, () => {
       const x = Math.random() * w;
       const y = Math.random() * h;
       return {
@@ -72,9 +76,23 @@ export function initParticleField(canvas: HTMLCanvasElement, opts: ParticleField
 
   resize();
   seed();
+
+  // En mobile el navegador dispara `resize` cada vez que la barra de direcciones
+  // se oculta o aparece al scrollear. Reposicionar las partículas ahí producía un
+  // salto a mitad del scroll, así que se ignoran los resize donde sólo cambió el
+  // alto (que es siempre el chrome del navegador, no un reflow real).
+  let lastWidth = window.innerWidth;
+  let resizeTimer: number | undefined;
+
   window.addEventListener("resize", () => {
-    resize();
-    seed();
+    if (window.innerWidth === lastWidth) return;
+    lastWidth = window.innerWidth;
+
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(() => {
+      resize();
+      seed();
+    }, 150);
   });
 
   if (prefersReducedMotion()) {

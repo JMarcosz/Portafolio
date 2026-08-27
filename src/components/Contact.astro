@@ -219,7 +219,15 @@ const iconPaths: Record<string, string> = {
     gsap.set(focusItems, { clearProps: "all" });
     gsap.set(socialBtns, { clearProps: "all" });
   } else {
-    gsap.set(focusItems, { autoAlpha: 0, filter: "blur(6px)", scale: 1.03 });
+    // Animar `filter: blur()` es de lo más caro que hay en mobile, así que ahí se
+    // usa sólo el scale — que ya lee como "enfoque" — y en desktop un radio chico.
+    const useBlur = hasFinePointer();
+
+    gsap.set(focusItems, {
+      autoAlpha: 0,
+      scale: 1.03,
+      ...(useBlur ? { filter: "blur(3px)" } : {}),
+    });
     gsap.set(socialBtns, { autoAlpha: 0, scale: 0.7 });
 
     const tl = gsap.timeline({
@@ -227,10 +235,10 @@ const iconPaths: Record<string, string> = {
     });
     tl.to(focusItems, {
       autoAlpha: 1,
-      filter: "blur(0px)",
       scale: 1,
-      duration: 0.8,
-      stagger: 0.08,
+      ...(useBlur ? { filter: "blur(0px)" } : {}),
+      duration: 0.6,
+      stagger: 0.06,
       ease: "power2.out",
     }).to(
       socialBtns,

@@ -3,7 +3,7 @@ import { nav } from "../data/site";
 ---
 
 <header class="fixed inset-x-0 top-0 z-50 border-b border-white/10">
-  <div class="header-bg pointer-events-none absolute inset-0 -z-10 bg-bg/85 opacity-0 backdrop-blur"></div>
+  <div class="header-bg pointer-events-none absolute inset-0 -z-10"></div>
 
   <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
     <a href="#inicio" data-header-mark class="text-sm font-bold tracking-tight opacity-0">Jean Marco</a>
@@ -71,6 +71,26 @@ import { nav } from "../data/site";
     }
   </nav>
 </header>
+
+<style>
+  .header-bg {
+    background-color: rgb(5 5 5 / 0.85);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  /* El backdrop-filter sólo se aplica cuando la barra está activa: mantenerlo
+     declarado permanentemente obliga al navegador a recalcularlo durante el scroll. */
+  .header-bg.is-active {
+    opacity: 1;
+    backdrop-filter: blur(8px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .header-bg {
+      transition: none;
+    }
+  }
+</style>
 
 <script>
   import { gsap, ScrollTrigger, prefersReducedMotion } from "../scripts/motion";
@@ -169,16 +189,21 @@ import { nav } from "../data/site";
 
   sections.forEach((section) => observer.observe(section));
 
-  // Header bg: opacidad atada al scroll durante los primeros 400px.
+  // Header bg: se activa por umbral, no con la opacidad atada al scroll.
+  // Antes el backdrop-filter estaba aplicado siempre y sólo se animaba la opacidad,
+  // así que el navegador recalculaba el desenfoque de todo lo que pasaba por detrás
+  // en cada frame de scroll — justo cuando se notaba el tirón. Ahora el blur sólo
+  // existe mientras la clase está puesta, y el fundido lo hace una transición CSS.
   const headerBg = document.querySelector<HTMLElement>(".header-bg");
   if (headerBg) {
     if (prefersReducedMotion()) {
-      gsap.set(headerBg, { opacity: 0.85 });
+      headerBg.classList.add("is-active");
     } else {
-      gsap.to(headerBg, {
-        opacity: 0.85,
-        ease: "none",
-        scrollTrigger: { trigger: document.body, start: "top top", end: "400px top", scrub: true },
+      ScrollTrigger.create({
+        trigger: document.body,
+        start: "top -60",
+        onEnter: () => headerBg.classList.add("is-active"),
+        onLeaveBack: () => headerBg.classList.remove("is-active"),
       });
     }
   }
