@@ -1,5 +1,11 @@
 ---
-import { nav } from "../data/site";
+import { getContent, normalizeLocale, localeHome } from "../i18n";
+
+const locale = normalizeLocale(Astro.currentLocale);
+const t = getContent(locale);
+const nav = t.nav;
+const otherLocale = locale === "es" ? "en" : "es";
+const otherHome = localeHome(otherLocale);
 ---
 
 <header class="fixed inset-x-0 top-0 z-50 border-b border-white/10">
@@ -28,22 +34,23 @@ import { nav } from "../data/site";
     </nav>
 
     <div data-header-actions class="flex items-center gap-2">
-      <button
-        type="button"
+      <a
+        href={otherHome}
+        hreflang={otherLocale}
         data-header-item
-        aria-label="Guardar"
-        class="hidden h-8 w-8 items-center justify-center rounded-lg border border-white/10 text-white/60 opacity-0 transition-colors hover:text-white md:flex"
+        aria-label={t.header.langAria}
+        class="flex h-8 items-center gap-1.5 rounded-lg border border-white/10 px-2.5 text-[11px] font-semibold uppercase tracking-[0.15em] opacity-0 transition-colors hover:border-white/25"
       >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-        </svg>
-      </button>
+        <span class={locale === "es" ? "text-white" : "text-white/35"}>ES</span>
+        <span class="text-white/20">/</span>
+        <span class={locale === "en" ? "text-white" : "text-white/35"}>EN</span>
+      </a>
 
       <button
         type="button"
         id="menu-toggle"
         data-header-item
-        aria-label="Abrir menú"
+        aria-label={t.header.menuOpen}
         aria-expanded="false"
         class="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 text-white/70 opacity-0 md:hidden"
       >
@@ -184,15 +191,22 @@ import { nav } from "../data/site";
     }
   };
 
-  // Scroll-spy: resalta el link de la sección visible
+  // Estado activo: lo gobierna groups.ts, que emite `nav:active` con el id de la
+  // sección visible (los 4 paneles del túnel ocupan inset:0 a la vez, así que un
+  // IntersectionObserver no serviría). Los enlaces que no tienen su propia sección
+  // en el nav igual se marcan si su sección pertenece al grupo activo.
   const links = document.querySelectorAll<HTMLAnchorElement>("[data-nav-link]");
-  const sections = Array.from(links)
-    .map((link) => document.querySelector(link.getAttribute("href") || ""))
-    .filter((el): el is Element => !!el);
+
+  // Secciones sin enlace propio -> enlace representativo de su grupo.
+  const REPR = new Map<string, string>([
+    ["formacion", "habilidades"],
+    ["certificados", "habilidades"],
+  ]);
 
   const setActive = (id: string) => {
+    const href = `#${REPR.get(id) ?? id}`;
     links.forEach((link) => {
-      const isActive = link.getAttribute("href") === `#${id}`;
+      const isActive = link.getAttribute("href") === href;
       link.classList.toggle("text-white", isActive);
       link.classList.toggle("text-white/50", !isActive);
       if (isActive && link.closest("nav")?.id !== "mobile-menu") {
@@ -201,16 +215,10 @@ import { nav } from "../data/site";
     });
   };
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) setActive(entry.target.id);
-      });
-    },
-    { rootMargin: "-45% 0px -50% 0px", threshold: 0 }
-  );
-
-  sections.forEach((section) => observer.observe(section));
+  document.addEventListener("nav:active", (event) => {
+    const id = (event as CustomEvent<{ id: string }>).detail?.id;
+    if (id) setActive(id);
+  });
 
   // Header bg: se activa por umbral, no con la opacidad atada al scroll.
   // Antes el backdrop-filter estaba aplicado siempre y sólo se animaba la opacidad,

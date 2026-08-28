@@ -1,6 +1,6 @@
 // Campo de partículas dispersas que huyen del cursor y vuelven a su lugar al soltarlo.
-// Reemplaza el anillo de Houdini: acá se necesita física por partícula (distancia al
-// mouse cada frame), así que canvas es la herramienta correcta, no un paint worklet.
+// Se usa como fondo global fijo (una sola capa a tamaño de viewport, detrás de
+// todo el contenido), continua al scrollear por todas las secciones.
 import { prefersReducedMotion } from "./motion";
 
 type Particle = {
@@ -19,14 +19,23 @@ type ParticleFieldOptions = {
   repelRadius?: number;
   repelStrength?: number;
   returnEase?: number;
+  /** Si devuelve false, el frame no se dibuja (para una capa que solo importa
+   *  en cierta zona de scroll, p. ej. la capa densa del Hero). */
+  visible?: () => boolean;
 };
 
 export function initParticleField(canvas: HTMLCanvasElement, opts: ParticleFieldOptions = {}) {
   const ctx = canvas.getContext("2d");
-  const stage = canvas.parentElement as HTMLElement | null;
-  if (!ctx || !stage) return;
+  if (!ctx) return;
 
-  const { count = 220, color = "242, 241, 236", repelRadius = 170, repelStrength = 64, returnEase = 0.055 } = opts;
+  const {
+    count = 220,
+    color = "242, 241, 236",
+    repelRadius = 170,
+    repelStrength = 64,
+    returnEase = 0.055,
+    visible,
+  } = opts;
 
   // En pantallas chicas se bajan densidad y resolución: es donde menos se aprecia
   // el detalle y donde más cuesta pintar cada frame.
@@ -41,8 +50,8 @@ export function initParticleField(canvas: HTMLCanvasElement, opts: ParticleField
   const pointer = { x: -9999, y: -9999, active: false };
 
   const resize = () => {
-    w = stage.clientWidth;
-    h = stage.clientHeight;
+    w = window.innerWidth;
+    h = window.innerHeight;
     canvas.width = w * dpr;
     canvas.height = h * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -79,15 +88,13 @@ export function initParticleField(canvas: HTMLCanvasElement, opts: ParticleField
 
   // En mobile el navegador dispara `resize` cada vez que la barra de direcciones
   // se oculta o aparece al scrollear. Reposicionar las partículas ahí producía un
-  // salto a mitad del scroll, así que se ignoran los resize donde sólo cambió el
-  // alto (que es siempre el chrome del navegador, no un reflow real).
+  // salto a mitad del scroll, así que se ignoran los resize donde sólo cambió el alto.
   let lastWidth = window.innerWidth;
   let resizeTimer: number | undefined;
 
   window.addEventListener("resize", () => {
     if (window.innerWidth === lastWidth) return;
     lastWidth = window.innerWidth;
-
     window.clearTimeout(resizeTimer);
     resizeTimer = window.setTimeout(() => {
       resize();
@@ -95,12 +102,37 @@ export function initParticleField(canvas: HTMLCanvasElement, opts: ParticleField
     }, 150);
   });
 
+  // El canvas es fixed en (0,0) y cubre el viewport: clientX/clientY ya están en
+  // sus coordenadas, sin necesidad de getBoundingClientRect.
+  window.addEventListener(
+    "pointermove",
+    (event) => {
+      pointer.x = event.clientX;
+      pointer.y = event.clientY;
+      pointer.active = true;
+    },
+    { passive: true }
+  );
+  window.addEventListener("pointerout", (event) => {
+    if (!event.relatedTarget) pointer.active = false;
+  });
+
   if (prefersReducedMotion()) {
     drawStatic();
     return;
   }
 
+  let wasHidden = false;
   const step = () => {
+    if (visible && !visible()) {
+      if (!wasHidden) {
+        ctx.clearRect(0, 0, w, h);
+        wasHidden = true;
+      }
+      raf = requestAnimationFrame(step);
+      return;
+    }
+    wasHidden = false;
     tick++;
     ctx.clearRect(0, 0, w, h);
 
@@ -133,36 +165,13 @@ export function initParticleField(canvas: HTMLCanvasElement, opts: ParticleField
     raf = requestAnimationFrame(step);
   };
 
-  stage.addEventListener("pointermove", (event) => {
-    const rect = stage.getBoundingClientRect();
-    pointer.x = event.clientX - rect.left;
-    pointer.y = event.clientY - rect.top;
-    pointer.active = true;
-  });
-  stage.addEventListener("pointerleave", () => {
-    pointer.active = false;
-  });
-
-  let isIntersecting = false;
-
-  const io = new IntersectionObserver(
-    ([entry]) => {
-      isIntersecting = entry.isIntersecting;
-      if (isIntersecting && !document.hidden && raf === null) raf = requestAnimationFrame(step);
-      if (!isIntersecting && raf !== null) {
-        cancelAnimationFrame(raf);
-        raf = null;
-      }
-    },
-    { threshold: 0.05 }
-  );
-  io.observe(stage);
+  raf = requestAnimationFrame(step);
 
   document.addEventListener("visibilitychange", () => {
     if (document.hidden && raf !== null) {
       cancelAnimationFrame(raf);
       raf = null;
-    } else if (!document.hidden && isIntersecting && raf === null) {
+    } else if (!document.hidden && raf === null) {
       raf = requestAnimationFrame(step);
     }
   });

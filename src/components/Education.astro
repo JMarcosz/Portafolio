@@ -1,11 +1,13 @@
 ---
-import { education } from "../data/site";
+import { getContent } from "../i18n";
+const { education: edu } = getContent(Astro.currentLocale);
+const education = edu.items;
 ---
 
-<section id="formacion" data-slide-section class="mx-auto max-w-6xl px-6 py-24">
-  <p class="eyebrow mb-4">Formación académica</p>
+<section id="formacion" class="mx-auto max-w-6xl px-6 py-24">
+  <p class="eyebrow mb-4">{edu.eyebrow}</p>
   <h2 class="text-4xl font-bold tracking-tight">
-    Mi <span class="font-extrabold">Formación</span>
+    {edu.heading1} <span class="font-extrabold">{edu.heading2}</span>
   </h2>
 
   <div class="mt-14 grid grid-cols-1 gap-5 md:grid-cols-2">
@@ -37,28 +39,24 @@ import { education } from "../data/site";
 
 <script>
   import { gsap, floatIdle, prefersReducedMotion } from "../scripts/motion";
+  import { registerPanelScrub } from "../scripts/panel-scrub";
 
-  const cards = document.querySelectorAll<HTMLElement>("[data-edu-card]");
+  const cards = gsap.utils.toArray<HTMLElement>("[data-edu-card]");
 
   if (prefersReducedMotion()) {
     gsap.set(cards, { autoAlpha: 1 });
   } else {
     // Familia de entrada: inclinación que se asienta — rotateZ, no translateY.
-    // Tratamiento deliberadamente más quieto que sus vecinas (Experiencia, Certificados).
     gsap.set(cards, { autoAlpha: 0, rotateZ: -4 });
     gsap.set("[data-edu-icon]", { rotate: -8, scale: 0.8 });
 
-    gsap.to(cards, {
-      autoAlpha: 1,
-      rotateZ: 0,
-      duration: 0.7,
-      stagger: 0.1,
-      ease: "power3.out",
-      scrollTrigger: { trigger: "#formacion", start: "top 78%", once: true },
-      onComplete: () => {
-        gsap.to("[data-edu-icon]", { rotate: 0, scale: 1, duration: 0.4, stagger: 0.1, ease: "back.out(1.7)" });
-        cards.forEach((card) => floatIdle(card, 2));
-      },
+    const tl = gsap.timeline({
+      paused: true,
+      onComplete: () => cards.forEach((card) => floatIdle(card, 2)),
     });
+    tl.to(cards, { autoAlpha: 1, rotateZ: 0, duration: 0.7, stagger: 0.15, ease: "power3.out" }, 0)
+      .to("[data-edu-icon]", { rotate: 0, scale: 1, duration: 0.4, stagger: 0.1, ease: "back.out(1.7)" }, 0.4);
+
+    registerPanelScrub("formacion", (_t, tMax) => tl.progress(tMax));
   }
 </script>

@@ -1,5 +1,6 @@
 ---
-import { footer } from "../data/site";
+import { getContent } from "../i18n";
+const { footer } = getContent(Astro.currentLocale);
 ---
 
 <footer data-footer class="border-t border-white/10">
@@ -8,11 +9,11 @@ import { footer } from "../data/site";
       <p class="text-sm font-bold tracking-tight">{footer.name.toUpperCase()}</p>
       <p class="text-xs text-white/40">{footer.role}</p>
     </div>
-    <a href="#contacto" class="text-sm text-white/60 hover:text-white">Contacto</a>
+    <a href="#contacto" class="text-sm text-white/60 hover:text-white">{footer.contact}</a>
   </div>
   <div class="border-t border-white/5">
     <div class="mx-auto max-w-6xl px-6 py-4 text-[11px] text-white/30">
-      © {footer.year} Ing. {footer.name}. Todos los derechos reservados.
+      © {footer.year} Ing. {footer.name}. {footer.rights}
     </div>
   </div>
 </footer>

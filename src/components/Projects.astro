@@ -1,13 +1,14 @@
 ---
-import { projects } from "../data/site";
-const { featured, client, toolset } = projects;
+import { getContent } from "../i18n";
+const { projects: p } = getContent(Astro.currentLocale);
+const { featured, client, toolset } = p;
 const items = [featured, client];
 ---
 
-<section id="proyectos" data-slide-section class="mx-auto max-w-6xl px-6 py-24">
-  <p class="eyebrow mb-4">Trabajo seleccionado</p>
+<section id="proyectos" class="mx-auto max-w-6xl px-6 py-24">
+  <p class="eyebrow mb-4">{p.eyebrow}</p>
   <h2 class="text-4xl font-bold tracking-tight">
-    Mis <span class="font-extrabold">Proyectos</span>
+    {p.heading1} <span class="font-extrabold">{p.heading2}</span>
   </h2>
 
   <div data-projects-grid class="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -18,7 +19,7 @@ const items = [featured, client];
             <img
               data-project-img
               src={project.image}
-              alt={`Captura de pantalla de ${project.title}`}
+              alt={`${project.title} — ${project.subtitle}`}
               class="aspect-video w-full border-b border-white/10 object-cover object-top"
               loading="lazy"
             />
@@ -46,7 +47,7 @@ const items = [featured, client];
                 data-demo-link
                 class="btn-primary flex-1 justify-center text-sm"
               >
-                Ver Demo
+                {p.viewDemo}
                 <svg data-demo-arrow width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M7 17L17 7M17 7H9M17 7v8" />
                 </svg>
@@ -56,7 +57,7 @@ const items = [featured, client];
                 target="_blank"
                 rel="noopener noreferrer"
                 data-code-link
-                aria-label={`Ver código de ${project.title}`}
+                aria-label={`${p.viewCodeAria} ${project.title}`}
                 class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 text-white/60 transition-colors hover:border-white/30 hover:text-white"
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -79,9 +80,9 @@ const items = [featured, client];
     </article>
 
     <article class="card flex flex-col justify-between p-6">
-      <h3 class="text-sm font-semibold">¿Tienes un proyecto en mente?</h3>
-      <button type="button" id="copy-email-projects" class="btn-primary mt-4 self-start !bg-white/10 !text-white">
-        <span data-copy-label>Copiar correo</span>
+      <h3 class="text-sm font-semibold">{p.haveProject}</h3>
+      <button type="button" id="copy-email-projects" class="btn-primary mt-4 self-start !bg-white/10 !text-white" data-copy-done={p.copied}>
+        <span data-copy-label>{p.copyEmail}</span>
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <rect x="9" y="9" width="13" height="13" rx="2"></rect>
           <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -92,16 +93,17 @@ const items = [featured, client];
 </section>
 
 <script>
-  import { contact } from "../data/site";
+  import { getContent } from "../i18n";
+  const email = getContent(document.documentElement.lang).contact.email;
 
   const btn = document.getElementById("copy-email-projects");
   btn?.addEventListener("click", async () => {
     const label = btn.querySelector("[data-copy-label]");
     try {
-      await navigator.clipboard.writeText(contact.email);
+      await navigator.clipboard.writeText(email);
       if (label) {
         const original = label.textContent;
-        label.textContent = "¡Copiado!";
+        label.textContent = btn.getAttribute("data-copy-done") || "OK";
         setTimeout(() => {
           label.textContent = original;
         }, 1800);
@@ -114,44 +116,35 @@ const items = [featured, client];
 
 <script>
   import { gsap, hasFinePointer, floatIdle, prefersReducedMotion } from "../scripts/motion";
-  import { onSectionRevealed } from "../scripts/section-transitions";
+  import { registerPanelScrub } from "../scripts/panel-scrub";
 
-  const cards = document.querySelectorAll<HTMLElement>("[data-project-card]");
+  const cards = gsap.utils.toArray<HTMLElement>("[data-project-card]");
   const grid = document.querySelector<HTMLElement>("[data-projects-grid]");
 
-  // La perspectiva sólo hace falta mientras el tilt 3D puede activarse. Aplicarla
-  // siempre metía la grilla en contexto de render 3D permanente, también en mobile
-  // (90% del tráfico), donde el tilt ni siquiera existe.
+  // La perspectiva sólo hace falta mientras el tilt 3D puede activarse.
   if (grid && hasFinePointer() && !prefersReducedMotion()) {
     grid.style.perspective = "900px";
   }
 
-  // Familia de entrada: profundidad ascendente — scale + translateY a la vez,
-  // no una traslación plana como el resto de las secciones.
-  //
-  // Se encadena a `section:revealed` en vez de a su propio ScrollTrigger: antes el
-  // slide de la sección (top 88%) y esta animación (top 78%) se solapaban, y el
-  // navegador terminaba componiendo transformaciones anidadas sobre un subárbol con
-  // las dos imágenes más pesadas del sitio. Ese solapamiento era el tirón.
+  // Familia de entrada: profundidad ascendente — scale + translateY a la vez.
   if (!prefersReducedMotion()) {
     gsap.set(cards, { autoAlpha: 0, y: 30, scale: 0.92 });
 
-    onSectionRevealed(document.getElementById("proyectos"), () => {
-      gsap.to(cards, {
-        autoAlpha: 1,
-        y: 0,
-        scale: 1,
-        duration: 0.8,
-        stagger: 0.12,
-        ease: "power3.out",
-        force3D: true,
-        onStart: () => cards.forEach((card) => (card.style.willChange = "transform, opacity")),
-        onComplete: () => {
-          cards.forEach((card) => (card.style.willChange = ""));
-          cards.forEach((card) => floatIdle(card, 2.5));
-        },
-      });
+    const tl = gsap.timeline({
+      paused: true,
+      onComplete: () => cards.forEach((card) => floatIdle(card, 2.5)),
     });
+    tl.to(cards, {
+      autoAlpha: 1,
+      y: 0,
+      scale: 1,
+      duration: 0.8,
+      stagger: 0.28,
+      ease: "power3.out",
+      force3D: true,
+    });
+
+    registerPanelScrub("proyectos", (_t, tMax) => tl.progress(tMax));
   }
 
   cards.forEach((card) => {

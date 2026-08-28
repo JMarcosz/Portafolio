@@ -1,0 +1,285 @@
+{
+  "meta": {
+    "title": "Jean Marco Marte — Full Stack Software Engineer | DR",
+    "description": "Portfolio of Jean Marco Marte, Full Stack Software Engineer in the Dominican Republic. Angular, Vue/Nuxt, React/Next, .NET, Laravel and Docker — projects, experience and contact.",
+    "ogAlt": "Jean Marco Marte — Full Stack Software Engineer",
+    "jobTitle": "Full Stack Software Engineer",
+    "localeOg": "en_US"
+  },
+  "nav": [
+    { "label": "Home", "href": "#inicio" },
+    { "label": "About", "href": "#sobre-mi" },
+    { "label": "Projects", "href": "#proyectos" },
+    { "label": "Services", "href": "#servicios" },
+    { "label": "Experience", "href": "#experiencia" },
+    { "label": "Skills", "href": "#habilidades" },
+    { "label": "Contact", "href": "#contacto" }
+  ],
+  "hero": {
+    "eyebrow": "Professional portfolio",
+    "title1": "Hi, I'm",
+    "title2": "Jean Marco",
+    "description": "An engineer focused on building digital solutions that solve real problems. I combine technical judgment with attention to detail to ship projects that work well and look good.",
+    "cta": "Get in touch",
+    "cvLabel": "View CV",
+    "photoAlt": "Photo of Jean Marco",
+    "nameAria": "Jean Marco Marte — Full Stack Software Engineer",
+    "scroll": "Scroll",
+    "scrollAria": "Go to the next section"
+  },
+  "about": {
+    "eyebrow": "Who I am",
+    "title1": "About",
+    "title2": "My Path",
+    "paragraphs": [
+      "I'm an engineer and developer. My work is taking an idea from the first conversation to something running in production, without losing clarity or detail along the way."
+    ],
+    "highlight": "engineering and design meet",
+    "paragraphAfterHighlight": ": systems that hold up technically and also feel natural to the people using them. I treat every project as a problem to solve, not a template to fill in.",
+    "highlightIntro": "I'm drawn to the point where ",
+    "stats": [
+      { "value": "3+", "label": "Years of experience" },
+      { "value": "20+", "label": "Projects completed" },
+      { "value": "10+", "label": "Happy clients" },
+      { "value": "5+", "label": "Certificates earned" }
+    ]
+  },
+  "projects": {
+    "eyebrow": "Selected work",
+    "heading1": "My",
+    "heading2": "Projects",
+    "viewDemo": "View Demo",
+    "viewCodeAria": "View code for",
+    "haveProject": "Have a project in mind?",
+    "copyEmail": "Copy email",
+    "copied": "Copied!",
+    "featured": {
+      "badge": "Featured project",
+      "title": "Zentra",
+      "subtitle": "Tax automation for the Dominican Republic",
+      "description": "A SaaS platform that automates the full tax-receipt cycle: it digitizes invoices with OCR and AI (Google Gemini), classifies expenses and income per DGII regulations, and generates the 606/607 files ready for the Virtual Office.",
+      "tags": ["Vue 3", "NestJS", "PostgreSQL", "Gemini AI"]
+    },
+    "client": {
+      "badge": "Client",
+      "title": "Santoral Logistic",
+      "subtitle": "For Maed Logistic Trading",
+      "description": "TMS + WMS + CRM that centralizes quotes, shipments, inventory and billing in one place.",
+      "tags": ["Laravel 12", "React 19", "PostgreSQL"]
+    },
+    "toolset": {
+      "title": "Tools I use",
+      "tags": ["TypeScript", "Docker", "PostgreSQL", "Git", "Tailwind CSS"]
+    }
+  },
+  "services": {
+    "eyebrow": "How I can help",
+    "heading1": "Development &",
+    "heading2": "Support",
+    "intro": "I work per project or as ongoing support, depending on what the team needs.",
+    "items": [
+      {
+        "title": "Custom development",
+        "description": "End-to-end full-stack web applications: frontend, API, database and deployment. Angular, Vue/Nuxt, React/Next, NestJS and Laravel."
+      },
+      {
+        "title": "Maintenance and support",
+        "description": "Ongoing care for production systems: bug fixes, monitoring, incremental improvements and incident response."
+      },
+      {
+        "title": "Integrations and automation",
+        "description": "Connecting third-party services and APIs (payments, messaging, DGII, AI) and automating processes that are done by hand today."
+      },
+      {
+        "title": "Infrastructure and deployment",
+        "description": "Containerization with Docker, VPS server setup, domains, SSL and deployment pipelines on AWS, Azure or Cloudflare."
+      }
+    ]
+  },
+  "experience": {
+    "eyebrow": "Professional experience",
+    "heading1": "Where I've",
+    "heading2": "Worked",
+    "items": [
+      {
+        "period": "OCT 2025 — PRESENT",
+        "role": "Software Developer",
+        "company": "Ministry of Finance and Economy",
+        "location": "Remote",
+        "bullets": [
+          "Building enterprise web solutions with Nuxt.js / Vue.js on the frontend, integrated with backend services and APIs within a modular, scalable architecture.",
+          "Developing reusable frontend components and interfaces focused on maintainability, usability and performance for business-critical applications.",
+          "Integrating frontend applications with RESTful services and backend systems, handling data exchange through JSON structures.",
+          "Containerizing applications and standardizing development and deployment environments with Docker.",
+          "Working with enterprise systems spanning HR, CRM, accounting and operations modules."
+        ],
+        "tags": ["Nuxt.js", "Vue.js", "Docker", "REST API", "JSON"]
+      },
+      {
+        "period": "NOV 2023 — SEP 2025",
+        "role": "Systems and Infrastructure Analyst",
+        "company": "Valiente Fernández",
+        "location": "Santo Domingo, DR",
+        "bullets": [
+          "Led the rollout of Electronic Invoicing (DGII) across multiple environments, coordinating application, database and infrastructure requirements.",
+          "Administered SAP Business One on Linux servers (openSUSE) and supported production environments with a focus on operational continuity.",
+          "Handled infrastructure maintenance, daily system monitoring and SLA-based technical support.",
+          "Built advanced SQL solutions, including stored procedures, views, data cubes and reports with SAP Crystal Reports."
+        ],
+        "tags": ["SAP Business One", "SQL Server", "Linux", "DGII", "Crystal Reports"]
+      },
+      {
+        "period": "2022 — PRESENT",
+        "role": "Software Engineer / Full Stack",
+        "company": "Freelance",
+        "location": "Remote",
+        "bullets": [
+          "Built an end-to-end logistics platform with React on the frontend and Laravel (PHP) on the backend.",
+          "Full-stack apps and automated messaging bots integrating the WhatsApp Business API and Meta Suite, with Python on the backend.",
+          "Websites and online stores with WordPress, Elementor and WooCommerce, including custom PHP templates.",
+          "Financial process automation with Google Apps Script and end-to-end infrastructure management: AWS, Azure, Hostinger, Cloudflare, VPS servers with Apache, DNS and SSL certificates."
+        ],
+        "tags": ["React", "Laravel", "Python", "WordPress", "AWS"]
+      }
+    ]
+  },
+  "education": {
+    "eyebrow": "Education",
+    "heading1": "My",
+    "heading2": "Education",
+    "items": [
+      {
+        "period": "2025 — 2027",
+        "degree": "Software Engineering",
+        "institution": "Universidad Domínico Americana (UNICDA)"
+      },
+      {
+        "period": "2022 — 2024",
+        "degree": "Software Development Technologist",
+        "institution": "Instituto Tecnológico de las Américas (ITLA)"
+      }
+    ]
+  },
+  "certificates": {
+    "eyebrow": "Achievements",
+    "heading1": "My",
+    "heading2": "Certificates",
+    "verified": "Verified",
+    "items": [
+      {
+        "year": "2025",
+        "title": "Front-End Web Development with Angular",
+        "institution": "ITLA",
+        "description": "Route authentication and validation with Guards, dynamic API consumption, LocalStorage management and reusable components with TailwindCSS.",
+        "tags": ["Angular", "TailwindCSS", "REST APIs"]
+      },
+      {
+        "year": "2024",
+        "title": "Data Analyst - Power BI",
+        "institution": "Udemy",
+        "description": "Training in data analysis and visualization with Power BI for business decision-making.",
+        "tags": ["Power BI", "Data Analysis"]
+      },
+      {
+        "year": "2024",
+        "title": "English Certificate A2-Level",
+        "institution": "International English Test",
+        "description": "A2 (elementary) English level certification.",
+        "tags": ["English", "A2"]
+      },
+      {
+        "year": "2024",
+        "title": "Scrum Fundamentals",
+        "institution": "soylider.net",
+        "description": "Principles and fundamentals of the agile Scrum framework.",
+        "tags": ["Scrum", "Agile"]
+      },
+      {
+        "year": "2026",
+        "title": "Community Management & Digital Marketing",
+        "institution": "ITLA",
+        "description": "Social media management and digital marketing strategy.",
+        "tags": ["Digital Marketing", "Social Media"]
+      },
+      {
+        "year": "2022",
+        "title": "Cisco Certified IT Essentials",
+        "institution": "Cisco Networking Academy",
+        "description": "Fundamentals of computer hardware, software and networking.",
+        "tags": ["Networking", "Hardware"]
+      }
+    ]
+  },
+  "skills": {
+    "eyebrow": "My expertise",
+    "heading1": "Skills &",
+    "heading2": "Technologies",
+    "categories": [
+      {
+        "index": "01",
+        "title": "Frontend development",
+        "description": "Interfaces, accessibility and in-browser performance",
+        "skills": [
+          { "label": "Angular", "percent": 85 },
+          { "label": "React / Next.js", "percent": 78 },
+          { "label": "Vue.js / Nuxt.js", "percent": 80 },
+          { "label": "TypeScript", "percent": 80 }
+        ]
+      },
+      {
+        "index": "02",
+        "title": "Backend development",
+        "description": "APIs, databases and server-side logic",
+        "skills": [
+          { "label": "Node.js", "percent": 75 },
+          { "label": "Databases", "percent": 70 },
+          { "label": "REST APIs", "percent": 80 },
+          { "label": "Authentication", "percent": 76 }
+        ]
+      },
+      {
+        "index": "03",
+        "title": "Tools & process",
+        "description": "Version control, deployment and teamwork",
+        "skills": [
+          { "label": "Docker", "percent": 78 },
+          { "label": "Git", "percent": 85 },
+          { "label": "AWS / Azure", "percent": 65 },
+          { "label": "Linux / VPS", "percent": 72 }
+        ]
+      }
+    ]
+  },
+  "contact": {
+    "eyebrow": "Let's talk",
+    "title1": "Let's build",
+    "title2": "Something New",
+    "description": "Have a project in mind or an idea you want to get moving? Tell me what it's about and I'll come back with the next steps.",
+    "location": "Dominican Republic · Remote",
+    "fieldEmail": "[ Email ]",
+    "fieldLocation": "[ Location ]",
+    "labelName": "Name",
+    "labelEmail": "Email",
+    "labelMessage": "Message",
+    "phName": "Your name",
+    "phEmail": "you@example.com",
+    "phMessage": "Tell me about your project...",
+    "submit": "Send message",
+    "sending": "Sending...",
+    "sent": "Sent",
+    "okMsg": "Message sent! I'll get back to you soon.",
+    "errMsg": "The message couldn't be sent. Please try again.",
+    "connErr": "Connection error. Please try again in a few minutes.",
+    "notConfigured": "The form isn't connected yet (the Web3Forms Access Key still needs to be configured)."
+  },
+  "footer": {
+    "role": "Engineer · Web development",
+    "contact": "Contact",
+    "rights": "All rights reserved."
+  },
+  "header": {
+    "save": "Save",
+    "menuOpen": "Open menu",
+    "langAria": "Switch language to Spanish"
+  }
+}

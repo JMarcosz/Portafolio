@@ -18,8 +18,8 @@
        nativo se deja fuera a propósito para que no compita con el rAF de Lenis. */
     scroll-padding-top: 5.5rem;
     /* `clip`, no `hidden`. Ambos contienen el desborde horizontal que producen las
-       secciones al trasladarse fuera de pantalla (section-transitions.ts), pero
-       `overflow-x: hidden` obliga a `overflow-y` a calcularse como `auto`, lo que
+       animaciones de entrada (grupos y secciones), pero `overflow-x: hidden`
+       obliga a `overflow-y` a calcularse como `auto`, lo que
        convierte a <html> en contenedor de scroll y rompe a Lenis: quedaban dos
        contextos de scroll peleando y el primer gesto se perdía (había que scrollear
        dos veces). Con `clip`, `overflow-y` sigue en `visible` y el scroller sigue
@@ -97,10 +97,4 @@
   #preloader {
     display: none;
   }
-}
-
-/* ---------- Hero: campo de partículas dispersas (src/scripts/particle-field.ts) ---------- */
-
-[data-hero-particles] {
-  pointer-events: none;
 }

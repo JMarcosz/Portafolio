@@ -1,0 +1,124 @@
+/* ==========================================================================
+   Túnel de zoom entre 4 grupos de secciones
+
+     main.viewport-root
+       └ .scroll-track          <- altura virtual; la fija groups.ts en runtime
+           └ .sticky-stage      <- position: sticky, 100dvh, perspectiva 3D
+               └ section.scroll-group * 4   <- apilados en inset:0, ocultos por defecto
+                   └ .group-inner           <- capa que se traslada en el sub-scroll
+
+   Entre grupo y grupo: transición de ZOOM (el saliente se aleja hacia la cámara
+   y se desvanece; el entrante llega desde el fondo). Dentro de un grupo alto el
+   scroll es normal: .group-inner sube y cada sección dibuja su coreografía
+   según su posición real en pantalla. Toda la lógica está en groups.ts.
+   ========================================================================== */
+
+:root {
+  --perspective-depth: 1200px;
+  --group-vh: 150vh; /* recorrido base de un grupo corto (fallback pre-JS) */
+  --group-top: 5.5rem; /* holgura para el header fijo en grupos altos */
+}
+
+.viewport-root {
+  position: relative;
+  width: 100%;
+}
+
+.scroll-track {
+  position: relative;
+  width: 100%;
+  height: calc(var(--groups, 4) * var(--group-vh));
+}
+
+.sticky-stage {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  perspective: var(--perspective-depth);
+  perspective-origin: center center;
+}
+
+.scroll-group {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center; /* grupos cortos: centrados */
+  justify-content: center;
+  transform-origin: center center;
+
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+/* Grupo alto: contenido anclado arriba (bajo el header) — sin hueco superior. */
+.scroll-group[data-group-tall] {
+  align-items: flex-start;
+  padding-top: var(--group-top);
+}
+
+.scroll-group[data-group-initial] {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.group-inner {
+  width: 100%;
+}
+
+.scroll-group[data-group-tall] .group-inner {
+  will-change: transform;
+}
+
+/* Indicador global de progreso del túnel. */
+.z-progress {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 2px;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: rgba(255, 255, 255, 0.7);
+  z-index: 60;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   Fallback: sin JS o prefers-reduced-motion -> documento vertical normal.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-track {
+    height: auto !important;
+  }
+  .sticky-stage {
+    position: static !important;
+    height: auto !important;
+    overflow: visible !important;
+    perspective: none !important;
+  }
+  .scroll-group {
+    position: relative !important;
+    inset: auto !important;
+    display: block !important;
+    padding-top: 0 !important;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    will-change: auto !important;
+  }
+  .scroll-group .group-inner {
+    transform: none !important;
+    will-change: auto !important;
+  }
+  .z-progress {
+    display: none !important;
+  }
+}

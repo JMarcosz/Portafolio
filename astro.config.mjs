@@ -10,7 +10,13 @@ export default defineConfig({
   // (Domain management → Primary domain), si no Google indexa los dos como sitios
   // distintos y divide el ranking.
   site: 'https://www.jeanmarte.com',
-  integrations: [sitemap()],
+  // Español en `/`, inglés en `/en/`. El toggle del header es un enlace entre ambas.
+  i18n: {
+    defaultLocale: 'es',
+    locales: ['es', 'en'],
+    routing: { prefixDefaultLocale: false },
+  },
+  integrations: [sitemap({ i18n: { defaultLocale: 'es', locales: { es: 'es-DO', en: 'en-US' } } })],
   vite: {
     plugins: [tailwindcss()],
     // Genera los .map y los enlaza desde cada bundle, para poder debuggear el

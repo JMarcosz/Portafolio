@@ -1,21 +1,18 @@
 ---
-import { hero } from "../data/site";
+import { getContent } from "../i18n";
+const { hero } = getContent(Astro.currentLocale);
 ---
 
-<!-- overflow-x-clip, no overflow-hidden: `overflow-hidden` afecta ambos ejes y
-     convierte al Hero en contenedor de scroll, de modo que un gesto táctil que
-     empieza acá (justo donde cae el primer scroll al cargar) lo consume él en vez
-     de desplazar la página. Sólo hace falta contener el eje horizontal. -->
-<section id="inicio" class="relative flex min-h-screen items-center overflow-x-clip pt-16" data-hero-section>
-  <canvas data-hero-particles class="absolute inset-0 -z-10 h-full w-full" aria-hidden="true"></canvas>
+<section id="inicio" class="relative flex items-center overflow-x-clip" data-hero-section>
+  <!-- Capa densa de partículas solo para el Hero (se va con el grupo al hacer zoom). -->
+  <canvas data-hero-particles class="pointer-events-none fixed inset-0 -z-10 h-full w-full" aria-hidden="true"></canvas>
 
-  <div class="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-16 px-6 py-24 md:grid-cols-2">
+  <div class="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-16 px-6 py-16 md:grid-cols-2">
     <div>
       <p class="eyebrow mb-4" data-hero-eyebrow>{hero.eyebrow}</p>
-      <!-- aria-label lleva el nombre completo + rol para SEO/lectores de pantalla,
-           sin tocar el copy visual diseñado ("Hola, soy Jean Marco"). -->
+      <!-- aria-label lleva el nombre completo + rol para SEO/lectores de pantalla. -->
       <h1
-        aria-label="Jean Marco Marte — Ingeniero de Software Full Stack"
+        aria-label={hero.nameAria}
         class="text-5xl font-bold leading-[1.05] tracking-tight md:text-6xl"
       >
         <span class="block overflow-hidden">
@@ -53,7 +50,7 @@ import { hero } from "../data/site";
         class="relative h-72 w-72 overflow-hidden rounded-full border border-white/10 md:h-80 md:w-80 lg:h-96 lg:w-96"
         data-hero-circle
       >
-        <img src={hero.photo} alt="Foto de Jean Marco" class="h-full w-full object-cover object-top" />
+        <img src={hero.photo} alt={hero.photoAlt} class="h-full w-full object-cover object-top" />
       </div>
     </div>
   </div>
@@ -61,10 +58,10 @@ import { hero } from "../data/site";
   <button
     type="button"
     data-scroll-cue
-    class="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-white/30 transition-colors hover:text-white/60"
-    aria-label="Bajar a la siguiente sección"
+    class="absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-white/30 transition-colors hover:text-white/60"
+    aria-label={hero.scrollAria}
   >
-    <span>Scroll</span>
+    <span>{hero.scroll}</span>
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M12 5v14M5 12l7 7 7-7"></path>
     </svg>
@@ -75,10 +72,14 @@ import { hero } from "../data/site";
   import { gsap, hasFinePointer, prefersReducedMotion } from "../scripts/motion";
   import { initParticleField } from "../scripts/particle-field";
 
-  // Campo de partículas dispersas: huyen del cursor y vuelven a su lugar al soltarlo.
-  const particleCanvas = document.querySelector<HTMLCanvasElement>("[data-hero-particles]");
-  if (particleCanvas) {
-    initParticleField(particleCanvas);
+  // Capa densa propia del Hero. El fondo global (Layout) va disperso; esta solo
+  // se dibuja mientras el Hero está en pantalla.
+  const heroCanvas = document.querySelector<HTMLCanvasElement>("[data-hero-particles]");
+  if (heroCanvas) {
+    initParticleField(heroCanvas, {
+      count: 210,
+      visible: () => window.scrollY < window.innerHeight * 1.6,
+    });
   }
 
   const eyebrow = document.querySelector<HTMLElement>("[data-hero-eyebrow]");
@@ -121,6 +122,9 @@ import { hero } from "../data/site";
     playHeroIntro();
   }
 
+  // La salida inmersiva del Hero (zoom hacia la cámara) la maneja el túnel de
+  // grupos (groups.ts) en la transición hacia el grupo siguiente.
+
   // Botón magnético en la foto: sigue el cursor con inercia (gsap.quickTo), no en teletransporte.
   const heroSection = document.querySelector<HTMLElement>("[data-hero-section]");
 
@@ -143,15 +147,6 @@ import { hero } from "../data/site";
     });
   }
 
-  // Parallax sutil del campo de partículas con el scroll.
-  if (particleCanvas && !prefersReducedMotion()) {
-    gsap.to(particleCanvas, {
-      y: -60,
-      ease: "none",
-      scrollTrigger: { trigger: "#inicio", start: "top top", end: "bottom top", scrub: true },
-    });
-  }
-
   // Indicador de scroll: se desvanece tras el primer scroll del usuario.
   if (scrollCue) {
     let dismissed = false;
@@ -167,7 +162,10 @@ import { hero } from "../data/site";
     };
     window.addEventListener("scroll", dismiss, { passive: true });
     scrollCue.addEventListener("click", () => {
-      document.getElementById("sobre-mi")?.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth" });
+      // Reutiliza el enlace del nav para que el scroll pase por Lenis (smooth-scroll.ts).
+      const link = document.querySelector<HTMLElement>('[data-nav-link][href="#sobre-mi"]');
+      if (link) link.click();
+      else document.getElementById("sobre-mi")?.scrollIntoView({ behavior: "smooth" });
     });
   }
 </script>

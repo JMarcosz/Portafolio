@@ -1,8 +1,9 @@
 ---
-import { about } from "../data/site";
+import { getContent } from "../i18n";
+const { about } = getContent(Astro.currentLocale);
 ---
 
-<section id="sobre-mi" data-slide-section class="mx-auto max-w-6xl px-6 py-24">
+<section id="sobre-mi" class="mx-auto max-w-6xl px-6 py-24">
   <div class="grid grid-cols-1 gap-12 md:grid-cols-2">
     <div>
       <p class="eyebrow mb-4">{about.eyebrow}</p>
@@ -15,12 +16,12 @@ import { about } from "../data/site";
     <div data-about-copy class="space-y-4 text-sm leading-relaxed text-white/50">
       {about.paragraphs.map((p) => <p>{p}</p>)}
       <p>
-        Me interesa el punto donde <span data-about-highlight class="font-semibold text-white">{about.highlight}</span>{about.paragraphAfterHighlight}
+        {about.highlightIntro}<span data-about-highlight class="font-semibold text-white">{about.highlight}</span>{about.paragraphAfterHighlight}
       </p>
     </div>
   </div>
 
-  <div class="mt-20 grid grid-cols-2 gap-8 border-t border-white/10 pt-10 md:grid-cols-4">
+  <div class="mt-16 grid grid-cols-2 gap-8 border-t border-white/10 pt-10 md:grid-cols-4">
     {
       about.stats.map((stat) => {
         const match = stat.value.match(/^(\d+)(.*)$/);
@@ -40,65 +41,67 @@ import { about } from "../data/site";
 </section>
 
 <script>
-  import { gsap, ScrollTrigger, SplitText, prefersReducedMotion } from "../scripts/motion";
+  import { gsap, prefersReducedMotion, SplitText } from "../scripts/motion";
+  import { registerPanelScrub } from "../scripts/panel-scrub";
 
+  const section = document.getElementById("sobre-mi");
   const heading = document.querySelector<HTMLElement>("[data-about-heading]");
   const copy = document.querySelector<HTMLElement>("[data-about-copy]");
+  const statValues = document.querySelectorAll<HTMLElement>("[data-stat-value]");
 
-  // Familia de entrada: máscara de línea (nunca por carácter — eso ya lo usó el Hero).
-  if (heading && copy && !prefersReducedMotion()) {
-    const headingSplit = new SplitText(heading, { type: "lines", mask: "lines" });
-    const copySplit = new SplitText(copy.querySelectorAll("p"), { type: "lines", mask: "lines" });
+  if (prefersReducedMotion()) {
+    const highlight = document.querySelector<HTMLElement>("[data-about-highlight]");
+    if (highlight) highlight.style.textDecoration = "underline";
+    statValues.forEach((el) => {
+      el.textContent = (el.dataset.target || "0") + (el.dataset.suffix || "");
+    });
+  } else {
+    // Estado oculto inmediato (el panel puede estar fuera de pantalla al cargar).
+    let headingLines: Element[] = [];
+    let copyLines: Element[] = [];
+    if (heading && copy) {
+      const headingSplit = new SplitText(heading, { type: "lines", mask: "lines" });
+      const copySplit = new SplitText(copy.querySelectorAll("p"), { type: "lines", mask: "lines" });
+      headingLines = headingSplit.lines;
+      copyLines = copySplit.lines;
+      gsap.set([...headingLines, ...copyLines], { yPercent: 105 });
+    }
 
-    gsap.set([...headingSplit.lines, ...copySplit.lines], { yPercent: 105 });
-
-    gsap
-      .timeline({
-        scrollTrigger: { trigger: "#sobre-mi", start: "top 75%", once: true },
-        defaults: { ease: "expo.out", duration: 0.85 },
-      })
-      .to(headingSplit.lines, { yPercent: 0, stagger: 0.04 })
-      .to(copySplit.lines, { yPercent: 0, stagger: 0.04 }, "-=0.55");
-  }
-
-  // Importante: se vuelve a consultar el DOM recién acá — SplitText reconstruye el
-  // interior del <p> al partirlo en líneas, así que una referencia capturada antes
-  // de ese punto quedaría apuntando a un nodo huérfano ya desprendido del documento.
-  const highlight = document.querySelector<HTMLElement>("[data-about-highlight]");
-  if (highlight) {
-    if (prefersReducedMotion()) {
-      highlight.style.textDecoration = "underline";
-    } else {
+    // SplitText reconstruyó el interior del <p>: re-consultar el highlight ahora.
+    const highlight = document.querySelector<HTMLElement>("[data-about-highlight]");
+    if (highlight) {
       gsap.set(highlight, {
         backgroundImage: "linear-gradient(currentColor, currentColor)",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "0 100%",
         backgroundSize: "0% 2px",
       });
-      gsap.to(highlight, {
-        backgroundSize: "100% 2px",
-        duration: 0.6,
-        ease: "power2.out",
-        delay: 0.5,
-        scrollTrigger: { trigger: "#sobre-mi", start: "top 75%", once: true },
-      });
     }
-  }
 
-  // Stats: cuentan de 0 al valor real, arranque escalonado entre cada uno.
-  document.querySelectorAll<HTMLElement>("[data-stat-value]").forEach((el, i) => {
-    const target = parseInt(el.dataset.target || "0", 10);
-    const suffix = el.dataset.suffix || "";
+    const tl = gsap.timeline({ paused: true });
+    tl.to(headingLines, { yPercent: 0, stagger: 0.04, ease: "expo.out", duration: 0.85 }, 0)
+      .to(copyLines, { yPercent: 0, stagger: 0.04, ease: "expo.out", duration: 0.85 }, 0.3);
+    if (highlight) {
+      tl.to(highlight, { backgroundSize: "100% 2px", duration: 0.6, ease: "power2.out" }, 0.7);
+    }
 
-    ScrollTrigger.create({
-      trigger: el,
-      start: "top 85%",
-      once: true,
-      onEnter: () => {
-        if (prefersReducedMotion()) {
-          el.textContent = target + suffix;
-          return;
-        }
+    // Contadores: de 0 al valor real, con arranque escalonado — el tween por
+    // tiempo del componente original, no atado al scrub.
+    //
+    // Scrubearlos no servía: "sobre-mi" es la primera sección de su grupo, así
+    // que su progreso lo dibuja el ZOOM de entrada (groups.ts -> armSection con
+    // smooth(tB)). Para cuando el grupo empieza a ser legible (autoAlpha recién
+    // sale de 0 en tB=0.4) los números ya iban por el 96%: contaban, pero nunca
+    // se los veía contar. Ahora se disparan una sola vez, ya con el grupo puesto.
+    const group = section?.closest<HTMLElement>(".scroll-group") ?? null;
+    const stats = document.querySelector<HTMLElement>("[data-stat]");
+    let counted = false;
+
+    const runCounters = () => {
+      counted = true;
+      statValues.forEach((el, i) => {
+        const target = parseInt(el.dataset.target || "0", 10);
+        const suffix = el.dataset.suffix || "";
         const counter = { val: 0 };
         gsap.to(counter, {
           val: target,
@@ -109,7 +112,19 @@ import { about } from "../data/site";
             el.textContent = Math.round(counter.val) + suffix;
           },
         });
-      },
+      });
+    };
+
+    registerPanelScrub("sobre-mi", (_t, tMax) => {
+      tl.progress(tMax);
+      if (counted || !stats) return;
+      // Mientras el grupo está escalado o transparente los rects no son legibles
+      // (y el usuario tampoco lo estaría viendo): esperar a que esté puesto.
+      if (group) {
+        if (Math.abs(Number(gsap.getProperty(group, "scale")) - 1) > 0.05) return;
+        if (Number(gsap.getProperty(group, "opacity")) < 0.99) return;
+      }
+      if (stats.getBoundingClientRect().top <= 0.85 * window.innerHeight) runCounters();
     });
-  });
+  }
 </script>

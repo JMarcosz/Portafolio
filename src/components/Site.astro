@@ -1,0 +1,51 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "./Header.astro";
+import Hero from "./Hero.astro";
+import About from "./About.astro";
+import Projects from "./Projects.astro";
+import Services from "./Services.astro";
+import Experience from "./Experience.astro";
+import Education from "./Education.astro";
+import Certificates from "./Certificates.astro";
+import Skills from "./Skills.astro";
+import Contact from "./Contact.astro";
+import Footer from "./Footer.astro";
+---
+
+<Layout>
+  <Header />
+
+  <main class="viewport-root">
+    <div class="scroll-track" style="--groups: 4;">
+      <div class="sticky-stage">
+        <section class="scroll-group" data-group="0" data-nav="inicio" data-group-initial>
+          <div class="group-inner"><Hero /></div>
+        </section>
+
+        <section class="scroll-group" data-group="1" data-nav="sobre-mi">
+          <div class="group-inner">
+            <About />
+            <Projects />
+            <Services />
+            <Experience />
+          </div>
+        </section>
+
+        <section class="scroll-group" data-group="2" data-nav="habilidades">
+          <div class="group-inner">
+            <Education />
+            <Certificates />
+            <Skills />
+          </div>
+        </section>
+
+        <section class="scroll-group" data-group="3" data-nav="contacto">
+          <div class="group-inner"><Contact /></div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

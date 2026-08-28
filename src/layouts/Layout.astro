@@ -1,33 +1,35 @@
 ---
 import "../styles/global.css";
+import "../styles/scroll-engine.css";
 // Se importa con ?url para que Vite devuelva la ruta final con hash: sin esto la
 // fuente recién se descubre al parsear el CSS, provocando FOUT en la primera pintura.
 import interLatin from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url";
+import { getContent, normalizeLocale } from "../i18n";
 
 interface Props {
-  title?: string;
-  description?: string;
-  /** Ruta absoluta o relativa al sitio de la imagen para compartir (Open Graph / Twitter). */
   image?: string;
 }
 
-const {
-  title = "Jean Marco Marte — Ingeniero de Software Full Stack | RD",
-  description = "Portafolio de Jean Marco Marte, Ingeniero de Software Full Stack en República Dominicana. Angular, Vue/Nuxt, React/Next, .NET, Laravel y Docker — proyectos, experiencia y contacto.",
-  image = "/og-image.jpg",
-} = Astro.props;
+const { image = "/og-image.jpg" } = Astro.props;
+
+const locale = normalizeLocale(Astro.currentLocale);
+const t = getContent(locale);
+const title = t.meta.title;
+const description = t.meta.description;
 
 // Astro.site viene de `site` en astro.config.mjs — hace falta para que canonical
 // y las imágenes de Open Graph sean URLs absolutas (las relativas no funcionan
 // al compartir el enlace en WhatsApp/LinkedIn, que no resuelven contra el HTML).
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImageURL = new URL(image, Astro.site);
+const esURL = new URL("/", Astro.site);
+const enURL = new URL("/en/", Astro.site);
 
 const personSchema = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Jean Marco Marte",
-  jobTitle: "Ingeniero de Software Full Stack",
+  jobTitle: t.meta.jobTitle,
   url: Astro.site?.toString(),
   image: ogImageURL.toString(),
   email: "mailto:jeanmarte22@gmail.com",
@@ -57,7 +59,7 @@ const personSchema = {
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang={locale}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -75,18 +77,21 @@ const personSchema = {
     <meta name="author" content="Jean Marco Marte" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href={canonicalURL} />
+    <link rel="alternate" hreflang="es" href={esURL} />
+    <link rel="alternate" hreflang="en" href={enURL} />
+    <link rel="alternate" hreflang="x-default" href={esURL} />
 
     <!-- Open Graph -->
     <meta property="og:type" content="profile" />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:site_name" content="Jean Marco Marte" />
-    <meta property="og:locale" content="es_DO" />
+    <meta property="og:locale" content={t.meta.localeOg} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImageURL} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="1200" />
-    <meta property="og:image:alt" content="Jean Marco Marte — Ingeniero de Software Full Stack" />
+    <meta property="og:image:alt" content={t.meta.ogAlt} />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -99,6 +104,11 @@ const personSchema = {
   <!-- overflow-x-clip (no -hidden): `hidden` obligaría a overflow-y a `auto` y
        convertiría al body en contenedor de scroll, interfiriendo con Lenis. -->
   <body class="overflow-x-clip bg-bg text-ink">
+    <!-- Campo de partículas global: una sola capa fija detrás de todo el contenido,
+         continua al scrollear por todas las secciones. -->
+    <canvas id="bg-particles" class="pointer-events-none fixed inset-0 -z-10 h-full w-full" aria-hidden="true"></canvas>
+    <div class="z-progress" aria-hidden="true"></div>
+
     <div id="preloader" aria-hidden="true">
       <div class="preloader-panel l"></div>
       <div class="preloader-panel r"></div>
@@ -110,9 +120,15 @@ const personSchema = {
     <script>
       import "../scripts/smooth-scroll";
       import { gsap, prefersReducedMotion } from "../scripts/motion";
-      import { initSectionTransitions } from "../scripts/section-transitions";
+      import { initParticleField } from "../scripts/particle-field";
+      import { initGroups } from "../scripts/groups";
 
-      initSectionTransitions();
+      // Fondo global disperso (todas las secciones menos el Hero, que lleva su
+      // propia capa densa en Hero.astro).
+      const bgCanvas = document.getElementById("bg-particles") as HTMLCanvasElement | null;
+      if (bgCanvas) initParticleField(bgCanvas, { count: 90 });
+
+      initGroups();
 
       const preloader = document.getElementById("preloader");
       const mark = preloader?.querySelector<HTMLElement>(".preloader-mark");

@@ -88,7 +88,7 @@ export function floatIdle(el: Element, amplitude = 3) {
   return tween;
 }
 
-/** Pausa las flotaciones dentro de `root` (lo llama section-transitions al ocultar una sección). */
+/** Pausa las flotaciones dentro de `root`. Utilitario disponible para ocultamientos manuales. */
 export function pauseFloatsIn(root: Element) {
   floats.forEach((entry, el) => {
     if (root.contains(el)) {
