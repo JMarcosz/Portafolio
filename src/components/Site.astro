@@ -16,7 +16,9 @@ import Footer from "./Footer.astro";
 <Layout>
   <Header />
 
-  <main class="viewport-root">
+  <!-- tabindex="-1": destino del enlace de salto, para que el foco aterrice acá
+       y el siguiente Tab entre al contenido y no vuelva al nav. -->
+  <main id="contenido" tabindex="-1" class="viewport-root">
     <div class="scroll-track" style="--groups: 4;">
       <div class="sticky-stage">
         <section class="scroll-group" data-group="0" data-nav="inicio" data-group-initial>

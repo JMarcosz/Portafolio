@@ -41,9 +41,9 @@ const otherHome = localeHome(otherLocale);
         aria-label={t.header.langAria}
         class="flex h-8 items-center gap-1.5 rounded-lg border border-white/10 px-2.5 text-[11px] font-semibold uppercase tracking-[0.15em] opacity-0 transition-colors hover:border-white/25"
       >
-        <span class={locale === "es" ? "text-white" : "text-white/35"}>ES</span>
-        <span class="text-white/20">/</span>
-        <span class={locale === "en" ? "text-white" : "text-white/35"}>EN</span>
+        <span class={locale === "es" ? "text-white" : "text-white/55"}>ES</span>
+        <span class="text-white/30" aria-hidden="true">/</span>
+        <span class={locale === "en" ? "text-white" : "text-white/55"}>EN</span>
       </a>
 
       <button
@@ -52,6 +52,7 @@ const otherHome = localeHome(otherLocale);
         data-header-item
         aria-label={t.header.menuOpen}
         aria-expanded="false"
+        aria-controls="mobile-menu"
         class="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 text-white/70 opacity-0 md:hidden"
       >
         <svg id="menu-icon-open" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -145,9 +146,14 @@ const otherHome = localeHome(otherLocale);
     link.addEventListener("click", closeMenu);
   });
 
-  // Cerrar el menú móvil apenas se detecta scroll: si quedaba abierto y el usuario
-  // scrolleaba, el menú se quedaba flotando sobre el contenido que se movía debajo.
-  window.addEventListener("scroll", closeMenu, { passive: true });
+  // Cerrar el menú móvil apenas el usuario hace un gesto de scroll: si quedaba
+  // abierto, se quedaba flotando sobre el contenido que se movía debajo.
+  //
+  // Se escuchan los GESTOS y no el evento `scroll`: ahora hay scrolls
+  // programáticos (el puente de foco y los atajos de sección de groups.ts) que no
+  // tienen por qué cerrarlo.
+  window.addEventListener("wheel", closeMenu, { passive: true });
+  window.addEventListener("touchmove", closeMenu, { passive: true });
 
   // Familia de entrada: descenso escalonado (logo, nav, botones), tras la cortina de carga.
   const headerItems = [

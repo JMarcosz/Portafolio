@@ -104,6 +104,8 @@ const personSchema = {
   <!-- overflow-x-clip (no -hidden): `hidden` obligaría a overflow-y a `auto` y
        convertiría al body en contenedor de scroll, interfiriendo con Lenis. -->
   <body class="overflow-x-clip bg-bg text-ink">
+    <a href="#contenido" class="skip-link">{t.header.skipToContent}</a>
+
     <!-- Campo de partículas global: una sola capa fija detrás de todo el contenido,
          continua al scrollear por todas las secciones. -->
     <canvas id="bg-particles" class="pointer-events-none fixed inset-0 -z-10 h-full w-full" aria-hidden="true"></canvas>

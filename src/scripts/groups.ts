@@ -1,20 +1,40 @@
-// Controlador del túnel de zoom entre 4 grupos de secciones.
+// Director de escena del túnel de zoom entre grupos de secciones.
 //
-// - Entre grupos: transición de ZOOM. El saliente se aleja hacia la cámara
-//   (scale 1 -> 2.6) y se desvanece; el entrante llega desde el fondo
-//   (scale 0.35 -> 1) y aparece.
-// - Dentro de un grupo alto: scroll normal. .group-inner sube (anclado arriba,
-//   sin hueco) y cada sección dibuja su coreografía según su posición REAL en
-//   el viewport. No retrocede: una vez revelada, se queda.
-// - Grupos cortos (Hero, Contacto): solo se enfocan.
+// - Entre grupos: transición de ZOOM. El saliente se aleja hacia la cámara y se
+//   desvanece; el entrante llega desde el fondo. El crossfade es SECUENCIADO: el
+//   saliente termina de irse antes de que el entrante empiece a aparecer, para
+//   que nunca haya dos secciones pintadas a la vez.
+// - Dentro de un grupo alto: scroll normal. .group-inner sube y cada sección
+//   dispara su entrada al cruzar la línea de lectura, una sola vez.
+// - Grupos cortos (Hero, Contacto): sólo se enfocan.
+//
+// Las secciones NO atan sus timelines al scroll: registran su coreografía en
+// stage.ts y el director decide cuándo corre. La regla dura es que una sección
+// sólo anima mientras su grupo manda en pantalla.
 import { gsap, ScrollTrigger, prefersReducedMotion } from "./motion";
-import { getPanelScrub } from "./panel-scrub";
+import { liveSection, revealSection } from "./stage";
 import { lenis } from "./smooth-scroll";
 
 const clamp01 = (n: number) => (n < 0 ? 0 : n > 1 ? 1 : n);
 const clamp = (n: number, lo: number, hi: number) => (n < lo ? lo : n > hi ? hi : n);
 const smooth = (k: number) => k * k * (3 - 2 * k);
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
+/** Altura del viewport a la que una sección dispara su entrada. */
+const REVEAL_LINE = 0.85;
+
+/**
+ * Punto del zoom a partir del cual el grupo entrante ya manda en pantalla.
+ *
+ * No es 1: si la entrada de la primera sección esperara al final del zoom se
+ * vería llegar un panel vacío y recién ahí aparecer el contenido. A 0.75 el
+ * grupo está al 92% de escala y el saliente hace rato que está en alpha 0
+ * (termina en 0.45), así que la entrada se solapa con la cola del zoom sin
+ * romper la secuencia.
+ */
+const PRESENT_AT = 0.75;
+
+type Phase = "hidden" | "entering" | "presented" | "leaving";
 
 type SectionRef = { id: string; el: HTMLElement };
 type GroupModel = {
@@ -28,6 +48,15 @@ type GroupModel = {
   windowPx: number; // scroll asignado tras el ancla
   anchorPx: number; // A_i acumulado
 };
+
+const FOCUSABLE = [
+  "a[href]",
+  "button:not([disabled])",
+  "input:not([disabled])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  '[tabindex]:not([tabindex="-1"])',
+].join(", ");
 
 export function initGroups() {
   const track = document.querySelector<HTMLElement>(".scroll-track");
@@ -65,13 +94,15 @@ export function initGroups() {
     m.sections.forEach((s) => groupOfId.set(s.id, i));
   });
 
-  // Progreso máximo alcanzado por cada sección (revelado sin retroceso).
-  const sectionMaxT = new Map<string, number>();
-  const armSection = (id: string, t: number) => {
-    const prev = sectionMaxT.get(id) ?? 0;
-    const next = t > prev ? t : prev;
-    if (next !== prev) sectionMaxT.set(id, next);
-    getPanelScrub(id)?.(t, next); // t en vivo (retrocede) + máximo (no retrocede)
+  const phases: Phase[] = models.map(() => "hidden");
+  let presented = -1;
+
+  const setPhase = (idx: number, phase: Phase) => {
+    if (phases[idx] === phase) return;
+    phases[idx] = phase;
+    if (phase === "presented") presented = idx;
+    else if (presented === idx) presented = -1;
+    document.dispatchEvent(new CustomEvent("stage:phase", { detail: { group: models[idx].navId, phase } }));
   };
 
   let totalPx = 0;
@@ -80,10 +111,11 @@ export function initGroups() {
   const measure = () => {
     stageH = stage.getBoundingClientRect().height;
     const topPx = groupTopPx();
-    // Ventana de la transición de zoom: también es el recorrido en el que se
-    // revela la PRIMERA sección del grupo entrante (contadores, líneas), así que
-    // conviene amplia para que dé tiempo a leerla.
-    const HANDOFF = stageH * 1.7;
+    // Ventana del zoom. Antes era 1.7x la altura del stage y se llevaba el 47%
+    // de TODO el scroll de la página: cambiar de sección costaba cinco gestos de
+    // rueda. El techo en px importa tanto como el factor — sin él, en una
+    // pantalla de 1440px de alto el zoom volvería a costar casi 800px.
+    const HANDOFF = Math.min(stageH * 0.55, 520);
 
     let acc = 0;
     models.forEach((m, i) => {
@@ -133,57 +165,61 @@ export function initGroups() {
     return cur;
   };
 
-  // Revela cada sección según su recorrido real: t = 0 cuando su borde superior
-  // toca el ~90% del viewport, t = 1 cuando la sección ya subió ~el 75% de su
-  // propia altura. Así una sección alta (Experiencia) dibuja su timeline a lo
-  // largo de todo su scroll y va mostrando cada tarjeta al llegar a ella; una
-  // corta se revela rápido.
-  const armGroupSections = (m: GroupModel) => {
+  /**
+   * Arma las secciones del grupo que manda en pantalla.
+   *
+   * `exact` dice si la geometría es de fiar. Durante la cola del zoom el grupo
+   * todavía está a ~0.92 de escala: alcanza para decidir un disparo con umbral,
+   * no para el trazo continuo, que necesita el rect real.
+   */
+  const armGroupSections = (m: GroupModel, exact: boolean) => {
     const vh = window.innerHeight;
     m.sections.forEach((s) => {
-      const top = s.el.getBoundingClientRect().top;
-      // Banda proporcional a la altura de la sección: una sección alta
-      // (Experiencia) reparte su revelado a lo largo de casi todo su scroll.
-      const band = Math.max(0.5 * vh, s.el.offsetHeight * 0.85);
-      const t = clamp01((0.92 * vh - top) / band);
-      armSection(s.id, t);
+      const rect = s.el.getBoundingClientRect();
+      if (rect.top <= REVEAL_LINE * vh) revealSection(s.id);
+      if (exact) liveSection(s.id, rect, vh);
     });
   };
 
   const showFocused = (i: number) => {
-    gsap.set(models[i].el, { autoAlpha: 1, scale: 1, zIndex: 30, pointerEvents: "auto" });
+    gsap.set(models[i].el, { autoAlpha: 1, scale: 1, yPercent: 0, zIndex: 30, pointerEvents: "auto" });
   };
 
+  /** Dibuja el zoom y devuelve la opacidad del grupo saliente. */
   const handoff = (out: number, inc: number, tB: number) => {
     const mobile = isMobile();
     const e = smooth(tB);
 
+    // Crossfade secuenciado. Antes el saliente se iba entre 0.12 y 0.62 y el
+    // entrante llegaba entre 0.40 y 0.90: durante casi un cuarto de la
+    // transición había dos grupos pintados uno encima del otro. Ahora el
+    // saliente termina en 0.45 y el entrante arranca en 0.40 — 0.05 de
+    // solapamiento, sólo para que no quede un frame en negro.
+    const outAlpha = 1 - clamp01(tB / 0.45);
+    const inAlpha = clamp01((tB - 0.4) / 0.6);
+
     gsap.set(models[out].el, {
-      autoAlpha: 1 - clamp01((tB - 0.12) / 0.5),
+      autoAlpha: outAlpha,
       scale: mobile ? 1 - 0.08 * e : 1 + 1.6 * e,
       yPercent: mobile ? -30 * e : 0,
       zIndex: 24,
-      pointerEvents: "none",
+      // Mientras se siga viendo, se sigue pudiendo tocar. Matar el hit-testing en
+      // tB=0 dejaba la última sección del grupo (Habilidades) a la vista, intacta
+      // y muerta al click durante todo el arranque del zoom.
+      pointerEvents: outAlpha > 0.5 ? "auto" : "none",
     });
     gsap.set(models[out].inner, { y: models[out].endY });
-    // Mantiene lo ya revelado del grupo saliente; no fuerza a 1.
-    models[out].sections.forEach((s) => {
-      const v = sectionMaxT.get(s.id) ?? 0;
-      getPanelScrub(s.id)?.(v, v);
-    });
 
     gsap.set(models[inc].el, {
-      autoAlpha: clamp01((tB - 0.4) / 0.5),
+      autoAlpha: inAlpha,
       scale: mobile ? 0.94 + 0.06 * e : 0.35 + 0.65 * e,
       yPercent: mobile ? 40 * (1 - e) : 0,
       zIndex: 30,
-      pointerEvents: tB > 0.65 ? "auto" : "none",
+      pointerEvents: inAlpha > 0.5 ? "auto" : "none",
     });
     gsap.set(models[inc].inner, { y: 0 });
-    // La PRIMERA sección del grupo entrante (que queda anclada arriba y nunca
-    // "cruza" una banda de reveal) se dibuja a lo largo de todo el zoom, con tB.
-    const firstId = models[inc].sections[0]?.id;
-    if (firstId) armSection(firstId, smooth(tB));
+
+    return outAlpha;
   };
 
   const render = (progress: number) => {
@@ -193,13 +229,17 @@ export function initGroups() {
     while (i < N - 1 && scrolled >= models[i + 1].anchorPx) i++;
 
     for (let k = 0; k < N; k++) {
-      if (k !== i && k !== i + 1) gsap.set(models[k].el, { autoAlpha: 0, pointerEvents: "none" });
+      if (k !== i && k !== i + 1) {
+        gsap.set(models[k].el, { autoAlpha: 0, pointerEvents: "none" });
+        setPhase(k, "hidden");
+      }
     }
 
     if (i === N - 1) {
       showFocused(i);
       gsap.set(models[i].inner, { y: models[i].endY });
-      armGroupSections(models[i]);
+      setPhase(i, "presented");
+      armGroupSections(models[i], true);
       setActive(currentSectionOf(models[i]));
     } else {
       const segLen = models[i].windowPx || 1;
@@ -210,12 +250,33 @@ export function initGroups() {
         const tA = phaseA <= 0 ? 1 : local / phaseA;
         showFocused(i);
         gsap.set(models[i].inner, { y: lerp(0, models[i].endY, tA) });
-        armGroupSections(models[i]);
         gsap.set(models[i + 1].el, { autoAlpha: 0, pointerEvents: "none" });
+        setPhase(i + 1, "hidden");
+        setPhase(i, "presented");
+        armGroupSections(models[i], true);
         setActive(currentSectionOf(models[i]));
       } else {
         const tB = models[i].tall ? (local - phaseA) / (1 - phaseA) : local;
-        handoff(i, i + 1, tB);
+        const outAlpha = handoff(i, i + 1, tB);
+
+        if (tB >= PRESENT_AT) {
+          setPhase(i, "hidden");
+          setPhase(i + 1, "presented");
+          armGroupSections(models[i + 1], false);
+        } else if (outAlpha > 0.5) {
+          // El saliente todavía manda en pantalla — es el mismo umbral con el que
+          // conserva el hit-testing, así que "presentado" y "clickeable" son la
+          // misma cosa. Hace falta para los grupos CORTOS: el Hero no tiene fase
+          // A, toda su ventana es zoom, así que sin esta rama nunca llegaría a
+          // estar presentado y el salto de Tab entre grupos no arrancaría.
+          setPhase(i + 1, "entering");
+          setPhase(i, "presented");
+          armGroupSections(models[i], false);
+        } else {
+          setPhase(i, "leaving");
+          setPhase(i + 1, "entering");
+        }
+
         setActive(tB < 0.5 ? currentSectionOf(models[i]) : models[i + 1].sections[0]?.id ?? models[i + 1].navId);
       }
     }
@@ -238,19 +299,50 @@ export function initGroups() {
   render(0);
   document.dispatchEvent(new CustomEvent("nav:active", { detail: { id: models[0].sections[0]?.id ?? models[0].navId } }));
 
-  // Navegación por anclas: #id de grupo o de sección.
+  // --------------------------------------------------------------- navegación
+
+  /** Desplazamiento de `el` dentro de su .scroll-group, en coordenadas de layout. */
+  const offsetInGroup = (el: HTMLElement, group: HTMLElement) => {
+    let y = 0;
+    let node: HTMLElement | null = el;
+    while (node && node !== group) {
+      y += node.offsetTop;
+      node = node.offsetParent as HTMLElement | null;
+    }
+    return y;
+  };
+
+  /** Posición del túnel que deja `offset` (dentro del grupo `gi`) cerca del tope. */
+  const scrollForOffset = (gi: number, offset: number | null) => {
+    const m = models[gi];
+    const base = st.start + m.anchorPx;
+    if (offset == null || !m.tall || m.endY === 0) return base;
+    const targetY = clamp(0.15 * window.innerHeight - offset, m.endY, 0);
+    return base + (targetY / m.endY) * m.travelPx;
+  };
+
   const scrollForId = (id: string): number | null => {
     const gi = groupOfId.get(id);
     if (gi == null) return null;
-    const m = models[gi];
-    const base = st.start + m.anchorPx;
-    const sec = m.sections.find((s) => s.id === id);
-    if (!m.tall || !sec || m.endY === 0) return base;
-    const vh = window.innerHeight;
-    const targetY = clamp(0.15 * vh - sec.el.offsetTop, m.endY, 0);
-    const tA = targetY / m.endY;
-    const local = tA * (m.travelPx / m.windowPx);
-    return base + local * m.windowPx;
+    const sec = models[gi].sections.find((s) => s.id === id);
+    return scrollForOffset(gi, sec ? sec.el.offsetTop : null);
+  };
+
+  const scrollForElement = (el: HTMLElement): number | null => {
+    const group = el.closest<HTMLElement>(".scroll-group");
+    if (!group) return null;
+    const gi = models.findIndex((m) => m.el === group);
+    if (gi < 0) return null;
+    return scrollForOffset(gi, offsetInGroup(el, group));
+  };
+
+  const goTo = (target: number, opts: { duration?: number; onComplete?: () => void } = {}) => {
+    if (lenis) {
+      lenis.scrollTo(target, { duration: opts.duration ?? 1.2, onComplete: opts.onComplete });
+    } else {
+      window.scrollTo({ top: target, behavior: "smooth" });
+      if (opts.onComplete) window.setTimeout(opts.onComplete, 400);
+    }
   };
 
   document.addEventListener(
@@ -262,11 +354,110 @@ export function initGroups() {
       if (target == null) return;
       event.preventDefault();
       event.stopImmediatePropagation();
-      if (lenis) lenis.scrollTo(target, { duration: 1.2 });
-      else window.scrollTo({ top: target, behavior: "smooth" });
+      goTo(target);
     },
     true
   );
+
+  // ------------------------------------------------------------------ teclado
+
+  /**
+   * Puente de foco.
+   *
+   * El stage es overflow:hidden y el scroll es virtual, así que cuando el
+   * navegador quiere traer a la vista un elemento enfocado no encuentra ningún
+   * contenedor que mover: tabular a un control fuera de pantalla no hacía nada.
+   * Acá se traduce la posición del elemento a su posición equivalente del túnel.
+   */
+  let pointerFocus = false;
+  // El puente se calla mientras nosotros mismos movemos el foco: si no, un salto
+  // de grupo encadenaba dos scrolls, el del salto y el del foco que acaba de
+  // aterrizar.
+  let suppressBridge = false;
+
+  document.addEventListener("pointerdown", () => (pointerFocus = true), true);
+  document.addEventListener("keydown", () => (pointerFocus = false), true);
+
+  document.addEventListener("focusin", (event) => {
+    if (pointerFocus || suppressBridge) return;
+    const el = event.target as HTMLElement | null;
+    // El header es fixed: siempre visible, nunca hay que ir a buscarlo.
+    if (!el || el.closest("header")) return;
+    const target = scrollForElement(el);
+    if (target == null || Math.abs(target - window.scrollY) < 8) return;
+    goTo(target, { duration: 0.45 });
+  });
+
+  const focusablesIn = (root: HTMLElement) =>
+    gsap.utils
+      .toArray<HTMLElement>(root.querySelectorAll(FOCUSABLE))
+      .filter((el) => el.checkVisibility?.({ visibilityProperty: true }) ?? true);
+
+  const focusGroupEdge = (gi: number, edge: "start" | "end") => {
+    const m = models[gi];
+    let target: HTMLElement | null = null;
+
+    if (edge === "start") {
+      // El ENCABEZADO, no el primer control: al entrar a un grupo su contenido
+      // recién se está revelando y buena parte sigue en visibility:hidden, así
+      // que "el primer enfocable" sería el único que quedó fuera de la
+      // coreografía — no el que le toca. El encabezado además ya está donde
+      // acabamos de scrollear, así que el foco no vuelve a mover la página.
+      target = m.el.querySelector<HTMLElement>("h1, h2");
+      if (target) target.tabIndex = -1;
+    }
+    if (!target) {
+      const list = focusablesIn(m.el);
+      target = edge === "start" ? list[0] : list[list.length - 1];
+    }
+    if (!target) return;
+
+    suppressBridge = true;
+    target.focus({ preventScroll: true });
+    requestAnimationFrame(() => (suppressBridge = false));
+  };
+
+  const goToGroup = (gi: number, edge: "start" | "end" = "start", focusAfter = false) => {
+    const m = models[gi];
+    const target = st.start + m.anchorPx + (edge === "end" ? m.travelPx : 0);
+    goTo(target, { duration: 0.6, onComplete: focusAfter ? () => focusGroupEdge(gi, edge) : undefined });
+  };
+
+  const inTextField = (el: Element | null) => !!el?.closest("input, textarea, select, [contenteditable='true']");
+
+  document.addEventListener("keydown", (event) => {
+    if (event.metaKey || event.ctrlKey || event.altKey) return;
+
+    // Tab en el borde del grupo: avanza el túnel en vez de morir ahí. Sin esto el
+    // teclado sólo alcanza el grupo presentado — los demás están en
+    // visibility:hidden y sus controles ni siquiera son enfocables.
+    if (event.key === "Tab" && presented >= 0) {
+      const list = focusablesIn(models[presented].el);
+      if (!list.length) return;
+      const edge = event.shiftKey ? list[0] : list[list.length - 1];
+      if (document.activeElement !== edge) return;
+      const next = event.shiftKey ? presented - 1 : presented + 1;
+      if (next < 0 || next >= N) return;
+      event.preventDefault();
+      goToGroup(next, event.shiftKey ? "end" : "start", true);
+      return;
+    }
+
+    if (inTextField(document.activeElement)) return;
+
+    const from = presented >= 0 ? presented : 0;
+    let next: number | null = null;
+    if (event.key === "PageDown") next = Math.min(N - 1, from + 1);
+    else if (event.key === "PageUp") next = Math.max(0, from - 1);
+    else if (event.key === "Home") next = 0;
+    else if (event.key === "End") next = N - 1;
+    if (next == null) return;
+
+    event.preventDefault();
+    goToGroup(next);
+  });
+
+  // -------------------------------------------------------------- re-medición
 
   window.addEventListener("load", () => ScrollTrigger.refresh());
   if (document.fonts?.ready) document.fonts.ready.then(() => ScrollTrigger.refresh());
@@ -274,8 +465,13 @@ export function initGroups() {
   let resizeTimer: number | undefined;
   const ro = new ResizeObserver(() => {
     window.clearTimeout(resizeTimer);
-    resizeTimer = window.setTimeout(() => ScrollTrigger.refresh(), 200);
+    resizeTimer = window.setTimeout(() => ScrollTrigger.refresh(), 150);
   });
+  // Se vigilan los .group-inner, no el stage: el stage mide 100dvh y no cambia
+  // nunca, así que abrir un acordeón de Habilidades crecía el contenido sin que
+  // nadie re-midiera y el alto extra quedaba fuera del recorrido, recortado por
+  // el overflow:hidden.
+  models.forEach((m) => ro.observe(m.inner));
   ro.observe(stage);
 
   ScrollTrigger.refresh();

@@ -4,53 +4,71 @@ const { skills } = getContent(Astro.currentLocale);
 const skillCategories = skills.categories;
 ---
 
-<section id="habilidades" class="mx-auto max-w-6xl px-6 py-24">
+<section id="habilidades" aria-labelledby="habilidades-title" class="mx-auto max-w-6xl px-6 py-24">
   <p class="eyebrow mb-4">{skills.eyebrow}</p>
-  <h2 class="text-4xl font-bold tracking-tight">
+  <h2 id="habilidades-title" class="text-4xl font-bold tracking-tight">
     {skills.heading1}<br />
     <span class="font-extrabold">{skills.heading2}</span>
   </h2>
 
   <div data-skills-block class="mt-14 divide-y divide-white/10 border-y border-white/10">
     {
-      skillCategories.map((cat, i) => (
-        <div class="skill-item" data-open={i === 1 ? "true" : "false"}>
-          <button
-            type="button"
-            class="skill-trigger flex w-full items-center justify-between gap-6 py-6 text-left"
-            aria-expanded={i === 1 ? "true" : "false"}
-          >
-            <div>
-              <h3 class="text-base font-semibold">{cat.title}</h3>
-              <p class="mt-1 text-xs text-white/40">{cat.description}</p>
-            </div>
-            <span class="flex shrink-0 items-center gap-3 text-xs text-white/40">
-              [ {cat.index} ]
-              <svg class="skill-chevron h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M6 9l6 6 6-6" />
-              </svg>
-            </span>
-          </button>
+      skillCategories.map((cat, i) => {
+        const open = i === 1;
+        const triggerId = `skill-trigger-${i}`;
+        const panelId = `skill-panel-${i}`;
+        return (
+          <div class="skill-item" data-open={String(open)}>
+            <button
+              type="button"
+              id={triggerId}
+              aria-expanded={String(open)}
+              aria-controls={panelId}
+              class="skill-trigger flex w-full items-center justify-between gap-6 py-6 text-left"
+            >
+              <div>
+                <h3 class="text-base font-semibold">{cat.title}</h3>
+                <p class="mt-1 text-xs text-white/55">{cat.description}</p>
+              </div>
+              <span class="flex shrink-0 items-center gap-3 text-xs text-white/55">
+                [ {cat.index} ]
+                <svg class="skill-chevron h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
+              </span>
+            </button>
 
-          <div class="skill-panel grid overflow-hidden transition-[grid-template-rows] duration-300 ease-out">
-            <div class="min-h-0">
-              <div class="grid grid-cols-1 gap-x-10 gap-y-5 pb-8 sm:grid-cols-2">
-                {cat.skills.map((skill) => (
-                  <div>
-                    <div class="mb-2 flex items-center justify-between text-xs">
-                      <span class="text-white/70">{skill.label}</span>
-                      <span class="text-white/40">{skill.percent}%</span>
+            {/* `inert` saca el panel cerrado del árbol de accesibilidad y del orden
+                de tabulación. Con sólo grid-template-rows: 0fr el contenido seguía
+                anunciándose aunque no se viera. */}
+            <div
+              id={panelId}
+              role="region"
+              aria-labelledby={triggerId}
+              inert={!open || undefined}
+              class="skill-panel grid overflow-hidden transition-[grid-template-rows] duration-300 ease-out"
+            >
+              <div class="min-h-0">
+                <div class="grid grid-cols-1 gap-x-10 gap-y-5 pb-8 sm:grid-cols-2">
+                  {cat.skills.map((skill) => (
+                    <div>
+                      <div class="mb-2 flex items-center justify-between text-xs">
+                        <span class="text-white/70">{skill.label}</span>
+                        <span class="text-white/55">{skill.percent}%</span>
+                      </div>
+                      {/* El porcentaje ya está ahí arriba como texto: la barra es
+                          decoración y no necesita rol propio. */}
+                      <div class="h-px w-full bg-white/10" aria-hidden="true">
+                        <div class="skill-bar h-px bg-white" data-percent={skill.percent} style="width: 0%;" />
+                      </div>
                     </div>
-                    <div class="h-px w-full bg-white/10">
-                      <div class="skill-bar h-px bg-white" data-percent={skill.percent} style="width: 0%;" />
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      ))
+        );
+      })
     }
   </div>
 </section>
@@ -62,28 +80,33 @@ const skillCategories = skills.categories;
   .skill-item[data-open="true"] .skill-panel {
     grid-template-rows: 1fr;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .skill-panel {
+      transition: none;
+    }
+  }
 </style>
 
 <script>
-  import { gsap, prefersReducedMotion } from "../scripts/motion";
-  import { registerPanelScrub } from "../scripts/panel-scrub";
+  import { gsap, prefersReducedMotion, TOKENS } from "../scripts/motion";
+  import { registerSection } from "../scripts/stage";
 
   const block = document.querySelector<HTMLElement>("[data-skills-block]");
-  const items = document.querySelectorAll<HTMLElement>(".skill-item");
+  const items = gsap.utils.toArray<HTMLElement>(".skill-item");
 
   // Familia de entrada: fundido + leve subida. NADA de clip-path aquí: recortaría
-  // el hit-testing y dejaría los acordeones de abajo sin poder abrirse mientras
-  // el revelado no llegue al 100%. Se completa pronto (a ~1/3 del recorrido) para
-  // que la sección sea interactiva apenas entra en pantalla.
+  // el hit-testing y dejaría los acordeones de abajo sin poder abrirse.
+  //
+  // La entrada corre por tiempo y no atada al scroll. Antes se destapaba contra
+  // el progreso de la sección, así que quedaba largos tramos en autoAlpha
+  // intermedio — y autoAlpha 0 es visibility:hidden, o sea acordeón muerto.
   if (block) {
-    if (prefersReducedMotion()) {
-      gsap.set(block, { autoAlpha: 1, y: 0 });
-    } else {
-      gsap.set(block, { autoAlpha: 0, y: 26 });
-      const tl = gsap.timeline({ paused: true });
-      tl.to(block, { autoAlpha: 1, y: 0, duration: 1, ease: "power2.out" });
-      registerPanelScrub("habilidades", (_t, tMax) => tl.progress(Math.min(1, tMax * 3)));
-    }
+    registerSection("habilidades", {
+      prepare: () => gsap.set(block, { autoAlpha: 0, y: 26 }),
+      reveal: () => gsap.timeline().to(block, { autoAlpha: 1, y: 0, ...TOKENS.revealMd }),
+      settle: () => gsap.set(block, { autoAlpha: 1, y: 0 }),
+    });
   }
 
   const animateBars = (item: HTMLElement) => {
@@ -93,39 +116,45 @@ const skillCategories = skills.categories;
       return;
     }
     gsap.to(bars, {
-      width: (index, target) => `${target.dataset.percent ?? 0}%`,
+      width: (_index, target) => `${target.dataset.percent ?? 0}%`,
       duration: 0.9,
-      stagger: 0.08,
+      stagger: TOKENS.stagger.tight,
       ease: "power3.out",
     });
   };
 
-  items.forEach((item) => {
+  const setOpen = (item: HTMLElement, open: boolean) => {
     const trigger = item.querySelector<HTMLButtonElement>(".skill-trigger");
+    const panel = item.querySelector<HTMLElement>(".skill-panel");
     const chevron = item.querySelector<HTMLElement>(".skill-chevron");
 
-    if (item.dataset.open === "true") animateBars(item);
-    if (item.dataset.open === "true" && chevron) gsap.set(chevron, { rotate: 180 });
+    item.dataset.open = String(open);
+    trigger?.setAttribute("aria-expanded", String(open));
+    if (panel) panel.inert = !open;
 
+    if (chevron) {
+      if (prefersReducedMotion()) gsap.set(chevron, { rotate: open ? 180 : 0 });
+      else gsap.to(chevron, { rotate: open ? 180 : 0, duration: 0.5, ease: "elastic.out(1,0.6)" });
+    }
+    if (open) animateBars(item);
+  };
+
+  items.forEach((item) => {
+    const trigger = item.querySelector<HTMLButtonElement>(".skill-trigger");
+    if (item.dataset.open === "true") {
+      gsap.set(item.querySelector(".skill-chevron"), { rotate: 180 });
+      animateBars(item);
+    }
+
+    // El toggle no depende de ningún estado de scroll ni de animación: si el
+    // botón se ve, se puede accionar. El reflow de los encabezados vecinos lo
+    // sigue animando la transición CSS de grid-template-rows del panel.
     trigger?.addEventListener("click", () => {
-      const isOpen = item.dataset.open === "true";
-
-      // El reflow de los encabezados vecinos ya lo anima suavemente la transición
-      // CSS de grid-template-rows del panel — acá solo se anima lo que esa
-      // transición no cubre: la rotación del chevron y las barras de progreso.
+      const willOpen = item.dataset.open !== "true";
       items.forEach((other) => {
-        const otherChevron = other.querySelector<HTMLElement>(".skill-chevron");
-        other.dataset.open = "false";
-        other.querySelector(".skill-trigger")?.setAttribute("aria-expanded", "false");
-        if (otherChevron && !prefersReducedMotion()) gsap.to(otherChevron, { rotate: 0, duration: 0.5, ease: "elastic.out(1,0.6)" });
+        if (other !== item && other.dataset.open === "true") setOpen(other, false);
       });
-
-      if (!isOpen) {
-        item.dataset.open = "true";
-        trigger.setAttribute("aria-expanded", "true");
-        if (chevron && !prefersReducedMotion()) gsap.to(chevron, { rotate: 180, duration: 0.5, ease: "elastic.out(1,0.6)" });
-        animateBars(item);
-      }
+      setOpen(item, willOpen);
     });
   });
 </script>

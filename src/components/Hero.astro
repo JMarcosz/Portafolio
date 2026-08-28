@@ -3,7 +3,7 @@ import { getContent } from "../i18n";
 const { hero } = getContent(Astro.currentLocale);
 ---
 
-<section id="inicio" class="relative flex items-center overflow-x-clip" data-hero-section>
+<section id="inicio" aria-labelledby="inicio-title" class="relative flex items-center overflow-x-clip" data-hero-section>
   <!-- Capa densa de partículas solo para el Hero (se va con el grupo al hacer zoom). -->
   <canvas data-hero-particles class="pointer-events-none fixed inset-0 -z-10 h-full w-full" aria-hidden="true"></canvas>
 
@@ -11,7 +11,7 @@ const { hero } = getContent(Astro.currentLocale);
     <div>
       <p class="eyebrow mb-4" data-hero-eyebrow>{hero.eyebrow}</p>
       <!-- aria-label lleva el nombre completo + rol para SEO/lectores de pantalla. -->
-      <h1
+      <h1 id="inicio-title"
         aria-label={hero.nameAria}
         class="text-5xl font-bold leading-[1.05] tracking-tight md:text-6xl"
       >
@@ -58,7 +58,7 @@ const { hero } = getContent(Astro.currentLocale);
   <button
     type="button"
     data-scroll-cue
-    class="absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-white/30 transition-colors hover:text-white/60"
+    class="absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-white/55 transition-colors hover:text-white/60"
     aria-label={hero.scrollAria}
   >
     <span>{hero.scroll}</span>

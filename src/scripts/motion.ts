@@ -14,33 +14,26 @@ export const prefersReducedMotion = () =>
 export const hasFinePointer = () =>
   typeof window !== "undefined" && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
-/** Token de easing/duración reutilizado por todas las secciones (ver plan de movimiento). */
+/**
+ * Vocabulario de movimiento compartido por todas las secciones.
+ *
+ * Existe para que las entradas se sientan de la misma familia: antes cada
+ * componente elegía su propia duración y su propio stagger (iban de 0.06 a 0.4)
+ * y el resultado era que unas secciones entraban en medio segundo y otras
+ * tardaban más de tres. Si una entrada necesita otro tiempo, que sea una
+ * decisión explícita y no el default.
+ */
 export const TOKENS = {
-  revealSm: { duration: 0.6, ease: "power3.out" },
-  revealMd: { duration: 0.8, ease: "power3.out" },
+  revealSm: { duration: 0.5, ease: "power3.out" },
+  revealMd: { duration: 0.6, ease: "power3.out" },
   splitChar: { duration: 1, ease: "expo.out", stagger: 0.01 },
-  splitLine: { duration: 0.85, ease: "expo.out", stagger: 0.04 },
+  splitLine: { duration: 0.7, ease: "expo.out", stagger: 0.04 },
   micro: { duration: 0.3, ease: "power2.out" },
   morph: { duration: 0.8, ease: "expo.inOut" },
   bounce: { duration: 0.4, ease: "back.out(1.7)" },
+  /** Cascada entre hermanos. `normal` es el default; `tight` para listas largas. */
+  stagger: { tight: 0.05, normal: 0.08 },
 };
-
-/**
- * Dispara `onEnter` la primera vez que `el` cruza el 80% inferior del viewport.
- * Envoltorio delgado sobre ScrollTrigger para no repetir la misma config en cada componente.
- */
-export function onScrollIn(
-  el: Element,
-  onEnter: () => void,
-  opts: { start?: string; once?: boolean } = {}
-) {
-  ScrollTrigger.create({
-    trigger: el,
-    start: opts.start ?? "top 82%",
-    once: opts.once ?? true,
-    onEnter,
-  });
-}
 
 /**
  * Registro de las flotaciones ambientales activas.

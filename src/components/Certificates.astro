@@ -4,9 +4,9 @@ const { certificates: certs } = getContent(Astro.currentLocale);
 const certificates = certs.items;
 ---
 
-<section id="certificados" class="mx-auto max-w-6xl px-6 py-24">
+<section id="certificados" aria-labelledby="certificados-title" class="mx-auto max-w-6xl px-6 py-24">
   <p class="eyebrow mb-4 text-center">{certs.eyebrow}</p>
-  <h2 class="text-center text-4xl font-bold tracking-tight">
+  <h2 id="certificados-title" class="text-center text-4xl font-bold tracking-tight">
     {certs.heading1} <span class="font-extrabold">{certs.heading2}</span>
   </h2>
 
@@ -16,12 +16,12 @@ const certificates = certs.items;
         <article data-cert-card class="card flex flex-col justify-between p-6 transition-[border-color,transform] duration-300 hover:-translate-y-1 hover:border-white/25">
           <div>
             <div class="flex items-center justify-between">
-              <span class="text-xs font-medium text-white/40">{cert.year}</span>
+              <span class="text-xs font-medium text-white/55">{cert.year}</span>
               <span data-cert-badge class="pill">{certs.verified}</span>
             </div>
 
             <h3 class="mt-4 text-base font-semibold leading-snug">{cert.title}</h3>
-            <p class="mt-1 text-xs text-white/40">{cert.institution}</p>
+            <p class="mt-1 text-xs text-white/55">{cert.institution}</p>
             <p class="mt-3 text-sm leading-relaxed text-white/50">{cert.description}</p>
           </div>
 
@@ -37,22 +37,25 @@ const certificates = certs.items;
 </section>
 
 <script>
-  import { gsap, floatIdle, prefersReducedMotion } from "../scripts/motion";
-  import { registerPanelScrub } from "../scripts/panel-scrub";
+  import { gsap, floatIdle, prefersReducedMotion, TOKENS } from "../scripts/motion";
+  import { registerSection } from "../scripts/stage";
 
   const cards = gsap.utils.toArray<HTMLElement>("[data-cert-card]");
 
-  if (prefersReducedMotion()) {
-    gsap.set(cards, { clipPath: "inset(0 0% 0 0)", autoAlpha: 1 });
-  } else {
-    // Familia de entrada: persiana — clip-path que se descorre, escalonada.
-    gsap.set(cards, { clipPath: "inset(0 100% 0 0)" });
+  // Familia de entrada: persiana — clip-path que se descorre, escalonada.
+  //
+  // El stagger era de 0.4: con estas tarjetas la persiana entera tardaba más de
+  // tres segundos en terminar de correrse. Con el token queda por debajo del
+  // segundo y se sigue leyendo como cascada.
+  registerSection("certificados", {
+    prepare: () => gsap.set(cards, { clipPath: "inset(0 100% 0 0)" }),
+    reveal: () =>
+      gsap.timeline().to(cards, { clipPath: "inset(0 0% 0 0)", stagger: TOKENS.stagger.tight, ...TOKENS.revealSm }, 0),
+    settle: () => gsap.set(cards, { clipPath: "inset(0 0% 0 0)", autoAlpha: 1 }),
+  });
 
-    const tl = gsap.timeline({ paused: true });
-    tl.to(cards, { clipPath: "inset(0 0% 0 0)", duration: 0.5, stagger: 0.4, ease: "power3.out" }, 0);
-    registerPanelScrub("certificados", (_t, tMax) => tl.progress(tMax));
-
-    // Flotación ambiental en reposo; se pausa en hover para no pelear con la elevación de 4px.
+  // Flotación ambiental en reposo; se pausa en hover para no pelear con la elevación de 4px.
+  if (!prefersReducedMotion()) {
     cards.forEach((card) => {
       const tween = floatIdle(card, 2.5);
       card.addEventListener("mouseenter", () => tween?.pause());

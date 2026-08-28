@@ -280,6 +280,7 @@
   "header": {
     "save": "Guardar",
     "menuOpen": "Abrir menú",
-    "langAria": "Cambiar idioma a inglés"
+    "langAria": "Cambiar idioma a inglés",
+    "skipToContent": "Saltar al contenido"
   }
 }

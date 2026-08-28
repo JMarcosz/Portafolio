@@ -280,6 +280,7 @@
   "header": {
     "save": "Save",
     "menuOpen": "Open menu",
-    "langAria": "Switch language to Spanish"
+    "langAria": "Switch language to Spanish",
+    "skipToContent": "Skip to content"
   }
 }

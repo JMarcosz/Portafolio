@@ -4,9 +4,9 @@ const { education: edu } = getContent(Astro.currentLocale);
 const education = edu.items;
 ---
 
-<section id="formacion" class="mx-auto max-w-6xl px-6 py-24">
+<section id="formacion" aria-labelledby="formacion-title" class="mx-auto max-w-6xl px-6 py-24">
   <p class="eyebrow mb-4">{edu.eyebrow}</p>
-  <h2 class="text-4xl font-bold tracking-tight">
+  <h2 id="formacion-title" class="text-4xl font-bold tracking-tight">
     {edu.heading1} <span class="font-extrabold">{edu.heading2}</span>
   </h2>
 
@@ -14,7 +14,7 @@ const education = edu.items;
     {
       education.map((item) => (
         <article data-edu-card class="card p-6">
-          <span class="inline-flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-white/40">
+          <span class="inline-flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-white/55">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <rect x="3" y="4" width="18" height="18" rx="2" />
               <path d="M16 2v4M8 2v4M3 10h18" />
@@ -38,25 +38,26 @@ const education = edu.items;
 </section>
 
 <script>
-  import { gsap, floatIdle, prefersReducedMotion } from "../scripts/motion";
-  import { registerPanelScrub } from "../scripts/panel-scrub";
+  import { gsap, floatIdle, TOKENS } from "../scripts/motion";
+  import { registerSection } from "../scripts/stage";
 
   const cards = gsap.utils.toArray<HTMLElement>("[data-edu-card]");
+  const icons = gsap.utils.toArray<HTMLElement>("[data-edu-icon]");
 
-  if (prefersReducedMotion()) {
-    gsap.set(cards, { autoAlpha: 1 });
-  } else {
-    // Familia de entrada: inclinación que se asienta — rotateZ, no translateY.
-    gsap.set(cards, { autoAlpha: 0, rotateZ: -4 });
-    gsap.set("[data-edu-icon]", { rotate: -8, scale: 0.8 });
-
-    const tl = gsap.timeline({
-      paused: true,
-      onComplete: () => cards.forEach((card) => floatIdle(card, 2)),
-    });
-    tl.to(cards, { autoAlpha: 1, rotateZ: 0, duration: 0.7, stagger: 0.15, ease: "power3.out" }, 0)
-      .to("[data-edu-icon]", { rotate: 0, scale: 1, duration: 0.4, stagger: 0.1, ease: "back.out(1.7)" }, 0.4);
-
-    registerPanelScrub("formacion", (_t, tMax) => tl.progress(tMax));
-  }
+  // Familia de entrada: inclinación que se asienta — rotateZ, no translateY.
+  registerSection("formacion", {
+    prepare: () => {
+      gsap.set(cards, { autoAlpha: 0, rotateZ: -4 });
+      gsap.set(icons, { rotate: -8, scale: 0.8 });
+    },
+    reveal: () =>
+      gsap
+        .timeline({ onComplete: () => cards.forEach((card) => floatIdle(card, 2)) })
+        .to(cards, { autoAlpha: 1, rotateZ: 0, stagger: TOKENS.stagger.normal, ...TOKENS.revealMd }, 0)
+        .to(icons, { rotate: 0, scale: 1, stagger: TOKENS.stagger.tight, ...TOKENS.bounce }, 0.2),
+    settle: () => {
+      gsap.set(cards, { autoAlpha: 1, rotateZ: 0 });
+      gsap.set(icons, { rotate: 0, scale: 1 });
+    },
+  });
 </script>

@@ -5,9 +5,9 @@ const { featured, client, toolset } = p;
 const items = [featured, client];
 ---
 
-<section id="proyectos" class="mx-auto max-w-6xl px-6 py-24">
+<section id="proyectos" aria-labelledby="proyectos-title" class="mx-auto max-w-6xl px-6 py-24">
   <p class="eyebrow mb-4">{p.eyebrow}</p>
-  <h2 class="text-4xl font-bold tracking-tight">
+  <h2 id="proyectos-title" class="text-4xl font-bold tracking-tight">
     {p.heading1} <span class="font-extrabold">{p.heading2}</span>
   </h2>
 
@@ -29,7 +29,7 @@ const items = [featured, client];
             <div>
               <p class="eyebrow mb-3">{project.badge}</p>
               <h3 class="text-lg font-semibold">{project.title}</h3>
-              {project.subtitle && <p class="mt-0.5 text-xs text-white/40">{project.subtitle}</p>}
+              {project.subtitle && <p class="mt-0.5 text-xs text-white/55">{project.subtitle}</p>}
               <p class="mt-2 text-sm leading-relaxed text-white/50">{project.description}</p>
               <div class="mt-4 flex flex-wrap gap-2">
                 {project.tags.map((tag) => (
@@ -115,8 +115,8 @@ const items = [featured, client];
 </script>
 
 <script>
-  import { gsap, hasFinePointer, floatIdle, prefersReducedMotion } from "../scripts/motion";
-  import { registerPanelScrub } from "../scripts/panel-scrub";
+  import { gsap, hasFinePointer, floatIdle, prefersReducedMotion, TOKENS } from "../scripts/motion";
+  import { registerSection } from "../scripts/stage";
 
   const cards = gsap.utils.toArray<HTMLElement>("[data-project-card]");
   const grid = document.querySelector<HTMLElement>("[data-projects-grid]");
@@ -127,25 +127,14 @@ const items = [featured, client];
   }
 
   // Familia de entrada: profundidad ascendente — scale + translateY a la vez.
-  if (!prefersReducedMotion()) {
-    gsap.set(cards, { autoAlpha: 0, y: 30, scale: 0.92 });
-
-    const tl = gsap.timeline({
-      paused: true,
-      onComplete: () => cards.forEach((card) => floatIdle(card, 2.5)),
-    });
-    tl.to(cards, {
-      autoAlpha: 1,
-      y: 0,
-      scale: 1,
-      duration: 0.8,
-      stagger: 0.28,
-      ease: "power3.out",
-      force3D: true,
-    });
-
-    registerPanelScrub("proyectos", (_t, tMax) => tl.progress(tMax));
-  }
+  registerSection("proyectos", {
+    prepare: () => gsap.set(cards, { autoAlpha: 0, y: 30, scale: 0.92 }),
+    reveal: () =>
+      gsap
+        .timeline({ onComplete: () => cards.forEach((card) => floatIdle(card, 2.5)) })
+        .to(cards, { autoAlpha: 1, y: 0, scale: 1, stagger: TOKENS.stagger.normal, force3D: true, ...TOKENS.revealMd }),
+    settle: () => gsap.set(cards, { autoAlpha: 1, y: 0, scale: 1 }),
+  });
 
   cards.forEach((card) => {
     const img = card.querySelector<HTMLElement>("[data-project-img]");

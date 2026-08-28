@@ -37,11 +37,50 @@
   ::selection {
     background-color: rgba(255, 255, 255, 0.15);
   }
+
+  /* Indicador de foco único para todo el sitio. Los inputs de Contacto lo
+     apagaban con focus:outline-none y sólo cambiaban el borde a blanco/30: a 1px
+     y 2.5:1 de contraste eso no alcanza como indicador. El outline sigue el
+     border-radius del elemento solo. */
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+}
+
+/* ---------- Salto al contenido ----------
+   Primer tabulable de la página. Hace falta especialmente acá: el nav son 7
+   enlaces que hay que atravesar antes de llegar a nada. */
+/* Se oculta moviendo `top`, no con un transform: la hoja del túnel
+   (scroll-engine.css) declara transforms con !important y no vale la pena
+   pelearse con la cascada por un enlace que sólo se ve al tabular. */
+.skip-link {
+  position: fixed;
+  top: -4rem;
+  left: 0.75rem;
+  z-index: 200;
+  border-radius: 0.5rem;
+  background-color: var(--color-ink);
+  color: var(--color-bg);
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 0.75rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skip-link {
+    transition: none;
+  }
 }
 
 @layer components {
   .eyebrow {
-    @apply text-xs font-medium uppercase tracking-[0.2em] text-white/40;
+    @apply text-xs font-medium uppercase tracking-[0.2em] text-white/55;
   }
 
   .card {
