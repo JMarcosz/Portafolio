@@ -126,10 +126,15 @@ export function initGroups() {
     // pixel de mas ya empezaba a desvanecer la seccion que estabas leyendo:
     // outAlpha cae desde tB=0, asi que pasarse de scroll costaba la seccion.
     //
+    // El techo (100px) es la medida, no un piso: son unos ~80-120px, el orden
+    // de UN notch de rueda de mouse. La primera versión llegaba a 440px —
+    // cerca de tres gestos de scroll completos para que la sección avanzara,
+    // que ya no es "amortiguar un accidente" sino sentirse trabado.
+    //
     // Solo en desktop: en touch el scroll es inercial y directo (el dedo
-    // arrastra la pantalla 1:1), asi que un tramo de 400px+ sin respuesta se
-    // siente atascado, no como un margen de seguridad.
-    dwellPx = isMobile() ? 0 : Math.min(stageH * 0.5, 440);
+    // arrastra la pantalla 1:1), asi que incluso este margen chico se siente
+    // atascado en vez de un colchón de seguridad.
+    dwellPx = isMobile() ? 0 : Math.min(stageH * 0.08, 100);
 
     let acc = 0;
     models.forEach((m, i) => {
