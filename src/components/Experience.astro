@@ -97,6 +97,13 @@ const experience = exp.items;
   const START = 0.6;
   const END = 0.95;
 
+  // En móvil groups.ts ni siquiera arma el túnel (ver el comentario de
+  // initGroups): el scroll es nativo y las secciones se revelan por
+  // IntersectionObserver, que sólo llama a `reveal()`. Esta sección nunca tuvo
+  // uno — toda su coreografía vivía en `live()`, que ahí no se llama jamás — así
+  // que las cards se quedaban para siempre en el estado oculto de `prepare()`.
+  const isMobile = () => window.matchMedia("(max-width: 768px)").matches;
+
   const played = new WeakSet<Element>();
 
   const revealDot = (dot: HTMLElement) => {
@@ -124,6 +131,26 @@ const experience = exp.items;
   };
 
   registerSection("experiencia", {
+    // Sólo hace algo en móvil. En desktop `live()` ya dibuja esto atado al
+    // scroll — dejarlo activo ahí doblaría la revelación (una de golpe acá,
+    // otra progresiva en `live()`) y adelantaría las cards antes de que el
+    // usuario llegue a leerlas.
+    reveal: () => {
+      if (!isMobile()) return;
+      gsap.set(fill, { scaleY: 1 });
+      const tl = gsap.timeline();
+      tl.to(dots, { autoAlpha: 1, scale: 1, stagger: TOKENS.stagger.tight, ...TOKENS.bounce }, 0);
+      cards.forEach((card, i) => {
+        tl.to(card, { autoAlpha: 1, x: 0, force3D: true, ...TOKENS.revealMd }, i * TOKENS.stagger.normal).to(
+          card.querySelectorAll("li"),
+          { autoAlpha: 1, y: 0, stagger: TOKENS.stagger.tight, ...TOKENS.micro },
+          "<+=0.15"
+        );
+      });
+      dots.forEach((dot) => played.add(dot));
+      cards.forEach((card) => played.add(card));
+      return tl;
+    },
     prepare: () => {
       gsap.set(fill, { scaleY: 0, transformOrigin: "top" });
       gsap.set(dots, { autoAlpha: 0, scale: 0.4 });
