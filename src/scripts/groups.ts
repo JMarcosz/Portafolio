@@ -125,7 +125,11 @@ export function initGroups() {
     // presentado y QUIETO antes de que arranque el zoom. Sin ella el primer
     // pixel de mas ya empezaba a desvanecer la seccion que estabas leyendo:
     // outAlpha cae desde tB=0, asi que pasarse de scroll costaba la seccion.
-    dwellPx = Math.min(stageH * 0.5, 440);
+    //
+    // Solo en desktop: en touch el scroll es inercial y directo (el dedo
+    // arrastra la pantalla 1:1), asi que un tramo de 400px+ sin respuesta se
+    // siente atascado, no como un margen de seguridad.
+    dwellPx = isMobile() ? 0 : Math.min(stageH * 0.5, 440);
 
     let acc = 0;
     models.forEach((m, i) => {
