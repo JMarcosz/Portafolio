@@ -1,6 +1,6 @@
 ---
 import { getContent } from "../i18n";
-const { footer } = getContent(Astro.currentLocale);
+const { footer, home } = getContent(Astro.currentLocale);
 ---
 
 <footer data-footer class="border-t border-white/10">
@@ -9,7 +9,7 @@ const { footer } = getContent(Astro.currentLocale);
       <p class="text-sm font-bold tracking-tight">{footer.name.toUpperCase()}</p>
       <p class="text-xs text-white/55">{footer.role}</p>
     </div>
-    <a href="#contacto" class="text-sm text-white/60 hover:text-white">{footer.contact}</a>
+    <a href={`${home}#contacto`} class="text-sm text-white/60 hover:text-white">{footer.contact}</a>
   </div>
   <div class="border-t border-white/5">
     <div class="mx-auto max-w-6xl px-6 py-4 text-[11px] text-white/55">

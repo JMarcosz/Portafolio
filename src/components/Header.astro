@@ -1,20 +1,31 @@
 ---
 import { getContent, normalizeLocale, localeHome } from "../i18n";
 
+interface Props {
+  /** Equivalente de ESTA página en el otro idioma. Por defecto, la home. */
+  otherHref?: string;
+}
+
 const locale = normalizeLocale(Astro.currentLocale);
 const t = getContent(locale);
-const nav = t.nav;
 const otherLocale = locale === "es" ? "en" : "es";
-const otherHome = localeHome(otherLocale);
+const { otherHref = localeHome(otherLocale) } = Astro.props;
+
+// Los enlaces del nav se prefijan con la home del idioma. Un `#proyectos` a
+// secas no lleva a ningún lado desde /proyectos/<slug>: el ancla no existe en
+// esa página. Con `/#proyectos` funciona desde cualquier ruta, y en la home
+// groups.ts lo intercepta igual porque compara el pathname.
+const home = t.home;
+const nav = t.nav.map((item) => ({ ...item, href: `${home}${item.href}` }));
 ---
 
 <header class="fixed inset-x-0 top-0 z-50 border-b border-white/10">
   <div class="header-bg pointer-events-none absolute inset-0 -z-10"></div>
 
   <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-    <a href="#inicio" data-header-mark class="text-sm font-bold tracking-tight opacity-0">Jean Marco</a>
+    <a href={`${home}#inicio`} data-header-mark class="text-sm font-bold tracking-tight opacity-0">Jean Marco</a>
 
-    <nav data-desktop-nav class="relative hidden items-center gap-7 md:flex">
+    <nav data-desktop-nav class="relative hidden items-center gap-5 lg:flex xl:gap-7">
       <span
         id="nav-rail"
         class="pointer-events-none absolute bottom-[-1px] h-[2px] rounded-full bg-white opacity-0"
@@ -25,7 +36,7 @@ const otherHome = localeHome(otherLocale);
             href={item.href}
             data-nav-link
             data-header-item
-            class="nav-link text-[11px] font-medium uppercase tracking-[0.15em] text-white/50 opacity-0 transition-colors hover:text-white"
+            class="nav-link whitespace-nowrap text-[11px] font-medium uppercase tracking-[0.15em] text-white/50 opacity-0 transition-colors hover:text-white"
           >
             {item.label}
           </a>
@@ -35,7 +46,7 @@ const otherHome = localeHome(otherLocale);
 
     <div data-header-actions class="flex items-center gap-2">
       <a
-        href={otherHome}
+        href={otherHref}
         hreflang={otherLocale}
         data-header-item
         aria-label={t.header.langAria}
@@ -53,7 +64,7 @@ const otherHome = localeHome(otherLocale);
         aria-label={t.header.menuOpen}
         aria-expanded="false"
         aria-controls="mobile-menu"
-        class="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 text-white/70 opacity-0 md:hidden"
+        class="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 text-white/70 opacity-0 lg:hidden"
       >
         <svg id="menu-icon-open" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M4 6h16M4 12h16M4 18h16"></path>
@@ -65,7 +76,7 @@ const otherHome = localeHome(otherLocale);
     </div>
   </div>
 
-  <nav id="mobile-menu" class="hidden flex-col border-t border-white/10 px-6 py-4 md:hidden">
+  <nav id="mobile-menu" class="hidden flex-col border-t border-white/10 px-6 py-4 lg:hidden">
     {
       nav.map((item) => (
         <a
@@ -205,14 +216,18 @@ const otherHome = localeHome(otherLocale);
 
   // Secciones sin enlace propio -> enlace representativo de su grupo.
   const REPR = new Map<string, string>([
-    ["formacion", "habilidades"],
-    ["certificados", "habilidades"],
+    ["faq", "proceso"],
+    ["habilidades", "experiencia"],
+    ["formacion", "experiencia"],
+    ["certificados", "experiencia"],
   ]);
 
   const setActive = (id: string) => {
-    const href = `#${REPR.get(id) ?? id}`;
+    // Se compara el hash y no el href completo: los enlaces del nav llevan la
+    // home delante (`/#proyectos`), así que un match literal nunca daría.
+    const hash = `#${REPR.get(id) ?? id}`;
     links.forEach((link) => {
-      const isActive = link.getAttribute("href") === href;
+      const isActive = link.hash === hash;
       link.classList.toggle("text-white", isActive);
       link.classList.toggle("text-white/50", !isActive);
       if (isActive && link.closest("nav")?.id !== "mobile-menu") {

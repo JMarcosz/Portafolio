@@ -1,8 +1,8 @@
 {
   "meta": {
-    "title": "Jean Marco Marte — Full Stack Software Engineer | DR",
-    "description": "Portfolio of Jean Marco Marte, Full Stack Software Engineer in the Dominican Republic. Angular, Vue/Nuxt, React/Next, .NET, Laravel and Docker — projects, experience and contact.",
-    "ogAlt": "Jean Marco Marte — Full Stack Software Engineer",
+    "title": "Jean Marco Marte — Custom web systems for your business | DR",
+    "description": "I build web systems that bring your whole operation into one place: clients, inventory, invoicing and reports. Jean Marco Marte, software engineer in the Dominican Republic.",
+    "ogAlt": "Jean Marco Marte — Custom web systems",
     "jobTitle": "Full Stack Software Engineer",
     "localeOg": "en_US"
   },
@@ -11,16 +11,16 @@
     { "label": "About", "href": "#sobre-mi" },
     { "label": "Projects", "href": "#proyectos" },
     { "label": "Services", "href": "#servicios" },
+    { "label": "Process", "href": "#proceso" },
     { "label": "Experience", "href": "#experiencia" },
-    { "label": "Skills", "href": "#habilidades" },
     { "label": "Contact", "href": "#contacto" }
   ],
   "hero": {
-    "eyebrow": "Professional portfolio",
-    "title1": "Hi, I'm",
-    "title2": "Jean Marco",
-    "description": "An engineer focused on building digital solutions that solve real problems. I combine technical judgment with attention to detail to ship projects that work well and look good.",
-    "cta": "Get in touch",
+    "eyebrow": "Custom software development",
+    "title1": "Web systems that bring",
+    "title2": "order to your business",
+    "description": "I bring into one place what you run today across spreadsheets, WhatsApp and paper: clients, inventory, invoicing and reports. Simple and straightforward, with no one else needed to operate it.",
+    "cta": "Book a call",
     "cvLabel": "View CV",
     "photoAlt": "Photo of Jean Marco",
     "nameAria": "Jean Marco Marte — Full Stack Software Engineer",
@@ -28,71 +28,259 @@
     "scrollAria": "Go to the next section"
   },
   "about": {
-    "eyebrow": "Who I am",
-    "title1": "About",
-    "title2": "My Path",
+    "eyebrow": "Who you'll be working with",
+    "title1": "Your Operation",
+    "title2": "Comes First",
     "paragraphs": [
-      "I'm an engineer and developer. My work is taking an idea from the first conversation to something running in production, without losing clarity or detail along the way."
+      "I work with businesses that already run, but whose operation is scattered across spreadsheets, WhatsApp threads and paper. My job is turning that into a system: one system, that your team can use without a manual."
     ],
-    "highlight": "engineering and design meet",
-    "paragraphAfterHighlight": ": systems that hold up technically and also feel natural to the people using them. I treat every project as a problem to solve, not a template to fill in.",
-    "highlightIntro": "I'm drawn to the point where ",
+    "highlightIntro": "Before writing a single line of code I want to understand ",
+    "highlight": "how your business actually works today",
+    "paragraphAfterHighlight": ", because a system that doesn't fit the real operation gets abandoned within two months. That's why every decision is explained by its effect on your business, not by the technology behind it.",
     "stats": [
-      { "value": "3+", "label": "Years of experience" },
-      { "value": "20+", "label": "Projects completed" },
-      { "value": "10+", "label": "Happy clients" },
-      { "value": "5+", "label": "Certificates earned" }
+      { "value": "3+", "label": "Years building software" },
+      { "value": "2", "label": "Systems in production" },
+      { "value": "6", "label": "Certifications" },
+      { "value": "EN/ES", "label": "Bilingual work" }
     ]
   },
   "projects": {
     "eyebrow": "Selected work",
-    "heading1": "My",
-    "heading2": "Projects",
-    "viewDemo": "View Demo",
-    "viewCodeAria": "View code for",
-    "haveProject": "Have a project in mind?",
-    "copyEmail": "Copy email",
-    "copied": "Copied!",
-    "featured": {
-      "badge": "Featured project",
-      "title": "Zentra",
-      "subtitle": "Tax automation for the Dominican Republic",
-      "description": "A SaaS platform that automates the full tax-receipt cycle: it digitizes invoices with OCR and AI (Google Gemini), classifies expenses and income per DGII regulations, and generates the 606/607 files ready for the Virtual Office.",
-      "tags": ["Vue 3", "NestJS", "PostgreSQL", "Gemini AI"]
+    "heading1": "Systems Already",
+    "heading2": "Up And Running",
+    "viewCase": "View case study",
+    "viewDemo": "View demo",
+    "items": [
+      {
+        "slug": "zentra",
+        "badge": "Own product",
+        "title": "606/607 tax filing automation",
+        "valueLine": "Turns paper, PDF or photographed invoices into the files the tax authority asks for, with no manual typing.",
+        "tags": ["Vue 3", "NestJS", "PostgreSQL"],
+        "caseStudy": {
+          "name": "Zentra",
+          "tagline": "Tax filing automation for the Dominican Republic",
+          "problema": "Every month, accountants and companies in the Dominican Republic sit down and type invoice after invoice to assemble the 606 and 607 files the DGII requires. It's manual, repetitive and fragile work: one mistyped tax ID or one invalid receipt number gets the file rejected, and the whole thing has to be reviewed again — with the deadline already closing in.",
+          "contexto": "Zentra is my own product, not a commission. It came from seeing the same problem in three different profiles: the independent accountant handling a handful of companies, the accounting firm with a client portfolio, and the company with high document volume that needs a dedicated setup.",
+          "solucion": [
+            "Tax dashboard with the state of the period",
+            "AI scanner for paper, PDFs and photos",
+            "606 report (purchases and expenses)",
+            "607 report (sales and income)",
+            "Tax ID and receipt-number validator",
+            "Official TXT file generator"
+          ],
+          "funcionalidades": [
+            "Reads invoices from thermal paper, PDFs and photos taken with a phone.",
+            "Automatic extraction of tax ID (RNC), receipt number (NCF), date, amount and VAT.",
+            "Validation of RNC and NCF with the Module 10 and Module 11 algorithms before anything is generated.",
+            "Review screen that shows the original document next to every extracted field.",
+            "Generation of the TXT file in the tax authority's official format.",
+            "Batch processing, so a whole period can be closed in one pass."
+          ],
+          "participacion": [
+            "Architecture and data model",
+            "Backend and API",
+            "Interface and user experience",
+            "AI model integration",
+            "Containerization and deployment"
+          ],
+          "decisiones": [
+            {
+              "titulo": "The AI extracts, the person confirms",
+              "texto": "The system never accepts a value without someone seeing it. Every extracted field is shown next to the original document, because a mistake in a tax filing isn't fixed with an undo button. The AI saves the typing, not the responsibility."
+            },
+            {
+              "titulo": "Validating tax IDs inside the system",
+              "texto": "I implemented the Module 10 and Module 11 checks inside the product instead of letting the error surface when the file is uploaded. That's the difference between fixing it at your desk and having the tax authority reject your submission."
+            },
+            {
+              "titulo": "PostgreSQL for the relationships, not for fashion",
+              "texto": "A receipt belongs to a company, a period and a classification, and those relationships have to stay consistent or the generated file won't add up. That's exactly the case for a relational database."
+            }
+          ],
+          "stack": ["Vue 3", "NestJS", "PostgreSQL", "Google Gemini", "Docker"],
+          "dificultades": [
+            "The real input isn't clean PDFs: it's faded thermal paper and crooked phone photos. The scanner had to treat that as the normal case, not the exception.",
+            "[PENDING: real technical difficulties worth telling — what was hardest and how you solved it]"
+          ],
+          "resultado": [
+            "The system replaces manual data entry for the entire 606/607 cycle: from a photo of the invoice to the TXT file ready to upload, with nothing transcribed by hand.",
+            "Tax ID and receipt-number errors are caught before the file is generated, not after it's rejected.",
+            "It's in production and can be tried in the live demo."
+          ]
+        }
+      },
+      {
+        "slug": "santoral-logistic",
+        "badge": "Client project",
+        "title": "Freight logistics platform",
+        "valueLine": "Quotes, shipments, inventory and clients in a single system, instead of separate processes.",
+        "tags": ["Laravel 12", "React 19", "PostgreSQL"],
+        "caseStudy": {
+          "name": "Santoral Logistic",
+          "tagline": "For Maed Logistic Trading",
+          "problema": "Maed Logistic Trading ran its operation on manual processes and legacy systems. Quotes, shipments, inventory and client data lived apart, so answering something as simple as \"where is this shipment?\" meant pulling information from several different places, each with its own version of the truth.",
+          "contexto": "It's a trading and freight logistics operation: they quote, they ship, they store. The brief was to digitize and standardize that entire operational flow, replacing the manual and the legacy with a single system. [PENDING: size of the operation and how many people use the system daily]",
+          "solucion": [
+            "Transportation management (TMS): quotes and shipping orders",
+            "Warehouse management (WMS): inventory operations",
+            "Client management (CRM): customers and contacts",
+            "Shared base configuration across every module"
+          ],
+          "funcionalidades": [
+            "Base catalogs for the operation: currencies, transport modes, package types and ports.",
+            "Customer and contact records, reachable from any module.",
+            "Quote generation and tracking.",
+            "Shipping orders linked to the quote that originated them, so the same data is never captured twice."
+          ],
+          "participacion": [
+            "Application architecture",
+            "Data model",
+            "Backend and frontend",
+            "Containerization and environments",
+            "Deployment"
+          ],
+          "decisiones": [
+            {
+              "titulo": "One deployment, not two applications",
+              "texto": "I chose a modern monolith with Inertia.js rather than splitting API and SPA. For an internal team that means a single place to deploy and a single permission model; splitting it would have doubled the maintenance without giving the client anything."
+            },
+            {
+              "titulo": "PostgreSQL because everything depends on everything",
+              "texto": "A shipping order is born from a quote and carries client, port, currency and package type with it. If those relationships aren't consistent, the system stops being a trustworthy source and the team goes back to the spreadsheet."
+            },
+            {
+              "titulo": "Docker from day one",
+              "texto": "The client's environment and the development environment are the same one. It's how \"works on my machine\" stops being a conversation, and how the system can move servers without redoing the setup."
+            }
+          ],
+          "stack": [
+            "Laravel 12 (PHP 8.3)",
+            "React 19 + Inertia.js",
+            "PostgreSQL 16",
+            "Redis + Horizon",
+            "TailwindCSS + shadcn/ui",
+            "Docker"
+          ],
+          "dificultades": [
+            "[PENDING: real technical difficulties — migrating off the legacy systems, team adoption, or whatever was hardest]"
+          ],
+          "resultado": [
+            "The MVP is in production and replaces the separate quoting, shipping, inventory and client processes with a single flow.",
+            "The shipping order is generated from the quote, so data is captured only once.",
+            "[PENDING: observable result in daily operation — what changed for the team]"
+          ]
+        }
+      }
+    ]
+  },
+  "caseStudy": {
+    "eyebrow": "Case study",
+    "back": "Back to home",
+    "labels": {
+      "problema": "The problem",
+      "contexto": "Context",
+      "solucion": "The solution",
+      "funcionalidades": "Features",
+      "participacion": "My role",
+      "decisiones": "Technical decisions",
+      "stack": "Stack",
+      "dificultades": "Difficulties",
+      "resultado": "Result",
+      "demo": "Demo"
     },
-    "client": {
-      "badge": "Client",
-      "title": "Santoral Logistic",
-      "subtitle": "For Maed Logistic Trading",
-      "description": "TMS + WMS + CRM that centralizes quotes, shipments, inventory and billing in one place.",
-      "tags": ["Laravel 12", "React 19", "PostgreSQL"]
-    },
-    "toolset": {
-      "title": "Tools I use",
-      "tags": ["TypeScript", "Docker", "PostgreSQL", "Git", "Tailwind CSS"]
-    }
+    "demoIntro": "The best proof is the system running. It's live:",
+    "demoCta": "Open the demo",
+    "repoCta": "View the code",
+    "ctaTitle": "Got a similar problem?",
+    "ctaText": "Tell me how your operation works today. The first conversation is free.",
+    "ctaButton": "Book a call"
   },
   "services": {
     "eyebrow": "How I can help",
-    "heading1": "Development &",
-    "heading2": "Support",
-    "intro": "I work per project or as ongoing support, depending on what the team needs.",
+    "heading1": "What I",
+    "heading2": "Build",
+    "intro": "I work per project or as ongoing support, depending on what your business needs.",
     "items": [
       {
-        "title": "Custom development",
-        "description": "End-to-end full-stack web applications: frontend, API, database and deployment. Angular, Vue/Nuxt, React/Next, NestJS and Laravel."
+        "title": "The system your business needs",
+        "description": "Internal systems to manage clients, data, inventory, bookings and invoicing from one place. Built to match how you actually work — simple and straightforward to use."
       },
       {
-        "title": "Maintenance and support",
-        "description": "Ongoing care for production systems: bug fixes, monitoring, incremental improvements and incident response."
+        "title": "Automating what's done by hand",
+        "description": "That repetitive process eating someone's hours every week: invoices being typed in, reports assembled by hand, messages answered one by one. It can be automated."
       },
       {
-        "title": "Integrations and automation",
-        "description": "Connecting third-party services and APIs (payments, messaging, DGII, AI) and automating processes that are done by hand today."
+        "title": "Maintenance and evolution",
+        "description": "After launch the system stays alive: I fix bugs, keep an eye on uptime and add whatever the business starts asking for. You're not left alone with a delivered system."
       },
       {
-        "title": "Infrastructure and deployment",
-        "description": "Containerization with Docker, VPS server setup, domains, SSL and deployment pipelines on AWS, Azure or Cloudflare."
+        "title": "Keeping it all standing",
+        "description": "Server, domain, security certificates and backups. I handle the part nobody sees, so you don't have to hire someone else for it."
+      }
+    ]
+  },
+  "process": {
+    "eyebrow": "No surprises",
+    "heading1": "How I",
+    "heading2": "Work",
+    "intro": "Six stages, always the same ones. In none of them are you left wondering where your project stands.",
+    "items": [
+      {
+        "title": "Discovery",
+        "description": "I understand the problem, who will use the system and what real need justifies it."
+      },
+      {
+        "title": "Architecture",
+        "description": "I define features, technology and structure, and document all of it so you understand what's going to be built."
+      },
+      {
+        "title": "Development",
+        "description": "I build in stages, keeping communication open throughout. You see progress, not three months of silence."
+      },
+      {
+        "title": "Testing",
+        "description": "Testing, behaviour on phone and desktop, security and performance — before anyone depends on the system."
+      },
+      {
+        "title": "Launch",
+        "description": "Deployment and final setup: domain, certificates and everything needed to get the system online."
+      },
+      {
+        "title": "Support",
+        "description": "Maintenance and monitoring, with improvements whenever the business calls for them."
+      }
+    ]
+  },
+  "faq": {
+    "eyebrow": "What everyone asks",
+    "heading1": "Before You",
+    "heading2": "Hire Me",
+    "items": [
+      {
+        "q": "I don't know if I really need a system.",
+        "a": "The initial assessment is free. I look at how your business runs today and tell you what's actually needed — even if the answer is that you don't need to hire me yet."
+      },
+      {
+        "q": "Will you disappear once I've paid?",
+        "a": "No. You get progress updates throughout development and continuous access to the work: you know what stage your project is in at any moment, not only at the end."
+      },
+      {
+        "q": "What if I need changes halfway through?",
+        "a": "Scope and revisions are defined in writing before we start, so we both know what's included and what gets quoted separately. No surprises mid-project."
+      },
+      {
+        "q": "What if you don't deliver what we agreed?",
+        "a": "If what was agreed isn't delivered, you get your money back. What counts as \"agreed\" is put in writing before we start, so it doesn't come down to anyone's interpretation."
+      },
+      {
+        "q": "Will I own the system?",
+        "a": "Yes. When the project ends you receive full access to the code, the accounts and the agreed resources. It's all planned before we start, and after launch maintenance and further development are available."
+      },
+      {
+        "q": "I don't know anything about programming.",
+        "a": "You don't need to. Every decision is explained through its impact on your business: what it saves you, what it lets you do, and what happens if it isn't done."
       }
     ]
   },
@@ -211,50 +399,57 @@
     ]
   },
   "skills": {
-    "eyebrow": "My expertise",
+    "eyebrow": "What I build with",
     "heading1": "Skills &",
     "heading2": "Technologies",
+    "levels": {
+      "advanced": "Advanced",
+      "solid": "Solid",
+      "daily": "Daily use"
+    },
     "categories": [
       {
         "index": "01",
-        "title": "Frontend development",
-        "description": "Interfaces, accessibility and in-browser performance",
+        "title": "What the user sees",
+        "description": "Clear, accessible and fast interfaces in the browser",
         "skills": [
-          { "label": "Angular", "percent": 85 },
-          { "label": "React / Next.js", "percent": 78 },
-          { "label": "Vue.js / Nuxt.js", "percent": 80 },
-          { "label": "TypeScript", "percent": 80 }
+          { "label": "Angular", "level": "advanced" },
+          { "label": "Vue.js / Nuxt.js", "level": "advanced" },
+          { "label": "React / Next.js", "level": "solid" },
+          { "label": "TypeScript", "level": "advanced" }
         ]
       },
       {
         "index": "02",
-        "title": "Backend development",
+        "title": "What makes the system run",
         "description": "APIs, databases and server-side logic",
         "skills": [
-          { "label": "Node.js", "percent": 75 },
-          { "label": "Databases", "percent": 70 },
-          { "label": "REST APIs", "percent": 80 },
-          { "label": "Authentication", "percent": 76 }
+          { "label": "NestJS / Node.js", "level": "solid" },
+          { "label": "Laravel / PHP", "level": "solid" },
+          { "label": "PostgreSQL / SQL Server", "level": "advanced" },
+          { "label": "REST APIs and authentication", "level": "advanced" }
         ]
       },
       {
         "index": "03",
-        "title": "Tools & process",
-        "description": "Version control, deployment and teamwork",
+        "title": "What keeps it standing",
+        "description": "Deployment, servers and teamwork",
         "skills": [
-          { "label": "Docker", "percent": 78 },
-          { "label": "Git", "percent": 85 },
-          { "label": "AWS / Azure", "percent": 65 },
-          { "label": "Linux / VPS", "percent": 72 }
+          { "label": "Docker", "level": "solid" },
+          { "label": "Git", "level": "daily" },
+          { "label": "Linux / VPS", "level": "solid" },
+          { "label": "AWS / Azure / Cloudflare", "level": "solid" }
         ]
       }
     ]
   },
   "contact": {
-    "eyebrow": "Let's talk",
-    "title1": "Let's build",
-    "title2": "Something New",
-    "description": "Have a project in mind or an idea you want to get moving? Tell me what it's about and I'll come back with the next steps.",
+    "eyebrow": "The first step",
+    "title1": "Tell Me",
+    "title2": "Your Problem",
+    "description": "You don't need to arrive with a solution in mind or know anything about technology. Tell me how your operation works today and what's costing you. The first conversation is free.",
+    "scheduleCta": "Book a call",
+    "orForm": "or write to me here",
     "location": "Dominican Republic · Remote",
     "fieldEmail": "[ Email ]",
     "fieldLocation": "[ Location ]",
@@ -263,7 +458,7 @@
     "labelMessage": "Message",
     "phName": "Your name",
     "phEmail": "you@example.com",
-    "phMessage": "Tell me about your project...",
+    "phMessage": "Which part of your operation is costing you most?",
     "submit": "Send message",
     "sending": "Sending...",
     "sent": "Sent",
@@ -273,7 +468,7 @@
     "notConfigured": "The form isn't connected yet (the Web3Forms Access Key still needs to be configured)."
   },
   "footer": {
-    "role": "Engineer · Web development",
+    "role": "Custom web systems · Dominican Republic",
     "contact": "Contact",
     "rights": "All rights reserved."
   },

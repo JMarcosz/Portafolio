@@ -1,0 +1,84 @@
+---
+import { getContent } from "../i18n";
+const { faq } = getContent(Astro.currentLocale);
+---
+
+<section id="faq" aria-labelledby="faq-title" class="mx-auto max-w-6xl section-y px-6">
+  <p class="eyebrow mb-4">{faq.eyebrow}</p>
+  <h2 id="faq-title" class="text-4xl font-bold tracking-tight">
+    {faq.heading1}<br />
+    <span class="font-extrabold">{faq.heading2}</span>
+  </h2>
+
+  <div data-faq-list class="mt-14 max-w-3xl divide-y divide-white/10 border-y border-white/10">
+    {
+      faq.items.map((item) => (
+        // <details> nativo: funciona sin JS y el navegador ya se encarga del
+        // estado expandido para lectores de pantalla. No hace falta ARIA propio.
+        <details class="faq-item group">
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-6 text-left text-base font-medium text-white/85 transition-colors hover:text-white">
+            {item.q}
+            <svg
+              class="faq-chevron h-4 w-4 shrink-0 text-white/55 transition-transform duration-300"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </summary>
+          <p class="max-w-2xl pb-6 text-sm leading-relaxed text-white/50">{item.a}</p>
+        </details>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  /* El marcador por defecto de <summary> sigue apareciendo en Safari aunque
+     list-style esté en none; ::-webkit-details-marker es el que lo apaga ahí. */
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq-item[open] .faq-chevron {
+    transform: rotate(180deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .faq-chevron {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  import { gsap, TOKENS } from "../scripts/motion";
+  import { registerSection } from "../scripts/stage";
+
+  const list = document.querySelector<HTMLElement>("[data-faq-list]");
+  const items = gsap.utils.toArray<HTMLDetailsElement>(".faq-item");
+
+  // El bloque entra como una pieza. Animar cada <details> por separado dejaría a
+  // los de abajo en autoAlpha intermedio — y autoAlpha 0 es visibility:hidden,
+  // o sea una pregunta que no se puede abrir.
+  if (list) {
+    registerSection("faq", {
+      prepare: () => gsap.set(list, { autoAlpha: 0, y: 26 }),
+      reveal: () => gsap.timeline().to(list, { autoAlpha: 1, y: 0, ...TOKENS.revealMd }),
+      settle: () => gsap.set(list, { autoAlpha: 1, y: 0 }),
+    });
+  }
+
+  // Acordeón: sólo una respuesta abierta a la vez. Sin esto el grupo crece y
+  // encoge de forma impredecible dentro del túnel de scroll.
+  items.forEach((item) => {
+    item.addEventListener("toggle", () => {
+      if (!item.open) return;
+      items.forEach((other) => {
+        if (other !== item) other.open = false;
+      });
+    });
+  });
+</script>

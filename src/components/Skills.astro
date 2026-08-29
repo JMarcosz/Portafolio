@@ -2,9 +2,14 @@
 import { getContent } from "../i18n";
 const { skills } = getContent(Astro.currentLocale);
 const skillCategories = skills.categories;
+
+// Los niveles son discretos a propósito: un "85%" es una cifra que nadie puede
+// verificar ni sostener si se la preguntan. El ancho de la barra es sólo la
+// lectura visual del nivel declarado.
+const LEVEL_WIDTH: Record<string, number> = { advanced: 100, solid: 72, daily: 88 };
 ---
 
-<section id="habilidades" aria-labelledby="habilidades-title" class="mx-auto max-w-6xl px-6 py-24">
+<section id="habilidades" aria-labelledby="habilidades-title" class="mx-auto max-w-6xl section-y px-6">
   <p class="eyebrow mb-4">{skills.eyebrow}</p>
   <h2 id="habilidades-title" class="text-4xl font-bold tracking-tight">
     {skills.heading1}<br />
@@ -54,12 +59,12 @@ const skillCategories = skills.categories;
                     <div>
                       <div class="mb-2 flex items-center justify-between text-xs">
                         <span class="text-white/70">{skill.label}</span>
-                        <span class="text-white/55">{skill.percent}%</span>
+                        <span class="text-white/55">{skills.levels[skill.level as keyof typeof skills.levels]}</span>
                       </div>
-                      {/* El porcentaje ya está ahí arriba como texto: la barra es
+                      {/* El nivel ya está ahí arriba como texto: la barra es
                           decoración y no necesita rol propio. */}
                       <div class="h-px w-full bg-white/10" aria-hidden="true">
-                        <div class="skill-bar h-px bg-white" data-percent={skill.percent} style="width: 0%;" />
+                        <div class="skill-bar h-px bg-white" data-percent={LEVEL_WIDTH[skill.level] ?? 70} style="width: 0%;" />
                       </div>
                     </div>
                   ))}

@@ -5,6 +5,8 @@ import Hero from "./Hero.astro";
 import About from "./About.astro";
 import Projects from "./Projects.astro";
 import Services from "./Services.astro";
+import Process from "./Process.astro";
+import Faq from "./Faq.astro";
 import Experience from "./Experience.astro";
 import Education from "./Education.astro";
 import Certificates from "./Certificates.astro";
@@ -19,7 +21,10 @@ import Footer from "./Footer.astro";
   <!-- tabindex="-1": destino del enlace de salto, para que el foco aterrice acá
        y el siguiente Tab entre al contenido y no vuelva al nav. -->
   <main id="contenido" tabindex="-1" class="viewport-root">
-    <div class="scroll-track" style="--groups: 4;">
+    <!-- Orden de arriba a abajo: primero lo que el cliente necesita para decidir
+         (quién soy, qué construí, qué ofrezco, cómo trabajo, qué le preocupa) y
+         recién después el respaldo (experiencia, habilidades, formación). -->
+    <div class="scroll-track" style="--groups: 5;">
       <div class="sticky-stage">
         <section class="scroll-group" data-group="0" data-nav="inicio" data-group-initial>
           <div class="group-inner"><Hero /></div>
@@ -30,19 +35,26 @@ import Footer from "./Footer.astro";
             <About />
             <Projects />
             <Services />
-            <Experience />
           </div>
         </section>
 
-        <section class="scroll-group" data-group="2" data-nav="habilidades">
+        <section class="scroll-group" data-group="2" data-nav="proceso">
           <div class="group-inner">
+            <Process />
+            <Faq />
+          </div>
+        </section>
+
+        <section class="scroll-group" data-group="3" data-nav="experiencia">
+          <div class="group-inner">
+            <Experience />
+            <Skills />
             <Education />
             <Certificates />
-            <Skills />
           </div>
         </section>
 
-        <section class="scroll-group" data-group="3" data-nav="contacto">
+        <section class="scroll-group" data-group="4" data-nav="contacto">
           <div class="group-inner"><Contact /></div>
         </section>
       </div>

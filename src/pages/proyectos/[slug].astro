@@ -1,0 +1,32 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import CaseStudy from "../../components/CaseStudy.astro";
+import { getProjects, projectPath } from "../../i18n";
+
+export function getStaticPaths() {
+  return getProjects("es").map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const cs = project.caseStudy;
+---
+
+<Layout
+  title={`${cs.name} — ${cs.tagline} | Jean Marco Marte`}
+  description={project.valueLine}
+  image={project.image}
+  esHref={projectPath("es", project.slug)}
+  enHref={projectPath("en", project.slug)}
+  ogType="article"
+>
+  <Header otherHref={projectPath("en", project.slug)} />
+  <main id="contenido" tabindex="-1">
+    <CaseStudy project={project} />
+  </main>
+  <Footer />
+</Layout>

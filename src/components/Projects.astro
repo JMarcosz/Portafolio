@@ -1,11 +1,10 @@
 ---
 import { getContent } from "../i18n";
 const { projects: p } = getContent(Astro.currentLocale);
-const { featured, client, toolset } = p;
-const items = [featured, client];
+const items = p.items;
 ---
 
-<section id="proyectos" aria-labelledby="proyectos-title" class="mx-auto max-w-6xl px-6 py-24">
+<section id="proyectos" aria-labelledby="proyectos-title" class="mx-auto max-w-6xl section-y px-6">
   <p class="eyebrow mb-4">{p.eyebrow}</p>
   <h2 id="proyectos-title" class="text-4xl font-bold tracking-tight">
     {p.heading1} <span class="font-extrabold">{p.heading2}</span>
@@ -15,22 +14,27 @@ const items = [featured, client];
     {
       items.map((project) => (
         <article data-project-card class="card flex flex-col overflow-hidden">
-          <div class="overflow-hidden">
+          {/* La media es el gancho: insinúa el sistema en uso. El detalle vive en
+              el caso de estudio, no acá. */}
+          <a href={project.href} tabindex="-1" aria-hidden="true" class="block overflow-hidden">
             <img
               data-project-img
               src={project.image}
-              alt={`${project.title} — ${project.subtitle}`}
+              alt=""
               class="aspect-video w-full border-b border-white/10 object-cover object-top"
               loading="lazy"
             />
-          </div>
+          </a>
 
           <div class="flex flex-1 flex-col justify-between p-6">
             <div>
               <p class="eyebrow mb-3">{project.badge}</p>
-              <h3 class="text-lg font-semibold">{project.title}</h3>
-              {project.subtitle && <p class="mt-0.5 text-xs text-white/55">{project.subtitle}</p>}
-              <p class="mt-2 text-sm leading-relaxed text-white/50">{project.description}</p>
+              <h3 class="text-lg font-semibold">
+                <a href={project.href} class="transition-colors hover:text-white/80">
+                  {project.title}
+                </a>
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed text-white/50">{project.valueLine}</p>
               <div class="mt-4 flex flex-wrap gap-2">
                 {project.tags.map((tag) => (
                   <span class="rounded-md bg-white/5 px-2 py-1 text-[11px] text-white/60">{tag}</span>
@@ -38,31 +42,20 @@ const items = [featured, client];
               </div>
             </div>
 
-            <div class="mt-6 flex items-center gap-3 border-t border-white/10 pt-5">
+            <div class="mt-6 flex items-center gap-4 border-t border-white/10 pt-5">
+              <a href={project.href} data-magnetic data-case-link class="btn-primary flex-1 justify-center text-sm">
+                {p.viewCase}
+                <svg data-case-arrow width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </a>
               <a
                 href={project.demo}
                 target="_blank"
                 rel="noopener noreferrer"
-                data-magnetic
-                data-demo-link
-                class="btn-primary flex-1 justify-center text-sm"
+                class="shrink-0 text-sm text-white/55 underline-offset-4 transition-colors hover:text-white hover:underline"
               >
                 {p.viewDemo}
-                <svg data-demo-arrow width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M7 17L17 7M17 7H9M17 7v8" />
-                </svg>
-              </a>
-              <a
-                href={project.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-code-link
-                aria-label={`${p.viewCodeAria} ${project.title}`}
-                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 text-white/60 transition-colors hover:border-white/30 hover:text-white"
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M8 3L4 12l4 9M16 3l4 9-4 9" />
-                </svg>
               </a>
             </div>
           </div>
@@ -70,49 +63,7 @@ const items = [featured, client];
       ))
     }
   </div>
-
-  <div class="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
-    <article class="card p-6">
-      <h3 class="text-sm font-semibold">{toolset.title}</h3>
-      <div class="mt-4 flex flex-wrap gap-2">
-        {toolset.tags.map((tag) => <span class="rounded-md bg-white/5 px-2 py-1 text-[11px] text-white/60">{tag}</span>)}
-      </div>
-    </article>
-
-    <article class="card flex flex-col justify-between p-6">
-      <h3 class="text-sm font-semibold">{p.haveProject}</h3>
-      <button type="button" id="copy-email-projects" class="btn-primary mt-4 self-start !bg-white/10 !text-white" data-copy-done={p.copied}>
-        <span data-copy-label>{p.copyEmail}</span>
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="9" y="9" width="13" height="13" rx="2"></rect>
-          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-        </svg>
-      </button>
-    </article>
-  </div>
 </section>
-
-<script>
-  import { getContent } from "../i18n";
-  const email = getContent(document.documentElement.lang).contact.email;
-
-  const btn = document.getElementById("copy-email-projects");
-  btn?.addEventListener("click", async () => {
-    const label = btn.querySelector("[data-copy-label]");
-    try {
-      await navigator.clipboard.writeText(email);
-      if (label) {
-        const original = label.textContent;
-        label.textContent = btn.getAttribute("data-copy-done") || "OK";
-        setTimeout(() => {
-          label.textContent = original;
-        }, 1800);
-      }
-    } catch {
-      // portapapeles no disponible; se ignora silenciosamente
-    }
-  });
-</script>
 
 <script>
   import { gsap, hasFinePointer, floatIdle, prefersReducedMotion, TOKENS } from "../scripts/motion";
@@ -138,7 +89,6 @@ const items = [featured, client];
 
   cards.forEach((card) => {
     const img = card.querySelector<HTMLElement>("[data-project-img]");
-    const codeLink = card.querySelector<HTMLElement>("[data-code-link]");
 
     if (hasFinePointer() && !prefersReducedMotion()) {
       card.addEventListener("mousemove", (event) => {
@@ -152,19 +102,13 @@ const items = [featured, client];
         gsap.to(card, { rotateY: 0, rotateX: 0, duration: 0.5, ease: "power2.out" });
         gsap.to(img, { scale: 1, duration: 0.5, ease: "power2.out" });
       });
-      codeLink?.addEventListener("mouseenter", () => {
-        gsap.to(codeLink, { rotate: 8, duration: 0.3, ease: "back.out(1.7)" });
-      });
-      codeLink?.addEventListener("mouseleave", () => {
-        gsap.to(codeLink, { rotate: 0, duration: 0.3, ease: "power2.out" });
-      });
     }
   });
 
-  // Botón "Ver Demo" magnético + flecha que se desplaza en diagonal.
+  // CTA "Ver caso de estudio" magnético + flecha que avanza.
   if (hasFinePointer() && !prefersReducedMotion()) {
-    document.querySelectorAll<HTMLElement>("[data-demo-link]").forEach((link) => {
-      const arrow = link.querySelector<HTMLElement>("[data-demo-arrow]");
+    document.querySelectorAll<HTMLElement>("[data-case-link]").forEach((link) => {
+      const arrow = link.querySelector<HTMLElement>("[data-case-arrow]");
       const moveX = gsap.quickTo(link, "x", { duration: 0.4, ease: "power3" });
       const moveY = gsap.quickTo(link, "y", { duration: 0.4, ease: "power3" });
 
@@ -172,12 +116,12 @@ const items = [featured, client];
         const rect = link.getBoundingClientRect();
         moveX((event.clientX - rect.left - rect.width / 2) * 0.25);
         moveY((event.clientY - rect.top - rect.height / 2) * 0.25);
-        gsap.to(arrow, { x: 2, y: -2, duration: 0.3 });
+        gsap.to(arrow, { x: 3, duration: 0.3 });
       });
       link.addEventListener("mouseleave", () => {
         moveX(0);
         moveY(0);
-        gsap.to(arrow, { x: 0, y: 0, duration: 0.3 });
+        gsap.to(arrow, { x: 0, duration: 0.3 });
       });
     });
   }

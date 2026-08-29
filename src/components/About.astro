@@ -3,7 +3,7 @@ import { getContent } from "../i18n";
 const { about } = getContent(Astro.currentLocale);
 ---
 
-<section id="sobre-mi" aria-labelledby="sobre-mi-title" class="mx-auto max-w-6xl px-6 py-24">
+<section id="sobre-mi" aria-labelledby="sobre-mi-title" class="mx-auto max-w-6xl section-y px-6">
   <div class="grid grid-cols-1 gap-12 md:grid-cols-2">
     <div>
       <p class="eyebrow mb-4">{about.eyebrow}</p>
@@ -24,14 +24,19 @@ const { about } = getContent(Astro.currentLocale);
   <div class="mt-16 grid grid-cols-2 gap-8 border-t border-white/10 pt-10 md:grid-cols-4">
     {
       about.stats.map((stat) => {
+        // Sólo los valores que empiezan por dígito llevan contador. Los que no
+        // ("ES/EN") se pintan tal cual: con el contador se quedaban clavados en
+        // "0", porque el parseo no tenía de dónde sacar un número al que subir.
         const match = stat.value.match(/^(\d+)(.*)$/);
-        const numeric = match ? match[1] : "0";
-        const suffix = match ? match[2] : "";
         return (
           <div data-stat>
-            <p class="text-3xl font-bold tracking-tight" data-stat-value data-target={numeric} data-suffix={suffix}>
-              0{suffix}
-            </p>
+            {match ? (
+              <p class="text-3xl font-bold tracking-tight" data-stat-value data-target={match[1]} data-suffix={match[2]}>
+                0{match[2]}
+              </p>
+            ) : (
+              <p class="text-3xl font-bold tracking-tight">{stat.value}</p>
+            )}
             <p class="mt-1 text-[11px] uppercase tracking-wider text-white/55">{stat.label}</p>
           </div>
         );

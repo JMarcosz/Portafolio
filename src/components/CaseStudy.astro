@@ -1,0 +1,176 @@
+---
+// Página de caso de estudio de un proyecto.
+//
+// El orden de los bloques no es decorativo: primero el problema del cliente y
+// el contexto, y el stack SIEMPRE después de las decisiones y del resultado.
+// Al revés se lee como "primero me vende herramientas".
+import { getContent, normalizeLocale, type Project } from "../i18n";
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const locale = normalizeLocale(Astro.currentLocale);
+const t = getContent(locale);
+const cs = project.caseStudy;
+const L = t.caseStudy.labels;
+---
+
+<article class="mx-auto max-w-3xl px-6 pb-24 pt-32">
+  <a href={`${t.home}#proyectos`} class="text-xs uppercase tracking-[0.15em] text-white/55 transition-colors hover:text-white">
+    &larr; {t.caseStudy.back}
+  </a>
+
+  <header class="mt-8 border-b border-white/10 pb-10">
+    <p class="eyebrow mb-4">{t.caseStudy.eyebrow}</p>
+    <h1 class="text-4xl font-bold leading-[1.1] tracking-tight md:text-5xl">{cs.name}</h1>
+    <p class="mt-3 text-base text-white/60">{cs.tagline}</p>
+  </header>
+
+  <div class="mt-12 overflow-hidden rounded-xl border border-white/10">
+    <img src={project.image} alt={`${cs.name} — ${cs.tagline}`} class="w-full object-cover object-top" />
+  </div>
+
+  <!-- 1. Problema -->
+  <section class="mt-16">
+    <h2 class="text-2xl font-bold tracking-tight">{L.problema}</h2>
+    <p class="mt-4 text-sm leading-relaxed text-white/60">{cs.problema}</p>
+  </section>
+
+  <!-- 2. Contexto -->
+  <section class="mt-14">
+    <h2 class="text-2xl font-bold tracking-tight">{L.contexto}</h2>
+    <p class="mt-4 text-sm leading-relaxed text-white/60">{cs.contexto}</p>
+  </section>
+
+  <!-- 3. Solución -->
+  <section class="mt-14">
+    <h2 class="text-2xl font-bold tracking-tight">{L.solucion}</h2>
+    <ul class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+      {
+        cs.solucion.map((line) => (
+          <li class="card px-4 py-3 text-sm text-white/70">{line}</li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <!-- 4. Funcionalidades -->
+  <section class="mt-14">
+    <h2 class="text-2xl font-bold tracking-tight">{L.funcionalidades}</h2>
+    <ul class="mt-5 space-y-3">
+      {
+        cs.funcionalidades.map((line) => (
+          <li class="flex gap-3 text-sm leading-relaxed text-white/60">
+            <span class="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-white/40" aria-hidden="true" />
+            {line}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <!-- 5. Mi participación -->
+  <section class="mt-14">
+    <h2 class="text-2xl font-bold tracking-tight">{L.participacion}</h2>
+    <div class="mt-5 flex flex-wrap gap-2">
+      {
+        cs.participacion.map((line) => (
+          <span class="rounded-full border border-white/15 px-3 py-1.5 text-xs text-white/70">{line}</span>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 6. Decisiones técnicas -->
+  <section class="mt-14">
+    <h2 class="text-2xl font-bold tracking-tight">{L.decisiones}</h2>
+    <div class="mt-5 space-y-5">
+      {
+        cs.decisiones.map((d) => (
+          <div class="card p-6">
+            <h3 class="text-base font-semibold">{d.titulo}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-white/55">{d.texto}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 7. Stack — después de las decisiones, nunca antes -->
+  <section class="mt-14">
+    <h2 class="text-2xl font-bold tracking-tight">{L.stack}</h2>
+    <div class="mt-5 flex flex-wrap gap-2">
+      {cs.stack.map((tech) => <span class="rounded-md bg-white/5 px-2.5 py-1.5 text-xs text-white/60">{tech}</span>)}
+    </div>
+    <a
+      href={project.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-5 inline-flex items-center gap-2 text-sm text-white/55 underline-offset-4 transition-colors hover:text-white hover:underline"
+    >
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M8 3L4 12l4 9M16 3l4 9-4 9" />
+      </svg>
+      {t.caseStudy.repoCta}
+    </a>
+  </section>
+
+  <!-- 8. Dificultades -->
+  <section class="mt-14">
+    <h2 class="text-2xl font-bold tracking-tight">{L.dificultades}</h2>
+    <ul class="mt-5 space-y-3">
+      {
+        cs.dificultades.map((line) => (
+          <li class="flex gap-3 text-sm leading-relaxed text-white/60">
+            <span class="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-white/40" aria-hidden="true" />
+            {line}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <!-- 9. Resultado -->
+  <section class="mt-14">
+    <h2 class="text-2xl font-bold tracking-tight">{L.resultado}</h2>
+    <ul class="mt-5 space-y-3">
+      {
+        cs.resultado.map((line) => (
+          <li class="flex gap-3 text-sm leading-relaxed text-white/70">
+            <svg class="mt-0.5 h-4 w-4 shrink-0 text-white/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M20 6 9 17l-5-5" />
+            </svg>
+            {line}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <!-- 10. Demo — la prueba real -->
+  <section class="mt-14 border-t border-white/10 pt-10">
+    <h2 class="text-2xl font-bold tracking-tight">{L.demo}</h2>
+    <p class="mt-4 text-sm leading-relaxed text-white/60">{t.caseStudy.demoIntro}</p>
+    <a href={project.demo} target="_blank" rel="noopener noreferrer" class="btn-primary mt-6">
+      {t.caseStudy.demoCta}
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M7 17L17 7M17 7H9M17 7v8" />
+      </svg>
+    </a>
+  </section>
+
+  <!-- Cierre: el visitante que llegó hasta acá ya está convencido; hay que
+       decirle exactamente qué hacer ahora. -->
+  <aside class="card mt-16 p-8">
+    <h2 class="text-xl font-bold tracking-tight">{t.caseStudy.ctaTitle}</h2>
+    <p class="mt-3 max-w-md text-sm leading-relaxed text-white/55">{t.caseStudy.ctaText}</p>
+    <a href={t.schedule} target="_blank" rel="noopener noreferrer" class="btn-primary mt-6">
+      {t.caseStudy.ctaButton}
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M5 12h14M12 5l7 7-7 7" />
+      </svg>
+    </a>
+  </aside>
+</article>

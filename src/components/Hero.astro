@@ -1,19 +1,24 @@
 ---
 import { getContent } from "../i18n";
-const { hero } = getContent(Astro.currentLocale);
+const { hero, schedule } = getContent(Astro.currentLocale);
 ---
 
-<section id="inicio" aria-labelledby="inicio-title" class="relative flex items-center overflow-x-clip" data-hero-section>
+<section
+  id="inicio"
+  aria-labelledby="inicio-title"
+  class="relative flex min-h-[calc(100dvh-var(--group-top))] items-center overflow-x-clip"
+  data-hero-section
+>
   <!-- Capa densa de partículas solo para el Hero (se va con el grupo al hacer zoom). -->
   <canvas data-hero-particles class="pointer-events-none fixed inset-0 -z-10 h-full w-full" aria-hidden="true"></canvas>
 
-  <div class="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-16 px-6 py-16 md:grid-cols-2">
+  <div class="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-10 px-6 py-12 sm:py-16 lg:grid-cols-2 lg:gap-16">
     <div>
       <p class="eyebrow mb-4" data-hero-eyebrow>{hero.eyebrow}</p>
       <!-- aria-label lleva el nombre completo + rol para SEO/lectores de pantalla. -->
       <h1 id="inicio-title"
         aria-label={hero.nameAria}
-        class="text-5xl font-bold leading-[1.05] tracking-tight md:text-6xl"
+        class="text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl"
       >
         <span class="block overflow-hidden">
           <span class="block text-white/90" data-hero-line1>{hero.title1}</span>
@@ -26,7 +31,13 @@ const { hero } = getContent(Astro.currentLocale);
         {hero.description}
       </p>
       <div class="mt-8 flex flex-wrap items-center gap-3">
-        <a href="#contacto" class="btn-primary" data-hero-cta>
+        <a
+          href={schedule}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-primary"
+          data-hero-cta
+        >
           {hero.cta}
         </a>
         <a
@@ -47,7 +58,7 @@ const { hero } = getContent(Astro.currentLocale);
 
     <div class="relative flex items-center justify-center" data-hero-visual>
       <div
-        class="relative h-72 w-72 overflow-hidden rounded-full border border-white/10 md:h-80 md:w-80 lg:h-96 lg:w-96"
+        class="relative h-56 w-56 overflow-hidden rounded-full border border-white/10 sm:h-72 sm:w-72 lg:h-96 lg:w-96"
         data-hero-circle
       >
         <img src={hero.photo} alt={hero.photoAlt} class="h-full w-full object-cover object-top" />

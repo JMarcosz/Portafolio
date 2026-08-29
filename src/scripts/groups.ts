@@ -107,6 +107,7 @@ export function initGroups() {
 
   let totalPx = 0;
   let stageH = 0;
+  let dwellPx = 0;
 
   const measure = () => {
     stageH = stage.getBoundingClientRect().height;
@@ -117,11 +118,22 @@ export function initGroups() {
     // pantalla de 1440px de alto el zoom volvería a costar casi 800px.
     const HANDOFF = Math.min(stageH * 0.55, 520);
 
+    // Zona muerta ("gancho"): scroll que hay que gastar con el grupo ya
+    // presentado y QUIETO antes de que arranque el zoom. Sin ella el primer
+    // pixel de mas ya empezaba a desvanecer la seccion que estabas leyendo:
+    // outAlpha cae desde tB=0, asi que pasarse de scroll costaba la seccion.
+    dwellPx = Math.min(stageH * 0.5, 440);
+
     let acc = 0;
     models.forEach((m, i) => {
       m.anchorPx = acc;
       gsap.set(m.inner, { clearProps: "transform,y" });
-      const contentH = m.inner.scrollHeight;
+      // Se suman las secciones en vez de leer inner.scrollHeight: en los grupos
+      // cortos el CSS estira el .group-inner a todo el panel para repartir el
+      // aire, asi que scrollHeight devolveria siempre el alto del stage y todo
+      // grupo se declararia "alto". offsetHeight ademas ignora el scale con el
+      // que el grupo espera oculto, que si falsea getBoundingClientRect.
+      const contentH = m.sections.reduce((sum, sec) => sum + sec.el.offsetHeight, 0);
 
       m.tall = contentH > stageH - topPx + 4;
       const availH = m.tall ? stageH - topPx : stageH;
@@ -129,7 +141,7 @@ export function initGroups() {
       m.endY = -m.travelPx;
       m.el.toggleAttribute("data-group-tall", m.tall);
 
-      m.windowPx = i === N - 1 ? 0 : m.travelPx + HANDOFF;
+      m.windowPx = i === N - 1 ? 0 : m.travelPx + dwellPx + HANDOFF;
       acc += m.windowPx;
     });
 
@@ -245,6 +257,7 @@ export function initGroups() {
       const segLen = models[i].windowPx || 1;
       const local = clamp01((scrolled - models[i].anchorPx) / segLen);
       const phaseA = models[i].travelPx / segLen;
+      const phaseDwell = dwellPx / segLen;
 
       if (models[i].tall && local < phaseA) {
         const tA = phaseA <= 0 ? 1 : local / phaseA;
@@ -255,8 +268,19 @@ export function initGroups() {
         setPhase(i, "presented");
         armGroupSections(models[i], true);
         setActive(currentSectionOf(models[i]));
+      } else if (local < phaseA + phaseDwell) {
+        // Zona muerta: el grupo se queda exactamente como estaba. Es el margen
+        // que absorbe el scroll de mas — el gesto se gasta sin que la seccion
+        // se mueva ni se opaque.
+        showFocused(i);
+        gsap.set(models[i].inner, { y: models[i].endY });
+        gsap.set(models[i + 1].el, { autoAlpha: 0, pointerEvents: "none" });
+        setPhase(i + 1, "hidden");
+        setPhase(i, "presented");
+        armGroupSections(models[i], true);
+        setActive(currentSectionOf(models[i]));
       } else {
-        const tB = models[i].tall ? (local - phaseA) / (1 - phaseA) : local;
+        const tB = (local - phaseA - phaseDwell) / (1 - phaseA - phaseDwell);
         const outAlpha = handoff(i, i + 1, tB);
 
         if (tB >= PRESENT_AT) {
@@ -348,9 +372,13 @@ export function initGroups() {
   document.addEventListener(
     "click",
     (event) => {
-      const link = (event.target as HTMLElement)?.closest<HTMLAnchorElement>('a[href^="#"]');
-      if (!link) return;
-      const target = scrollForId((link.getAttribute("href") || "").slice(1));
+      const link = (event.target as HTMLElement)?.closest<HTMLAnchorElement>('a[href*="#"]');
+      // Ahora los enlaces del nav llevan la home delante (`/#proyectos`) para
+      // que también sirvan desde las páginas de caso de estudio. Acá sólo se
+      // intercepta si el ancla es de ESTA página: si apunta a otra ruta, se deja
+      // que el navegador navegue de verdad.
+      if (!link || !link.hash || link.pathname !== window.location.pathname) return;
+      const target = scrollForId(link.hash.slice(1));
       if (target == null) return;
       event.preventDefault();
       event.stopImmediatePropagation();

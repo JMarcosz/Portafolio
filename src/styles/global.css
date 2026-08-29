@@ -94,6 +94,14 @@
   .btn-primary {
     @apply inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-black transition-opacity hover:opacity-85;
   }
+
+  /* Aire vertical de una seccion, atado a la altura del viewport.
+     Con un `py-24` fijo la misma seccion se amontonaba en una pantalla de 690px
+     y quedaba flotando en el centro de uno de 2400px. Ahora encoge donde no
+     sobra espacio y crece donde sobra. */
+  .section-y {
+    padding-block: clamp(3rem, 8vh, 7rem);
+  }
 }
 
 /* ---------- Preloader: "primera carga", una sola vez por visita ---------- */

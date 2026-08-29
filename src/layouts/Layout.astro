@@ -8,22 +8,35 @@ import { getContent, normalizeLocale } from "../i18n";
 
 interface Props {
   image?: string;
+  /** Título y descripción propios (páginas de caso de estudio). */
+  title?: string;
+  description?: string;
+  /** Par de idiomas de ESTA página, para canonical/hreflang. */
+  esHref?: string;
+  enHref?: string;
+  /** Tipo de Open Graph: la home es un perfil, un caso de estudio es un artículo. */
+  ogType?: string;
 }
-
-const { image = "/og-image.jpg" } = Astro.props;
 
 const locale = normalizeLocale(Astro.currentLocale);
 const t = getContent(locale);
-const title = t.meta.title;
-const description = t.meta.description;
+
+const {
+  image = "/og-image.jpg",
+  title = t.meta.title,
+  description = t.meta.description,
+  esHref = "/",
+  enHref = "/en/",
+  ogType = "profile",
+} = Astro.props;
 
 // Astro.site viene de `site` en astro.config.mjs — hace falta para que canonical
 // y las imágenes de Open Graph sean URLs absolutas (las relativas no funcionan
 // al compartir el enlace en WhatsApp/LinkedIn, que no resuelven contra el HTML).
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImageURL = new URL(image, Astro.site);
-const esURL = new URL("/", Astro.site);
-const enURL = new URL("/en/", Astro.site);
+const esURL = new URL(esHref, Astro.site);
+const enURL = new URL(enHref, Astro.site);
 
 const personSchema = {
   "@context": "https://schema.org",
@@ -82,7 +95,7 @@ const personSchema = {
     <link rel="alternate" hreflang="x-default" href={esURL} />
 
     <!-- Open Graph -->
-    <meta property="og:type" content="profile" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:site_name" content="Jean Marco Marte" />
     <meta property="og:locale" content={t.meta.localeOg} />
