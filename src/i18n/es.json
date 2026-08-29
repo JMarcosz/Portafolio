@@ -340,12 +340,14 @@
       {
         "period": "2025 — 2027",
         "degree": "Ingeniería de Software",
-        "institution": "Universidad Domínico Americana (UNICDA)"
+        "institution": "Universidad Domínico Americana (UNICDA)",
+        "image": "/Universidades/unicda-rd.jpg"
       },
       {
         "period": "2022 — 2024",
         "degree": "Tecnólogo en Desarrollo de Software",
-        "institution": "Instituto Tecnológico de las Américas (ITLA)"
+        "institution": "Instituto Tecnológico de las Américas (ITLA)",
+        "image": "/Universidades/itla.webp"
       }
     ]
   },
