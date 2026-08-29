@@ -13,22 +13,57 @@ const certificates = certs.items;
   <div class="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
     {
       certificates.map((cert) => (
-        <article data-cert-card class="card flex flex-col justify-between p-6 transition-[border-color,transform] duration-300 hover:-translate-y-1 hover:border-white/25">
-          <div>
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-medium text-white/55">{cert.year}</span>
-              <span data-cert-badge class="pill">{certs.verified}</span>
+        <article
+          data-cert-card
+          class="card flex flex-col overflow-hidden transition-[border-color,transform] duration-300 hover:-translate-y-1 hover:border-white/25"
+        >
+          {/* La imagen real del documento es la prueba: sin ella la card
+              afirmaba un certificado sin dejar verlo. */}
+          {cert.image && (
+            <div class="overflow-hidden border-b border-white/10">
+              <img
+                src={encodeURI(cert.image)}
+                alt={`${cert.title} — ${cert.institution}`}
+                class="aspect-[4/3] w-full object-cover object-top"
+                loading="lazy"
+              />
+            </div>
+          )}
+
+          <div class="flex flex-1 flex-col justify-between p-6">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-medium text-white/55">{cert.year}</span>
+                <span data-cert-badge class="pill">{certs.verified}</span>
+              </div>
+
+              <h3 class="mt-4 text-base font-semibold leading-snug">{cert.title}</h3>
+              <p class="mt-1 text-xs text-white/55">{cert.institution}</p>
+              <p class="mt-3 text-sm leading-relaxed text-white/50">{cert.description}</p>
             </div>
 
-            <h3 class="mt-4 text-base font-semibold leading-snug">{cert.title}</h3>
-            <p class="mt-1 text-xs text-white/55">{cert.institution}</p>
-            <p class="mt-3 text-sm leading-relaxed text-white/50">{cert.description}</p>
-          </div>
+            <div class="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-4">
+              <div class="flex flex-wrap gap-2">
+                {cert.tags.map((tag) => (
+                  <span class="rounded-md bg-white/5 px-2 py-1 text-[11px] text-white/60">{tag}</span>
+                ))}
+              </div>
 
-          <div class="mt-6 flex flex-wrap gap-2 border-t border-white/10 pt-4">
-            {cert.tags.map((tag) => (
-              <span class="rounded-md bg-white/5 px-2 py-1 text-[11px] text-white/60">{tag}</span>
-            ))}
+              {cert.pdf && (
+                <a
+                  href={encodeURI(cert.pdf)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/15 px-3 py-1.5 text-xs font-medium text-white/70 transition-colors hover:border-white/30 hover:text-white"
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <path d="M14 2v6h6M9 15h6M9 11h2" />
+                  </svg>
+                  {certs.viewCert}
+                </a>
+              )}
+            </div>
           </div>
         </article>
       ))

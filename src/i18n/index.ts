@@ -69,6 +69,37 @@ const shared = {
       image: "/santorallogisticsv2.webp",
     },
   } as Record<string, { link: string; demo: string; image: string }>,
+  /**
+   * Imagen y PDF de cada certificado, indexados por slug. Un slug sin entrada
+   * aquí se queda sin media en la card en vez de fingir un archivo que no
+   * existe — el componente lo maneja como caso normal, no como excepción.
+   */
+  certificates: {
+    angular: {
+      image: "/Certificados Portafolio/Desarrollo Angular ITLA_page-0001.jpg",
+      pdf: "/Certificados Portafolio/Desarrollo Angular ITLA.pdf",
+    },
+    powerbi: {
+      image: "/Certificados Portafolio/Analista de Datos - PowerBI_page-0001.jpg",
+      pdf: "/Certificados Portafolio/Analista de Datos - PowerBI.pdf",
+    },
+    "english-a2": {
+      image: "/Certificados Portafolio/A2-Elementary-English-certificate-International-English-Test_page-0001.jpg",
+      pdf: "/Certificados Portafolio/A2-Elementary-English-certificate-International-English-Test.pdf",
+    },
+    scrum: {
+      image: "/Certificados Portafolio/Certificacion de Fundamentos de Scrum_page-0001.jpg",
+      pdf: "/Certificados Portafolio/Certificacion de Fundamentos de Scrum.pdf",
+    },
+    "cisco-it-essentials": {
+      image: "/Certificados Portafolio/IT Essentials - Cisco Networking Academy_page-0001.jpg",
+      pdf: "/Certificados Portafolio/IT Essentials - Cisco Networking Academy.pdf",
+    },
+    "community-management": {
+      image: "/Certificados Portafolio/Certificado_Curso_Community_Management_&_Marketing_Digital_101 (1)_page-0001.jpg",
+      pdf: "/Certificados Portafolio/Certificado_Curso_Community_Management_&_Marketing_Digital_101 (1).pdf",
+    },
+  } as Record<string, { image: string; pdf: string }>,
   contact: {
     email: "jeanmarte22@gmail.com",
   },
@@ -95,6 +126,13 @@ function merge(dict: Dict, locale: Locale) {
         ...item,
         ...(shared.projects[item.slug] ?? { link: "", demo: "", image: "" }),
         href: projectPath(locale, item.slug),
+      })),
+    },
+    certificates: {
+      ...dict.certificates,
+      items: dict.certificates.items.map((item) => ({
+        ...item,
+        ...shared.certificates[item.slug],
       })),
     },
     contact: { ...dict.contact, ...shared.contact },

@@ -50,6 +50,7 @@
     "heading2": "Up And Running",
     "viewCase": "View case study",
     "viewDemo": "View demo",
+    "viewCodeAria": "View code for",
     "items": [
       {
         "slug": "zentra",
@@ -353,8 +354,10 @@
     "heading1": "My",
     "heading2": "Certificates",
     "verified": "Verified",
+    "viewCert": "View certificate",
     "items": [
       {
+        "slug": "angular",
         "year": "2025",
         "title": "Front-End Web Development with Angular",
         "institution": "ITLA",
@@ -362,6 +365,7 @@
         "tags": ["Angular", "TailwindCSS", "REST APIs"]
       },
       {
+        "slug": "powerbi",
         "year": "2024",
         "title": "Data Analyst - Power BI",
         "institution": "Udemy",
@@ -369,6 +373,7 @@
         "tags": ["Power BI", "Data Analysis"]
       },
       {
+        "slug": "english-a2",
         "year": "2024",
         "title": "English Certificate A2-Level",
         "institution": "International English Test",
@@ -376,6 +381,7 @@
         "tags": ["English", "A2"]
       },
       {
+        "slug": "scrum",
         "year": "2024",
         "title": "Scrum Fundamentals",
         "institution": "soylider.net",
@@ -383,6 +389,7 @@
         "tags": ["Scrum", "Agile"]
       },
       {
+        "slug": "community-management",
         "year": "2026",
         "title": "Community Management & Digital Marketing",
         "institution": "ITLA",
@@ -390,6 +397,7 @@
         "tags": ["Digital Marketing", "Social Media"]
       },
       {
+        "slug": "cisco-it-essentials",
         "year": "2022",
         "title": "Cisco Certified IT Essentials",
         "institution": "Cisco Networking Academy",

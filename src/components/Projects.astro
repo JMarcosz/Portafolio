@@ -42,21 +42,43 @@ const items = p.items;
               </div>
             </div>
 
-            <div class="mt-6 flex items-center gap-4 border-t border-white/10 pt-5">
-              <a href={project.href} data-magnetic data-case-link class="btn-primary flex-1 justify-center text-sm">
+            {/* CTA principal a ancho completo: en una fila junto a "Ver demo" el
+                texto más largo ("Ver caso de estudio" / "View case study") se
+                partía en dos líneas dentro del pill en pantallas angostas. */}
+            <div class="mt-6 flex flex-col gap-3 border-t border-white/10 pt-5">
+              <a href={project.href} data-magnetic data-case-link class="btn-primary w-full justify-center text-sm">
                 {p.viewCase}
                 <svg data-case-arrow width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
               </a>
-              <a
-                href={project.demo}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="shrink-0 text-sm text-white/55 underline-offset-4 transition-colors hover:text-white hover:underline"
-              >
-                {p.viewDemo}
-              </a>
+
+              <div class="flex items-center gap-3">
+                <a
+                  href={project.demo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-demo-link
+                  class="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:border-white/30 hover:text-white"
+                >
+                  {p.viewDemo}
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 17L17 7M17 7H9M17 7v8" />
+                  </svg>
+                </a>
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-code-link
+                  aria-label={`${p.viewCodeAria} ${project.title}`}
+                  class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 text-white/60 transition-colors hover:border-white/30 hover:text-white"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M8 3L4 12l4 9M16 3l4 9-4 9" />
+                  </svg>
+                </a>
+              </div>
             </div>
           </div>
         </article>
@@ -89,6 +111,7 @@ const items = p.items;
 
   cards.forEach((card) => {
     const img = card.querySelector<HTMLElement>("[data-project-img]");
+    const codeLink = card.querySelector<HTMLElement>("[data-code-link]");
 
     if (hasFinePointer() && !prefersReducedMotion()) {
       card.addEventListener("mousemove", (event) => {
@@ -101,6 +124,12 @@ const items = p.items;
       card.addEventListener("mouseleave", () => {
         gsap.to(card, { rotateY: 0, rotateX: 0, duration: 0.5, ease: "power2.out" });
         gsap.to(img, { scale: 1, duration: 0.5, ease: "power2.out" });
+      });
+      codeLink?.addEventListener("mouseenter", () => {
+        gsap.to(codeLink, { rotate: 8, duration: 0.3, ease: "back.out(1.7)" });
+      });
+      codeLink?.addEventListener("mouseleave", () => {
+        gsap.to(codeLink, { rotate: 0, duration: 0.3, ease: "power2.out" });
       });
     }
   });
@@ -123,6 +152,14 @@ const items = p.items;
         moveY(0);
         gsap.to(arrow, { x: 0, duration: 0.3 });
       });
+    });
+
+    // "Ver demo" repite la flecha diagonal — mismo lenguaje que el CTA
+    // principal, para que quede claro que también abre algo, no navega la página.
+    document.querySelectorAll<HTMLElement>("[data-demo-link]").forEach((link) => {
+      const arrow = link.querySelector("svg");
+      link.addEventListener("mouseenter", () => gsap.to(arrow, { x: 2, y: -2, duration: 0.3 }));
+      link.addEventListener("mouseleave", () => gsap.to(arrow, { x: 0, y: 0, duration: 0.3 }));
     });
   }
 </script>

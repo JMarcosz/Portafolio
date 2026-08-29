@@ -6,6 +6,9 @@
 //   que nunca haya dos secciones pintadas a la vez.
 // - Dentro de un grupo alto: scroll normal. .group-inner sube y cada sección
 //   dispara su entrada al cruzar la línea de lectura, una sola vez.
+// - Entre el final de un grupo y el arranque del zoom hay una ZONA MUERTA: un
+//   tramo de scroll en el que no pasa nada. Es el gancho que evita que pasarse
+//   de rueda te cueste la sección que estabas leyendo.
 // - Grupos cortos (Hero, Contacto): sólo se enfocan.
 //
 // Las secciones NO atan sus timelines al scroll: registran su coreografía en
@@ -141,7 +144,12 @@ export function initGroups() {
       m.endY = -m.travelPx;
       m.el.toggleAttribute("data-group-tall", m.tall);
 
-      m.windowPx = i === N - 1 ? 0 : m.travelPx + dwellPx + HANDOFF;
+      // El ultimo grupo no tiene zoom de salida, pero si necesita su propio
+      // sub-scroll cuando no cabe: sin el se pintaba directamente en `endY` — o
+      // sea, desplazado al fondo de su contenido y sin manera de subir. En
+      // movil eso dejaba el titulo de Contacto cortado por arriba, de forma
+      // permanente.
+      m.windowPx = i === N - 1 ? m.travelPx : m.travelPx + dwellPx + HANDOFF;
       acc += m.windowPx;
     });
 
@@ -248,8 +256,10 @@ export function initGroups() {
     }
 
     if (i === N - 1) {
+      const travel = models[i].travelPx;
+      const tA = travel > 0 ? clamp01((scrolled - models[i].anchorPx) / travel) : 1;
       showFocused(i);
-      gsap.set(models[i].inner, { y: models[i].endY });
+      gsap.set(models[i].inner, { y: lerp(0, models[i].endY, tA) });
       setPhase(i, "presented");
       armGroupSections(models[i], true);
       setActive(currentSectionOf(models[i]));

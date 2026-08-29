@@ -100,7 +100,7 @@
      y quedaba flotando en el centro de uno de 2400px. Ahora encoge donde no
      sobra espacio y crece donde sobra. */
   .section-y {
-    padding-block: clamp(3rem, 8vh, 7rem);
+    padding-block: clamp(3rem, 9vh, 7rem);
   }
 }
 

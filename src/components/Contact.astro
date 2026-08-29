@@ -80,7 +80,7 @@ const iconPaths: Record<string, string> = {
 
     <form
       id="contact-form"
-      class="space-y-5"
+      class="flex flex-col gap-5 md:h-full"
       data-msg-submit={contact.submit}
       data-msg-sending={contact.sending}
       data-msg-sent={contact.sent}
@@ -117,19 +117,32 @@ const iconPaths: Record<string, string> = {
         </div>
       </div>
 
-      <div data-focus-item>
+      <div data-focus-item class="flex flex-1 flex-col">
         <label for="message" class="mb-2 block text-[11px] uppercase tracking-wider text-white/55">{contact.labelMessage}</label>
+        {/* flex-1 la estira contra el alto de la columna izquierda (grid con
+            stretch por defecto); min-h es el piso en mobile, donde las columnas
+            van en filas separadas y el stretch no aplica. */}
         <textarea
           id="message"
           name="message"
           required
-          rows="4"
           placeholder={contact.phMessage}
-          class="w-full resize-none rounded-lg border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-white placeholder:text-white/55 focus:border-white/30"
+          class="w-full min-h-[160px] flex-1 resize-none rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white placeholder:text-white/55 focus:border-white/30"
         ></textarea>
       </div>
 
-      <button type="submit" id="contact-submit" data-focus-item data-magnetic class="btn-primary">
+      {/* btn-primary es inline-flex sin ancho propio: dentro de un form en
+          columna (align-items: stretch por defecto) se estiraba al ancho
+          completo también en desktop/tablet, no sólo en mobile. w-full +
+          justify-center son la base (mobile); md: la vuelve a su ancho natural
+          y anula el stretch con self-start. */}
+      <button
+        type="submit"
+        id="contact-submit"
+        data-focus-item
+        data-magnetic
+        class="btn-primary w-full justify-center md:w-auto md:self-start"
+      >
         <span data-submit-label>{contact.submit}</span>
         <svg data-submit-arrow width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M5 12h14M12 5l7 7-7 7"></path>
