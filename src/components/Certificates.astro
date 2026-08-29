@@ -24,8 +24,11 @@ const certificates = certs.items;
               <img
                 src={encodeURI(cert.image)}
                 alt={`${cert.title} — ${cert.institution}`}
+                width={cert.imageWidth}
+                height={cert.imageHeight}
                 class="aspect-[4/3] w-full object-cover object-top"
                 loading="lazy"
+                decoding="async"
               />
             </div>
           )}

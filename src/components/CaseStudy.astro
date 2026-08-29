@@ -28,8 +28,18 @@ const L = t.caseStudy.labels;
     <p class="mt-3 text-base text-white/60">{cs.tagline}</p>
   </header>
 
+  {/* Captura de página completa: acá sí va entera, es el cuerpo del caso. Las
+      dimensiones explícitas evitan el salto de layout — sin ellas el navegador
+      reservaba 0px de alto y al llegar la imagen empujaba toda la página. */}
   <div class="mt-12 overflow-hidden rounded-xl border border-white/10">
-    <img src={project.image} alt={`${cs.name} — ${cs.tagline}`} class="w-full object-cover object-top" />
+    <img
+      src={project.image}
+      alt={`${cs.name} — ${cs.tagline}`}
+      width={project.imageWidth}
+      height={project.imageHeight}
+      decoding="async"
+      class="w-full object-cover object-top"
+    />
   </div>
 
   <!-- 1. Problema -->

@@ -14,8 +14,8 @@
 // Las secciones NO atan sus timelines al scroll: registran su coreografía en
 // stage.ts y el director decide cuándo corre. La regla dura es que una sección
 // sólo anima mientras su grupo manda en pantalla.
-import { gsap, ScrollTrigger, prefersReducedMotion } from "./motion";
-import { liveSection, revealSection } from "./stage";
+import { gsap, ScrollTrigger, prefersReducedMotion, pauseFloatsIn, resumeFloatsIn } from "./motion";
+import { finishSection, liveSection, revealSection } from "./stage";
 import { lenis } from "./smooth-scroll";
 
 const clamp01 = (n: number) => (n < 0 ? 0 : n > 1 ? 1 : n);
@@ -70,10 +70,23 @@ export function initGroups() {
 
   const N = groupEls.length;
 
-  if (prefersReducedMotion()) {
-    groupEls.forEach((g) => g.removeAttribute("data-group-initial"));
-    return;
-  }
+  if (prefersReducedMotion()) return;
+
+  // A partir de acá el documento pasa a ser el túnel. Hasta este momento —y para
+  // siempre, si no hay JS o si el usuario pide menos movimiento— el markup es un
+  // documento vertical normal con las cinco secciones VISIBLES, una debajo de la
+  // otra.
+  //
+  // No es sólo un fallback: era un problema de indexación. El estado oculto vivía
+  // en el CSS base, así que el HTML servido tenía cuatro de los cinco grupos en
+  // `visibility: hidden` — es decir, Proyectos, Servicios, Proceso, FAQ,
+  // Experiencia, Habilidades, Formación, Certificados y Contacto. Todo el
+  // contenido de conversión llegaba oculto a cualquier crawler que no ejecute JS,
+  // y Google pondera menos el texto oculto incluso cuando sí lo ejecuta.
+  //
+  // El cambio de layout no se ve: el preloader es opaco y cubre el viewport desde
+  // la primera pintura, y este script corre antes de que su cortina se abra.
+  document.documentElement.classList.add("tunnel-on");
 
   const isMobile = () => window.matchMedia("(max-width: 768px)").matches;
   const groupTopPx = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--group-top")) * 16 || 88;
@@ -105,6 +118,22 @@ export function initGroups() {
     phases[idx] = phase;
     if (phase === "presented") presented = idx;
     else if (presented === idx) presented = -1;
+
+    // Las flotaciones ambientales se apagan con el grupo. No alcanza con el
+    // IntersectionObserver de floatIdle: los 5 grupos son `inset: 0`, así que
+    // todas sus tarjetas están DENTRO del viewport siempre, y `visibility:
+    // hidden` no lo cambia. Sin este cable quedaban ~10 tweens infinitos
+    // escribiendo transforms en secciones que nadie está mirando.
+    const el = models[idx].el;
+    if (phase === "hidden" || phase === "leaving") {
+      pauseFloatsIn(el);
+      // Y se cobra la coreografía que quedó a medias por haber atravesado el
+      // grupo de un salto (ver finishSection).
+      if (phase === "hidden") models[idx].sections.forEach((s) => finishSection(s.id));
+    } else {
+      resumeFloatsIn(el);
+    }
+
     document.dispatchEvent(new CustomEvent("stage:phase", { detail: { group: models[idx].navId, phase } }));
   };
 
@@ -173,7 +202,6 @@ export function initGroups() {
       zIndex: i === 0 ? 30 : 10,
       pointerEvents: i === 0 ? "auto" : "none",
     });
-    el.removeAttribute("data-group-initial");
   });
 
   let activeId = "";
@@ -203,21 +231,78 @@ export function initGroups() {
    */
   const armGroupSections = (m: GroupModel, exact: boolean) => {
     const vh = window.innerHeight;
-    m.sections.forEach((s) => {
-      const rect = s.el.getBoundingClientRect();
-      if (rect.top <= REVEAL_LINE * vh) revealSection(s.id);
-      if (exact) liveSection(s.id, rect, vh);
-    });
+
+    // FASE DE LECTURA — primero todos los rects, sin escribir nada.
+    //
+    // Antes se leía el rect de una sección y acto seguido se la revelaba o se le
+    // pasaba a `live()`, que escribe estilos. Cada escritura invalida el layout y
+    // la lectura siguiente lo fuerza a recalcularse: en el grupo de Experiencia
+    // eran ~19 recálculos sincrónicos por frame de scroll. El rect también se
+    // reaprovecha para decidir la sección activa, que antes pedía los suyos aparte.
+    const reads = m.sections.map((s) => ({ id: s.id, rect: s.el.getBoundingClientRect() }));
+
+    // FASE DE ESCRITURA.
+    const activeLine = vh * 0.35;
+    let cur = m.sections[0]?.id ?? m.navId;
+    for (const r of reads) {
+      if (r.rect.top <= activeLine) cur = r.id;
+      if (r.rect.top <= REVEAL_LINE * vh) revealSection(r.id);
+      if (exact) liveSection(r.id, r.rect, vh);
+    }
+    return cur;
   };
 
+  // ------------------------------------------------------- capas de composición
+  //
+  // `will-change` es una promesa de cambio INMINENTE, no una optimización que se
+  // deje puesta. Declarado en el CSS mantenía los 5 grupos promovidos a capa de
+  // composición del tamaño del viewport a la vez (~12 MB de VRAM cada una en un
+  // iPhone). Safari tiene un presupuesto de memoria de composición mucho más
+  // estrecho que Chrome: al agotarlo descarta capas y las vuelve a rasterizar
+  // bajo demanda, que es exactamente el tirón que aparecía a mitad del scroll.
+  // Ahora sólo lo llevan los elementos que se están moviendo en este frame.
+  const hints = new Map<HTMLElement, string>();
+  const hint = (el: HTMLElement, value: string) => {
+    if ((hints.get(el) ?? "") === value) return;
+    el.style.willChange = value;
+    if (value) hints.set(el, value);
+    else hints.delete(el);
+  };
+
+  // Un grupo "aparcado" ya está en autoAlpha 0 y fuera del hit-testing. Sin este
+  // guarda, render() reescribía esas dos propiedades a los N-2 grupos ocultos en
+  // CADA frame de scroll — 60 veces por segundo, siempre el mismo valor.
+  const parked: boolean[] = models.map(() => false);
+
+  const park = (k: number) => {
+    hint(models[k].el, "");
+    hint(models[k].inner, "");
+    if (parked[k]) return;
+    parked[k] = true;
+    gsap.set(models[k].el, { autoAlpha: 0, pointerEvents: "none" });
+  };
+
+  /** Ni el grupo ni su capa interna se mueven: sólo la interna si hay sub-scroll. */
   const showFocused = (i: number) => {
+    parked[i] = false;
     gsap.set(models[i].el, { autoAlpha: 1, scale: 1, yPercent: 0, zIndex: 30, pointerEvents: "auto" });
+    hint(models[i].el, "");
+    hint(models[i].inner, models[i].travelPx > 0 ? "transform" : "");
   };
 
   /** Dibuja el zoom y devuelve la opacidad del grupo saliente. */
   const handoff = (out: number, inc: number, tB: number) => {
     const mobile = isMobile();
     const e = smooth(tB);
+
+    // Los dos únicos grupos que se mueven durante el zoom. Sus capas internas ya
+    // están quietas (`y` fijo abajo), así que no necesitan pista propia.
+    parked[out] = false;
+    parked[inc] = false;
+    hint(models[out].el, "transform, opacity");
+    hint(models[inc].el, "transform, opacity");
+    hint(models[out].inner, "");
+    hint(models[inc].inner, "");
 
     // Crossfade secuenciado. Antes el saliente se iba entre 0.12 y 0.62 y el
     // entrante llegaba entre 0.40 y 0.90: durante casi un cuarto de la
@@ -259,7 +344,7 @@ export function initGroups() {
 
     for (let k = 0; k < N; k++) {
       if (k !== i && k !== i + 1) {
-        gsap.set(models[k].el, { autoAlpha: 0, pointerEvents: "none" });
+        park(k);
         setPhase(k, "hidden");
       }
     }
@@ -270,8 +355,7 @@ export function initGroups() {
       showFocused(i);
       gsap.set(models[i].inner, { y: lerp(0, models[i].endY, tA) });
       setPhase(i, "presented");
-      armGroupSections(models[i], true);
-      setActive(currentSectionOf(models[i]));
+      setActive(armGroupSections(models[i], true));
     } else {
       const segLen = models[i].windowPx || 1;
       const local = clamp01((scrolled - models[i].anchorPx) / segLen);
@@ -282,25 +366,27 @@ export function initGroups() {
         const tA = phaseA <= 0 ? 1 : local / phaseA;
         showFocused(i);
         gsap.set(models[i].inner, { y: lerp(0, models[i].endY, tA) });
-        gsap.set(models[i + 1].el, { autoAlpha: 0, pointerEvents: "none" });
+        park(i + 1);
         setPhase(i + 1, "hidden");
         setPhase(i, "presented");
-        armGroupSections(models[i], true);
-        setActive(currentSectionOf(models[i]));
+        setActive(armGroupSections(models[i], true));
       } else if (local < phaseA + phaseDwell) {
         // Zona muerta: el grupo se queda exactamente como estaba. Es el margen
         // que absorbe el scroll de mas — el gesto se gasta sin que la seccion
         // se mueva ni se opaque.
         showFocused(i);
         gsap.set(models[i].inner, { y: models[i].endY });
-        gsap.set(models[i + 1].el, { autoAlpha: 0, pointerEvents: "none" });
+        park(i + 1);
         setPhase(i + 1, "hidden");
         setPhase(i, "presented");
-        armGroupSections(models[i], true);
-        setActive(currentSectionOf(models[i]));
+        setActive(armGroupSections(models[i], true));
       } else {
         const tB = (local - phaseA - phaseDwell) / (1 - phaseA - phaseDwell);
         const outAlpha = handoff(i, i + 1, tB);
+        // La sección activa sale del mismo barrido de rects que hace
+        // armGroupSections; sólo hay que pedirla aparte en la rama del medio,
+        // donde no se arma ningún grupo.
+        let cur = "";
 
         if (tB >= PRESENT_AT) {
           setPhase(i, "hidden");
@@ -314,13 +400,14 @@ export function initGroups() {
           // estar presentado y el salto de Tab entre grupos no arrancaría.
           setPhase(i + 1, "entering");
           setPhase(i, "presented");
-          armGroupSections(models[i], false);
+          cur = armGroupSections(models[i], false);
         } else {
           setPhase(i, "leaving");
           setPhase(i + 1, "entering");
+          if (tB < 0.5) cur = currentSectionOf(models[i]);
         }
 
-        setActive(tB < 0.5 ? currentSectionOf(models[i]) : models[i + 1].sections[0]?.id ?? models[i + 1].navId);
+        setActive(tB < 0.5 ? cur : models[i + 1].sections[0]?.id ?? models[i + 1].navId);
       }
     }
 
@@ -510,14 +597,37 @@ export function initGroups() {
   if (document.fonts?.ready) document.fonts.ready.then(() => ScrollTrigger.refresh());
 
   let resizeTimer: number | undefined;
-  const ro = new ResizeObserver(() => {
+  const lastSize = new WeakMap<Element, number>();
+
+  const ro = new ResizeObserver((entries) => {
+    // `ScrollTrigger.refresh()` no es barato: dispara measure(), que limpia
+    // transforms y lee el offsetHeight de TODAS las secciones. Así que sólo se
+    // corre cuando algo cambió de verdad.
+    //
+    // El stage mide 100dvh. En iOS eso cambia cada vez que la barra de
+    // direcciones se oculta o reaparece — es decir, continuamente durante el
+    // scroll normal — y cada uno de esos avisos estaba costando un reflow
+    // completo de la página. Mismo criterio que en particle-field.ts: un cambio
+    // de sólo altura en móvil es la barra del navegador, no un cambio de layout.
+    let relevant = false;
+    for (const entry of entries) {
+      const h = Math.round(entry.contentRect.height);
+      const prev = lastSize.get(entry.target);
+      if (prev === h) continue;
+      lastSize.set(entry.target, h);
+      if (prev === undefined) continue; // primera medición: ya la hizo measure()
+      if (entry.target === stage && isMobile()) continue;
+      relevant = true;
+    }
+    if (!relevant) return;
+
     window.clearTimeout(resizeTimer);
-    resizeTimer = window.setTimeout(() => ScrollTrigger.refresh(), 150);
+    resizeTimer = window.setTimeout(() => ScrollTrigger.refresh(), 200);
   });
-  // Se vigilan los .group-inner, no el stage: el stage mide 100dvh y no cambia
-  // nunca, así que abrir un acordeón de Habilidades crecía el contenido sin que
-  // nadie re-midiera y el alto extra quedaba fuera del recorrido, recortado por
-  // el overflow:hidden.
+
+  // Se vigilan los .group-inner, no sólo el stage: abrir un acordeón de
+  // Habilidades crece el contenido, y sin re-medir el alto extra quedaba fuera
+  // del recorrido, recortado por el overflow:hidden.
   models.forEach((m) => ro.observe(m.inner));
   ro.observe(stage);
 

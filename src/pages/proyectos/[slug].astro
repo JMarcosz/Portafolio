@@ -3,7 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
 import CaseStudy from "../../components/CaseStudy.astro";
-import { getProjects, projectPath } from "../../i18n";
+import { getContent, getProjects, projectPath } from "../../i18n";
 
 export function getStaticPaths() {
   return getProjects("es").map((project) => ({
@@ -14,15 +14,43 @@ export function getStaticPaths() {
 
 const { project } = Astro.props;
 const cs = project.caseStudy;
+
+const site = "https://www.jeanmarte.com";
+const t = getContent("es");
+
+// Migas para Search Console: sin BreadcrumbList, Google inventa la jerarquia a
+// partir de la URL y el resultado pierde el contexto de "Proyectos".
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: t.nav[0]?.label ?? "Inicio", item: `${site}${t.home}` },
+    {
+      "@type": "ListItem",
+      position: 2,
+      // La etiqueta del nav, no el titular de la seccion: `heading2` es copy
+      // ("Estan Funcionando") y como miga de pan no dice donde esta uno.
+      name: t.nav.find((n) => n.href.includes("proyectos"))?.label ?? "Proyectos",
+      item: `${site}${t.home}#proyectos`,
+    },
+    { "@type": "ListItem", position: 3, name: cs.name, item: `${site}${projectPath("es", project.slug)}` },
+  ],
+};
 ---
 
+<!-- image = el recorte 16:9, no la captura de pagina completa: una
+     previsualizacion de enlace necesita relacion de tarjeta, no una tira
+     vertical de 6456px. -->
 <Layout
   title={`${cs.name} — ${cs.tagline} | Jean Marco Marte`}
   description={project.valueLine}
-  image={project.image}
+  image={project.thumb}
+  imageWidth={1200}
+  imageHeight={675}
   esHref={projectPath("es", project.slug)}
   enHref={projectPath("en", project.slug)}
   ogType="article"
+  extraSchema={[breadcrumbSchema]}
 >
   <Header otherHref={projectPath("en", project.slug)} />
   <main id="contenido" tabindex="-1">

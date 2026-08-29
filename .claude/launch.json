@@ -5,7 +5,15 @@
       "name": "portafolio",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
-      "port": 4321
+      "port": 4321,
+      "autoPort": true
+    },
+    {
+      "name": "portafolio-build",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "preview"],
+      "port": 4322,
+      "autoPort": true
     }
   ]
 }

@@ -98,9 +98,15 @@ const nav = t.nav.map((item) => ({ ...item, href: `${home}${item.href}` }));
     transition: opacity 0.3s ease;
   }
   /* El backdrop-filter sólo se aplica cuando la barra está activa: mantenerlo
-     declarado permanentemente obliga al navegador a recalcularlo durante el scroll. */
+     declarado permanentemente obliga al navegador a recalcularlo durante el scroll.
+
+     El prefijo -webkit- NO es histórico: Safari sólo entiende `backdrop-filter`
+     sin prefijo desde la versión 18. En Safari 15/16/17 la regla sin prefijo se
+     descarta entera, así que el header se quedaba sin desenfoque y el Hero se
+     transparentaba a través de la barra. */
   .header-bg.is-active {
     opacity: 1;
+    -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
   }
 

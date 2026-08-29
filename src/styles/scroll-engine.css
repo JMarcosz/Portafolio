@@ -4,13 +4,27 @@
      main.viewport-root
        └ .scroll-track          <- altura virtual; la fija groups.ts en runtime
            └ .sticky-stage      <- position: sticky, 100dvh, perspectiva 3D
-               └ section.scroll-group * N   <- apilados en inset:0, ocultos por defecto
+               └ section.scroll-group * N   <- apilados en inset:0
                    └ .group-inner           <- capa que se traslada en el sub-scroll
 
    Entre grupo y grupo: transición de ZOOM (el saliente se aleja hacia la cámara
    y se desvanece; el entrante llega desde el fondo). Dentro de un grupo alto el
    scroll es normal: .group-inner sube y cada sección dibuja su coreografía
    según su posición real en pantalla. Toda la lógica está en groups.ts.
+
+   ---------------------------------------------------------------------------
+   IMPORTANTE — el túnel es OPT-IN, no el estado base.
+
+   El estado por defecto de esta hoja es un documento vertical corriente con las
+   cinco secciones visibles. `groups.ts` pone `.tunnel-on` en <html> y recién ahí
+   se arma el túnel.
+
+   Al revés (que era como estaba) el HTML servido llevaba cuatro de los cinco
+   grupos en `visibility: hidden`: todo el contenido de conversión llegaba oculto
+   a cualquier crawler que no ejecute JS, y Google pondera menos el texto oculto
+   incluso cuando sí lo ejecuta. Esta forma además hace que el fallback sin JS y
+   el de prefers-reduced-motion sean el mismo camino, en vez de un bloque de
+   !important aparte.
    ========================================================================== */
 
 :root {
@@ -24,13 +38,26 @@
   width: 100%;
 }
 
-.scroll-track {
+.group-inner {
+  width: 100%;
+}
+
+/* Sin túnel: documento normal. El indicador de progreso no aplica. */
+.z-progress {
+  display: none;
+}
+
+/* ==========================================================================
+   Túnel activo
+   ========================================================================== */
+
+.tunnel-on .scroll-track {
   position: relative;
   width: 100%;
   height: calc(var(--groups, 4) * var(--group-vh));
 }
 
-.sticky-stage {
+.tunnel-on .sticky-stage {
   position: sticky;
   top: 0;
   left: 0;
@@ -42,7 +69,7 @@
   perspective-origin: center center;
 }
 
-.scroll-group {
+.tunnel-on .scroll-group {
   position: absolute;
   inset: 0;
   display: flex;
@@ -53,23 +80,16 @@
   visibility: hidden;
   opacity: 0;
   pointer-events: none;
-  will-change: transform, opacity;
+  /* Sin `will-change` acá a propósito: lo aplica groups.ts sólo al par de grupos
+     que se está moviendo en cada frame. Declararlo para los cinco mantenía cinco
+     capas de composición del tamaño del viewport promovidas a la vez, que es lo
+     que agota el presupuesto de memoria de Safari y produce los tirones. */
 }
 
 /* Grupo alto: contenido anclado arriba (bajo el header) — sin hueco superior. */
-.scroll-group[data-group-tall] {
+.tunnel-on .scroll-group[data-group-tall] {
   align-items: flex-start;
   padding-top: var(--group-top);
-}
-
-.scroll-group[data-group-initial] {
-  visibility: visible;
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.group-inner {
-  width: 100%;
 }
 
 /* Grupo corto: sus secciones se reparten la altura del panel en vez de
@@ -77,19 +97,16 @@
    crecia con la pantalla: en 2400px de alto el bloque de Proceso + FAQ dejaba
    casi 800px muertos. groups.ts mide sumando secciones, no leyendo la altura de
    esta capa, justamente para que este min-height no lo confunda. */
-.scroll-group:not([data-group-tall]) .group-inner {
+.tunnel-on .scroll-group:not([data-group-tall]) .group-inner {
   min-height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
 }
 
-.scroll-group[data-group-tall] .group-inner {
-  will-change: transform;
-}
-
 /* Indicador global de progreso del túnel. */
-.z-progress {
+.tunnel-on .z-progress {
+  display: block;
   position: fixed;
   left: 0;
   top: 0;
@@ -100,37 +117,4 @@
   background: rgba(255, 255, 255, 0.7);
   z-index: 60;
   pointer-events: none;
-}
-
-/* ==========================================================================
-   Fallback: sin JS o prefers-reduced-motion -> documento vertical normal.
-   ========================================================================== */
-@media (prefers-reduced-motion: reduce) {
-  .scroll-track {
-    height: auto !important;
-  }
-  .sticky-stage {
-    position: static !important;
-    height: auto !important;
-    overflow: visible !important;
-    perspective: none !important;
-  }
-  .scroll-group {
-    position: relative !important;
-    inset: auto !important;
-    display: block !important;
-    padding-top: 0 !important;
-    transform: none !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    pointer-events: auto !important;
-    will-change: auto !important;
-  }
-  .scroll-group .group-inner {
-    transform: none !important;
-    will-change: auto !important;
-  }
-  .z-progress {
-    display: none !important;
-  }
 }

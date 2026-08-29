@@ -155,6 +155,26 @@ const experience = exp.items;
       });
     },
 
+    // Al salir el grupo de escena se cobra lo que `live` no llegó a dibujar.
+    // Atravesar el grupo de un salto — PageDown, un ancla del nav, una rueda
+    // agresiva — dejaba de llamar a `live` antes de que las últimas tarjetas
+    // cruzaran su umbral, y como el reveal es de una sola vez se quedaban en
+    // autoAlpha 0 para siempre. El WeakSet `played` garantiza que esto sólo toca
+    // lo que quedó pendiente: lo ya animado no se pisa.
+    finish: () => {
+      dots.forEach((dot) => {
+        if (played.has(dot)) return;
+        played.add(dot);
+        gsap.set(dot, { autoAlpha: 1, scale: 1 });
+      });
+      cards.forEach((card) => {
+        if (played.has(card)) return;
+        played.add(card);
+        gsap.set(card, { autoAlpha: 1, x: 0 });
+        gsap.set(card.querySelectorAll("li"), { autoAlpha: 1, y: 0 });
+      });
+    },
+
     settle: () => {
       gsap.set(fill, { scaleY: 1 });
       gsap.set(dots, { autoAlpha: 1, scale: 1 });

@@ -8,6 +8,14 @@ import { getContent, normalizeLocale } from "../i18n";
 
 interface Props {
   image?: string;
+  /**
+   * Dimensiones REALES de `image`. Estaban fijas en 1200x1200, que sólo era
+   * cierto para el og-image por defecto: los casos de estudio pasaban la captura
+   * de página completa (hasta 1200x6456) y seguían declarando un cuadrado, así
+   * que WhatsApp y LinkedIn recortaban la previsualización a ciegas.
+   */
+  imageWidth?: number;
+  imageHeight?: number;
   /** Título y descripción propios (páginas de caso de estudio). */
   title?: string;
   description?: string;
@@ -16,6 +24,10 @@ interface Props {
   enHref?: string;
   /** Tipo de Open Graph: la home es un perfil, un caso de estudio es un artículo. */
   ogType?: string;
+  /** Imagen a precargar por ser la candidata a LCP de esta página. */
+  preloadImage?: string;
+  /** JSON-LD propio de la página, además del Person que va en todas. */
+  extraSchema?: unknown[];
 }
 
 const locale = normalizeLocale(Astro.currentLocale);
@@ -23,11 +35,15 @@ const t = getContent(locale);
 
 const {
   image = "/og-image.jpg",
+  imageWidth = 1200,
+  imageHeight = 1200,
   title = t.meta.title,
   description = t.meta.description,
   esHref = "/",
   enHref = "/en/",
   ogType = "profile",
+  preloadImage,
+  extraSchema = [],
 } = Astro.props;
 
 // Astro.site viene de `site` en astro.config.mjs — hace falta para que canonical
@@ -84,6 +100,11 @@ const personSchema = {
     <meta name="theme-color" content="#050505" />
 
     <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin />
+    {
+      preloadImage && (
+        <link rel="preload" href={preloadImage} as="image" type="image/webp" fetchpriority="high" />
+      )
+    }
 
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -102,9 +123,11 @@ const personSchema = {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImageURL} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="1200" />
+    <meta property="og:image:width" content={String(imageWidth)} />
+    <meta property="og:image:height" content={String(imageHeight)} />
     <meta property="og:image:alt" content={t.meta.ogAlt} />
+    {ogType === "profile" && <meta property="profile:first_name" content="Jean Marco" />}
+    {ogType === "profile" && <meta property="profile:last_name" content="Marte" />}
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -113,15 +136,21 @@ const personSchema = {
     <meta name="twitter:image" content={ogImageURL} />
 
     <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+    {extraSchema.map((schema) => <script type="application/ld+json" set:html={JSON.stringify(schema)} />)}
   </head>
   <!-- overflow-x-clip (no -hidden): `hidden` obligaría a overflow-y a `auto` y
        convertiría al body en contenedor de scroll, interfiriendo con Lenis. -->
   <body class="overflow-x-clip bg-bg text-ink">
     <a href="#contenido" class="skip-link">{t.header.skipToContent}</a>
 
-    <!-- Campo de partículas global: una sola capa fija detrás de todo el contenido,
-         continua al scrollear por todas las secciones. -->
+    <!-- Campos de partículas globales: capas fijas detrás de todo el contenido,
+         continuas al scrollear por todas las secciones.
+
+         Las DOS viven acá, fuera del túnel, y no dentro de la sección que las usa:
+         un `position: fixed` dentro de un ancestro con transform se ancla a ese
+         ancestro en vez de al viewport, y groups.ts transforma los grupos. -->
     <canvas id="bg-particles" class="pointer-events-none fixed inset-0 -z-10 h-full w-full" aria-hidden="true"></canvas>
+    <canvas id="hero-particles" class="pointer-events-none fixed inset-0 -z-10 h-full w-full" aria-hidden="true"></canvas>
     <div class="z-progress" aria-hidden="true"></div>
 
     <div id="preloader" aria-hidden="true">
@@ -138,10 +167,22 @@ const personSchema = {
       import { initParticleField } from "../scripts/particle-field";
       import { initGroups } from "../scripts/groups";
 
-      // Fondo global disperso (todas las secciones menos el Hero, que lleva su
-      // propia capa densa en Hero.astro).
+      // Fondo global disperso, continuo en todas las secciones.
       const bgCanvas = document.getElementById("bg-particles") as HTMLCanvasElement | null;
       if (bgCanvas) initParticleField(bgCanvas, { count: 90 });
+
+      // Capa densa del Hero, encima de la anterior. Sólo existe donde hay Hero:
+      // en una página de caso de estudio no hay nada que ambientar y serían 210
+      // partículas repintándose por nada.
+      const heroCanvas = document.getElementById("hero-particles") as HTMLCanvasElement | null;
+      if (heroCanvas && document.querySelector("[data-hero-section]")) {
+        initParticleField(heroCanvas, {
+          count: 210,
+          visible: () => window.scrollY < window.innerHeight * 1.6,
+        });
+      } else {
+        heroCanvas?.remove();
+      }
 
       initGroups();
 
@@ -158,13 +199,16 @@ const personSchema = {
       if (!preloader || !mark || !panelL || !panelR || prefersReducedMotion()) {
         finish();
       } else {
+        // La cortina se lleva por delante el LCP: nada del contenido cuenta como
+        // pintado hasta que se abre. Duraba 1.45s (0.5 + 0.25 + 0.7) ANTES de
+        // sumar la red y el parseo de GSAP, lo que dejaba el <h1> visible bien
+        // pasados los 2.5s que Search Console marca como umbral. Ahora son 0.6s.
         gsap
           .timeline({ onComplete: finish })
-          .to(mark, { opacity: 1, scale: 1, duration: 0.5, ease: "expo.out" })
-          .to({}, { duration: 0.25 }) // breve pausa antes de abrir la cortina
-          .to([panelL], { xPercent: -100, duration: 0.7, ease: "expo.inOut" }, "open")
-          .to([panelR], { xPercent: 100, duration: 0.7, ease: "expo.inOut" }, "open")
-          .to(mark, { opacity: 0, duration: 0.3, ease: "power2.out" }, "open");
+          .to(mark, { opacity: 1, scale: 1, duration: 0.28, ease: "expo.out" })
+          .to([panelL], { xPercent: -100, duration: 0.45, ease: "expo.inOut" }, "open")
+          .to([panelR], { xPercent: 100, duration: 0.45, ease: "expo.inOut" }, "open")
+          .to(mark, { opacity: 0, duration: 0.2, ease: "power2.out" }, "open");
       }
     </script>
   </body>

@@ -9,8 +9,11 @@ const { hero, schedule } = getContent(Astro.currentLocale);
   class="relative flex min-h-[calc(100dvh-var(--group-top))] items-center overflow-x-clip"
   data-hero-section
 >
-  <!-- Capa densa de partículas solo para el Hero (se va con el grupo al hacer zoom). -->
-  <canvas data-hero-particles class="pointer-events-none fixed inset-0 -z-10 h-full w-full" aria-hidden="true"></canvas>
+  <!-- La capa densa de partículas del Hero vive en Layout.astro, no acá: un
+       `position: fixed` dentro de un ancestro con transform se ancla a ESE
+       ancestro, no al viewport. Como groups.ts le pone un transform al grupo
+       desde el primer frame, el canvas quedaba atado al grupo y escalaba con él:
+       durante el zoom de salida se rasterizaba a 2.6x el tamaño del viewport. -->
 
   <div class="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-10 px-6 py-12 sm:py-16 lg:grid-cols-2 lg:gap-16">
     <div>
@@ -61,7 +64,17 @@ const { hero, schedule } = getContent(Astro.currentLocale);
         class="relative h-56 w-56 overflow-hidden rounded-full border border-white/10 sm:h-72 sm:w-72 lg:h-96 lg:w-96"
         data-hero-circle
       >
-        <img src={hero.photo} alt={hero.photoAlt} class="h-full w-full object-cover object-top" />
+        {/* Candidata a LCP: se carga con prioridad alta y sin lazy. El preload
+            que la acompaña está en Layout.astro. */}
+        <img
+          src={hero.photo}
+          alt={hero.photoAlt}
+          width="768"
+          height="768"
+          fetchpriority="high"
+          decoding="async"
+          class="h-full w-full object-cover object-top"
+        />
       </div>
     </div>
   </div>
@@ -81,17 +94,6 @@ const { hero, schedule } = getContent(Astro.currentLocale);
 
 <script>
   import { gsap, hasFinePointer, prefersReducedMotion } from "../scripts/motion";
-  import { initParticleField } from "../scripts/particle-field";
-
-  // Capa densa propia del Hero. El fondo global (Layout) va disperso; esta solo
-  // se dibuja mientras el Hero está en pantalla.
-  const heroCanvas = document.querySelector<HTMLCanvasElement>("[data-hero-particles]");
-  if (heroCanvas) {
-    initParticleField(heroCanvas, {
-      count: 210,
-      visible: () => window.scrollY < window.innerHeight * 1.6,
-    });
-  }
 
   const eyebrow = document.querySelector<HTMLElement>("[data-hero-eyebrow]");
   const line1 = document.querySelector<HTMLElement>("[data-hero-line1]");

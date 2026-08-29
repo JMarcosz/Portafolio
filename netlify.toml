@@ -4,3 +4,36 @@
 
 [build.environment]
   NODE_VERSION = "22.12.0"
+
+# El apex tiene que redirigir a www, que es el host de `site` en astro.config.mjs
+# y el de todos los canonical. Sin esta regla Google indexa jeanmarte.com y
+# www.jeanmarte.com como dos sitios distintos y parte el ranking entre los dos.
+[[redirects]]
+  from = "https://jeanmarte.com/*"
+  to = "https://www.jeanmarte.com/:splat"
+  status = 301
+  force = true
+
+# Los assets de /_astro/ llevan hash de contenido en el nombre: un cambio genera
+# un nombre nuevo, así que se pueden cachear para siempre. Con el default de
+# Netlify se revalidaban en cada visita.
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.webp"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+[[headers]]
+  for = "/Certificados Portafolio/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

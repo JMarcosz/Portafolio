@@ -16,13 +16,20 @@ const items = p.items;
         <article data-project-card class="card flex flex-col overflow-hidden">
           {/* La media es el gancho: insinúa el sistema en uso. El detalle vive en
               el caso de estudio, no acá. */}
-          <a href={project.href} tabindex="-1" aria-hidden="true" class="block overflow-hidden">
+          {/* `tabindex="-1"` pero SIN aria-hidden: el enlace no necesita parada
+              propia de teclado (el título de abajo va al mismo sitio), pero la
+              captura sí es contenido — es la única prueba visual del proyecto y
+              vale como resultado en Google Imágenes. */}
+          <a href={project.href} tabindex="-1" class="block overflow-hidden">
             <img
               data-project-img
-              src={project.image}
-              alt=""
+              src={project.thumb}
+              alt={`${project.title} — ${project.valueLine}`}
+              width="1200"
+              height="675"
               class="aspect-video w-full border-b border-white/10 object-cover object-top"
               loading="lazy"
+              decoding="async"
             />
           </a>
 
@@ -114,15 +121,33 @@ const items = p.items;
     const codeLink = card.querySelector<HTMLElement>("[data-code-link]");
 
     if (hasFinePointer() && !prefersReducedMotion()) {
-      card.addEventListener("mousemove", (event) => {
-        const rect = card.getBoundingClientRect();
-        const px = (event.clientX - rect.left) / rect.width - 0.5;
-        const py = (event.clientY - rect.top) / rect.height - 0.5;
-        gsap.to(card, { rotateY: px * 6, rotateX: py * -6, duration: 0.4, ease: "power2.out" });
+      // quickTo, no gsap.to: un `gsap.to` por evento instanciaba DOS tweens
+      // nuevos en cada movimiento del ratón — a 120 Hz son ~240 tweens por
+      // segundo creados, resueltos por overwrite y descartados. quickTo reusa
+      // uno solo, que es lo que ya hacían los CTAs de esta misma sección.
+      const tiltY = gsap.quickTo(card, "rotateY", { duration: 0.4, ease: "power2.out" });
+      const tiltX = gsap.quickTo(card, "rotateX", { duration: 0.4, ease: "power2.out" });
+
+      // El rect se cachea al entrar: pedirlo por movimiento era una lectura de
+      // layout por evento, y la tarjeta no cambia de tamaño mientras el cursor
+      // está encima.
+      let rect: DOMRect | null = null;
+
+      card.addEventListener("mouseenter", () => {
+        rect = card.getBoundingClientRect();
         gsap.to(img, { scale: 1.06, duration: 0.5, ease: "power2.out" });
       });
+      card.addEventListener("mousemove", (event) => {
+        if (!rect) rect = card.getBoundingClientRect();
+        const px = (event.clientX - rect.left) / rect.width - 0.5;
+        const py = (event.clientY - rect.top) / rect.height - 0.5;
+        tiltY(px * 6);
+        tiltX(py * -6);
+      });
       card.addEventListener("mouseleave", () => {
-        gsap.to(card, { rotateY: 0, rotateX: 0, duration: 0.5, ease: "power2.out" });
+        rect = null;
+        tiltY(0);
+        tiltX(0);
         gsap.to(img, { scale: 1, duration: 0.5, ease: "power2.out" });
       });
       codeLink?.addEventListener("mouseenter", () => {

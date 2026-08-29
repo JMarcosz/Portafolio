@@ -26,6 +26,11 @@ export type SectionSpec = {
   reveal?: () => gsap.core.Timeline | void;
   /** Efecto continuo. `rect` es el de la sección en el frame actual. */
   live?: (rect: DOMRect, vh: number) => void;
+  /**
+   * Cierra lo que `live()` dejó a medias cuando el grupo sale de escena. Sólo lo
+   * implementan las secciones que animan en `live()`; ver `finishSection`.
+   */
+  finish?: () => void;
   /** Estado final inmediato, sin animación (reduced-motion). */
   settle: () => void;
 };
@@ -53,4 +58,22 @@ export function revealSection(id: string) {
 
 export function liveSection(id: string, rect: DOMRect, vh: number) {
   sections.get(id)?.spec.live?.(rect, vh);
+}
+
+/**
+ * Cobra la coreografía pendiente de una sección cuando su grupo sale de escena.
+ *
+ * Red de seguridad para las secciones que animan en `live()` (hoy Experiencia):
+ * `live()` sólo se llama con el grupo presentado y a escala exacta, así que si
+ * el usuario atraviesa el grupo de un salto — PageDown, un ancla del nav, una
+ * rueda agresiva — deja de llamarse antes de que las últimas tarjetas crucen su
+ * umbral. Como cada tarjeta se revela una sola vez, se quedarían en
+ * `autoAlpha: 0` para siempre, sin ningún camino de vuelta salvo volver a
+ * scrollear por encima de ellas.
+ *
+ * Es deliberadamente distinto de `settle()`: éste sólo toca lo que quedó
+ * pendiente, así que llamarlo de más no pisa lo que ya se animó.
+ */
+export function finishSection(id: string) {
+  sections.get(id)?.spec.finish?.();
 }

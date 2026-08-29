@@ -56,19 +56,38 @@ const shared = {
     photo: "/foto_personal.webp",
     cvFile: "/CV Jean Marte Full Stack Spanish Version.pdf",
   },
-  /** Media y enlaces de cada proyecto, indexados por el slug del JSON. */
+  /**
+   * Media y enlaces de cada proyecto, indexados por el slug del JSON.
+   *
+   * `image` es la captura de pagina completa: es el cuerpo del caso de estudio.
+   * `thumb` es el recorte 16:9 que muestra la card de la home — exactamente la
+   * franja que el `object-cover object-top` dejaba ver del original. La card
+   * pedia la captura entera (1200x6456 en Zentra) para ensenar los 675px de
+   * arriba: 31 MB de bitmap decodificado por una tarjeta de 570px de ancho.
+   * `thumb` es ademas la imagen de Open Graph, porque una previsualizacion
+   * necesita una relacion de aspecto de tarjeta, no una tira vertical.
+   */
   projects: {
     zentra: {
       link: "https://github.com/JMarcosz/FacturasRD",
       demo: "https://zentra.jeanmarte.com",
       image: "/zentrav2.webp",
+      imageWidth: 1200,
+      imageHeight: 6456,
+      thumb: "/zentrav2-card.webp",
     },
     "santoral-logistic": {
       link: "https://github.com/JMarcosz/SantoralLogistic",
       demo: "https://santorallogistics.jeanmarte.com",
       image: "/santorallogisticsv2.webp",
+      imageWidth: 1200,
+      imageHeight: 3393,
+      thumb: "/santorallogisticsv2-card.webp",
     },
-  } as Record<string, { link: string; demo: string; image: string }>,
+  } as Record<
+    string,
+    { link: string; demo: string; image: string; imageWidth: number; imageHeight: number; thumb: string }
+  >,
   /**
    * Imagen y PDF de cada certificado, indexados por slug. Un slug sin entrada
    * aquí se queda sin media en la card en vez de fingir un archivo que no
@@ -76,30 +95,42 @@ const shared = {
    */
   certificates: {
     angular: {
-      image: "/Certificados Portafolio/Desarrollo Angular ITLA_page-0001.jpg",
+      image: "/Certificados Portafolio/Desarrollo Angular ITLA_page-0001.webp",
+      imageWidth: 900,
+      imageHeight: 695,
       pdf: "/Certificados Portafolio/Desarrollo Angular ITLA.pdf",
     },
     powerbi: {
-      image: "/Certificados Portafolio/Analista de Datos - PowerBI_page-0001.jpg",
+      image: "/Certificados Portafolio/Analista de Datos - PowerBI_page-0001.webp",
+      imageWidth: 900,
+      imageHeight: 636,
       pdf: "/Certificados Portafolio/Analista de Datos - PowerBI.pdf",
     },
     "english-a2": {
-      image: "/Certificados Portafolio/A2-Elementary-English-certificate-International-English-Test_page-0001.jpg",
+      image: "/Certificados Portafolio/A2-Elementary-English-certificate-International-English-Test_page-0001.webp",
+      imageWidth: 900,
+      imageHeight: 695,
       pdf: "/Certificados Portafolio/A2-Elementary-English-certificate-International-English-Test.pdf",
     },
     scrum: {
-      image: "/Certificados Portafolio/Certificacion de Fundamentos de Scrum_page-0001.jpg",
+      image: "/Certificados Portafolio/Certificacion de Fundamentos de Scrum_page-0001.webp",
+      imageWidth: 900,
+      imageHeight: 695,
       pdf: "/Certificados Portafolio/Certificacion de Fundamentos de Scrum.pdf",
     },
     "cisco-it-essentials": {
-      image: "/Certificados Portafolio/IT Essentials - Cisco Networking Academy_page-0001.jpg",
+      image: "/Certificados Portafolio/IT Essentials - Cisco Networking Academy_page-0001.webp",
+      imageWidth: 900,
+      imageHeight: 637,
       pdf: "/Certificados Portafolio/IT Essentials - Cisco Networking Academy.pdf",
     },
     "community-management": {
-      image: "/Certificados Portafolio/Certificado_Curso_Community_Management_&_Marketing_Digital_101 (1)_page-0001.jpg",
+      image: "/Certificados Portafolio/Certificado_Curso_Community_Management_&_Marketing_Digital_101 (1)_page-0001.webp",
+      imageWidth: 900,
+      imageHeight: 695,
       pdf: "/Certificados Portafolio/Certificado_Curso_Community_Management_&_Marketing_Digital_101 (1).pdf",
     },
-  } as Record<string, { image: string; pdf: string }>,
+  } as Record<string, { image: string; imageWidth: number; imageHeight: number; pdf: string }>,
   contact: {
     email: "jeanmarte22@gmail.com",
   },
@@ -124,7 +155,7 @@ function merge(dict: Dict, locale: Locale) {
       ...dict.projects,
       items: dict.projects.items.map((item) => ({
         ...item,
-        ...(shared.projects[item.slug] ?? { link: "", demo: "", image: "" }),
+        ...(shared.projects[item.slug] ?? { link: "", demo: "", image: "", imageWidth: 0, imageHeight: 0, thumb: "" }),
         href: projectPath(locale, item.slug),
       })),
     },

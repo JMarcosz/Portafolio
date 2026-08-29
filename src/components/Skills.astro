@@ -44,16 +44,16 @@ const LEVEL_WIDTH: Record<string, number> = { advanced: 100, solid: 72, daily: 8
             </button>
 
             {/* `inert` saca el panel cerrado del árbol de accesibilidad y del orden
-                de tabulación. Con sólo grid-template-rows: 0fr el contenido seguía
+                de tabulación. Con sólo la altura en 0 el contenido seguía
                 anunciándose aunque no se viera. */}
             <div
               id={panelId}
               role="region"
               aria-labelledby={triggerId}
               inert={!open || undefined}
-              class="skill-panel grid overflow-hidden transition-[grid-template-rows] duration-300 ease-out"
+              class="skill-panel overflow-hidden"
             >
-              <div class="min-h-0">
+              <div data-panel-body>
                 <div class="grid grid-cols-1 gap-x-10 gap-y-5 pb-8 sm:grid-cols-2">
                   {cat.skills.map((skill) => (
                     <div>
@@ -79,17 +79,14 @@ const LEVEL_WIDTH: Record<string, number> = { advanced: 100, solid: 72, daily: 8
 </section>
 
 <style>
+  /* Altura 0 como estado base, para que el panel cerrado ya llegue cerrado en el
+     HTML servido. A partir de ahi la abre y la cierra GSAP (ver mas abajo por que
+     no es una transicion CSS de grid-template-rows). */
   .skill-panel {
-    grid-template-rows: 0fr;
+    height: 0;
   }
   .skill-item[data-open="true"] .skill-panel {
-    grid-template-rows: 1fr;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .skill-panel {
-      transition: none;
-    }
+    height: auto;
   }
 </style>
 
@@ -128,14 +125,45 @@ const LEVEL_WIDTH: Record<string, number> = { advanced: 100, solid: 72, daily: 8
     });
   };
 
+  // La apertura la anima GSAP sobre `height`, no una transicion CSS de
+  // `grid-template-rows: 0fr -> 1fr`.
+  //
+  // Interpolar `fr` es una animacion de LAYOUT: cada frame de los 300 ms
+  // recalculaba el acordeon entero y todo lo que tiene debajo. Y como el
+  // .group-inner esta vigilado por un ResizeObserver que dispara
+  // ScrollTrigger.refresh(), cada uno de esos frames reentraba pidiendo una
+  // re-medicion completa de la pagina. Con una altura concreta se mide una vez y
+  // se anima contra ese numero.
+  const panelTweens = new WeakMap<HTMLElement, gsap.core.Tween>();
+
   const setOpen = (item: HTMLElement, open: boolean) => {
     const trigger = item.querySelector<HTMLButtonElement>(".skill-trigger");
     const panel = item.querySelector<HTMLElement>(".skill-panel");
+    const body = item.querySelector<HTMLElement>("[data-panel-body]");
     const chevron = item.querySelector<HTMLElement>(".skill-chevron");
 
     item.dataset.open = String(open);
     trigger?.setAttribute("aria-expanded", String(open));
     if (panel) panel.inert = !open;
+
+    if (panel && body) {
+      panelTweens.get(panel)?.kill();
+      if (prefersReducedMotion()) {
+        gsap.set(panel, { height: open ? "auto" : 0 });
+      } else {
+        const tween = gsap.to(panel, {
+          height: open ? body.offsetHeight : 0,
+          duration: 0.35,
+          ease: "power2.out",
+          // Al abrir se deja en `auto` para que el panel siga al contenido si
+          // este cambia de alto despues (reflow de texto, cambio de idioma).
+          onComplete: () => {
+            if (open) gsap.set(panel, { height: "auto" });
+          },
+        });
+        panelTweens.set(panel, tween);
+      }
+    }
 
     if (chevron) {
       if (prefersReducedMotion()) gsap.set(chevron, { rotate: open ? 180 : 0 });
@@ -152,8 +180,7 @@ const LEVEL_WIDTH: Record<string, number> = { advanced: 100, solid: 72, daily: 8
     }
 
     // El toggle no depende de ningún estado de scroll ni de animación: si el
-    // botón se ve, se puede accionar. El reflow de los encabezados vecinos lo
-    // sigue animando la transición CSS de grid-template-rows del panel.
+    // botón se ve, se puede accionar.
     trigger?.addEventListener("click", () => {
       const willOpen = item.dataset.open !== "true";
       items.forEach((other) => {

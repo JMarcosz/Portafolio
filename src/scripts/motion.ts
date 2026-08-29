@@ -1,12 +1,13 @@
 // Setup compartido de animación. Se importa desde el <script> de cada componente;
 // Vite comparte la misma instancia de módulo entre todos ellos, así que
 // gsap.registerPlugin() solo corre una vez sin importar cuántos componentes lo importen.
+// Flip estaba importado y registrado sin un solo uso en todo src/: eran ~15 KB
+// de plugin viajando dentro del bundle crítico por nada.
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
-import { Flip } from "gsap/Flip";
 
-gsap.registerPlugin(ScrollTrigger, SplitText, Flip);
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 export const prefersReducedMotion = () =>
   typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -101,4 +102,4 @@ export function resumeFloatsIn(root: Element) {
   });
 }
 
-export { gsap, ScrollTrigger, SplitText, Flip };
+export { gsap, ScrollTrigger, SplitText };

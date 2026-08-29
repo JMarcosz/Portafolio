@@ -1,4 +1,5 @@
 ---
+import { getContent, normalizeLocale } from "../i18n";
 import Layout from "../layouts/Layout.astro";
 import Header from "./Header.astro";
 import Hero from "./Hero.astro";
@@ -13,9 +14,63 @@ import Certificates from "./Certificates.astro";
 import Skills from "./Skills.astro";
 import Contact from "./Contact.astro";
 import Footer from "./Footer.astro";
+
+const locale = normalizeLocale(Astro.currentLocale);
+const t = getContent(locale);
+const site = "https://www.jeanmarte.com";
+
+// JSON-LD propio de la home.
+//
+// El FAQPage es el que más rinde: es de los pocos rich results que Google sigue
+// mostrando ampliamente, y la sección ya existe con preguntas y respuestas
+// reales. Antes no se declaraba ninguno de los tres, así que Google tenía que
+// inferir de un DOM donde además cuatro de cinco grupos llegaban ocultos.
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: t.faq.items.map((item) => ({
+    "@type": "Question",
+    name: item.q,
+    acceptedAnswer: { "@type": "Answer", text: item.a },
+  })),
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Jean Marco Marte",
+  url: `${site}/`,
+  inLanguage: locale === "en" ? "en-US" : "es-DO",
+};
+
+// El <title> apunta a "RD" pero no había ninguna señal estructurada de negocio
+// local: sin esto la sección de Servicios era texto suelto para Google.
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  name: "Jean Marco Marte — Desarrollo de software a medida",
+  description: t.meta.description,
+  url: `${site}${t.home}`,
+  image: `${site}/og-image.jpg`,
+  email: "mailto:jeanmarte22@gmail.com",
+  address: { "@type": "PostalAddress", addressCountry: "DO" },
+  areaServed: { "@type": "Country", name: "República Dominicana" },
+  provider: { "@type": "Person", name: "Jean Marco Marte" },
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: t.services.heading2,
+    itemListElement: t.services.items.map((item) => ({
+      "@type": "Offer",
+      itemOffered: { "@type": "Service", name: item.title, description: item.description },
+    })),
+  },
+};
 ---
 
-<Layout>
+<Layout
+  preloadImage={t.hero.photo}
+  extraSchema={[websiteSchema, serviceSchema, faqSchema]}
+>
   <Header />
 
   <!-- tabindex="-1": destino del enlace de salto, para que el foco aterrice acá
@@ -26,7 +81,7 @@ import Footer from "./Footer.astro";
          recién después el respaldo (experiencia, habilidades, formación). -->
     <div class="scroll-track" style="--groups: 5;">
       <div class="sticky-stage">
-        <section class="scroll-group" data-group="0" data-nav="inicio" data-group-initial>
+        <section class="scroll-group" data-group="0" data-nav="inicio">
           <div class="group-inner"><Hero /></div>
         </section>
 
