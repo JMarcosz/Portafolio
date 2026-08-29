@@ -148,7 +148,7 @@ export function initGroups() {
     // de TODO el scroll de la página: cambiar de sección costaba cinco gestos de
     // rueda. El techo en px importa tanto como el factor — sin él, en una
     // pantalla de 1440px de alto el zoom volvería a costar casi 800px.
-    const HANDOFF = Math.min(stageH * 0.55, 520);
+    const HANDOFF = isMobile() ? Math.min(stageH * 0.22, 180) : Math.min(stageH * 0.55, 520);
 
     // Zona muerta ("gancho"): scroll que hay que gastar con el grupo ya
     // presentado y QUIETO antes de que arranque el zoom. Sin ella el primer
