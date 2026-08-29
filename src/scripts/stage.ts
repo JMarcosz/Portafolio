@@ -77,3 +77,15 @@ export function liveSection(id: string, rect: DOMRect, vh: number) {
 export function finishSection(id: string) {
   sections.get(id)?.spec.finish?.();
 }
+
+/**
+ * Liquida todas las secciones registradas en su estado final sin animación.
+ *
+ * Se llama cuando el túnel no se activa (móvil) pero `prepare()` ya ocultó
+ * los elementos: sin esto las secciones quedarían invisibles para siempre.
+ */
+export function settleAllSections() {
+  sections.forEach((entry) => {
+    if (!entry.revealed) entry.spec.settle();
+  });
+}

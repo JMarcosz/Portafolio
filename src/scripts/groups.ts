@@ -15,7 +15,7 @@
 // stage.ts y el director decide cuándo corre. La regla dura es que una sección
 // sólo anima mientras su grupo manda en pantalla.
 import { gsap, ScrollTrigger, prefersReducedMotion, pauseFloatsIn, resumeFloatsIn } from "./motion";
-import { finishSection, liveSection, revealSection } from "./stage";
+import { finishSection, liveSection, revealSection, settleAllSections } from "./stage";
 import { lenis } from "./smooth-scroll";
 
 const clamp01 = (n: number) => (n < 0 ? 0 : n > 1 ? 1 : n);
@@ -71,6 +71,53 @@ export function initGroups() {
   const N = groupEls.length;
 
   if (prefersReducedMotion()) return;
+
+  // En móvil: scroll nativo + revelaciones por IntersectionObserver.
+  //
+  // El túnel sticky se omite porque asigna "pixels virtuales" a cada transición
+  // (HANDOFF): durante esos pixels el stage queda fijo y sólo cambia opacidad/
+  // escala — el contenido no se mueve verticalmente. Un flick rápido consume
+  // esos pixels sin que nada se mueva en pantalla → el usuario ve un "alto".
+  //
+  // En su lugar: las secciones se apilan verticalmente (estado base sin tunnel-on)
+  // y cada una revela su coreografía cuando cruza el umbral de lectura, igual que
+  // en desktop pero disparado por IO en vez del director de grupos.
+  if (window.matchMedia("(max-width: 768px)").matches) {
+    // rAF: asegura que todos los <script> de componentes hayan corrido
+    // registerSection() antes de que el IO empiece a observar.
+    requestAnimationFrame(() => {
+      const allSections = gsap.utils.toArray<HTMLElement>("section[id]");
+
+      // rootMargin "-15% bottom": la sección revela cuando su borde superior
+      // entra en el 85% superior del viewport — mismo umbral que REVEAL_LINE
+      // en desktop (0.85). Así las animaciones se sienten igual de tempranas.
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            revealSection(entry.target.id);
+            document.dispatchEvent(
+              new CustomEvent("nav:active", { detail: { id: entry.target.id } })
+            );
+            // Una vez revelada, dejar de observar: reveal() corre una sola vez.
+            io.unobserve(entry.target);
+          });
+        },
+        { rootMargin: "0px 0px -15% 0px", threshold: 0.05 }
+      );
+
+      allSections.forEach((sec) => io.observe(sec));
+
+      // Estado inicial del nav: la primera sección.
+      const first = allSections[0];
+      if (first) {
+        document.dispatchEvent(
+          new CustomEvent("nav:active", { detail: { id: first.id } })
+        );
+      }
+    });
+    return;
+  }
 
   // A partir de acá el documento pasa a ser el túnel. Hasta este momento —y para
   // siempre, si no hay JS o si el usuario pide menos movimiento— el markup es un
