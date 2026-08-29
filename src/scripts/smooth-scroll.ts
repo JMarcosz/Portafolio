@@ -1,11 +1,17 @@
 // Scroll suave global (única instancia de Lenis del sitio). Se importa una sola
 // vez desde Layout.astro.
+//
+// Lenis sólo se activa en dispositivos con puntero fino (ratón / trackpad).
+// En touch (móvil, tablet) el navegador ya tiene su propia inercia nativa que
+// se siente fluida y 1:1 con el dedo. Activar Lenis encima añadía una segunda
+// capa de momentum que, sobre el sticky-stage, producía el efecto de que la
+// sección se "congelaba" unos instantes al levantar el dedo.
 import Lenis from "lenis";
-import { gsap, ScrollTrigger, prefersReducedMotion } from "./motion";
+import { gsap, ScrollTrigger, prefersReducedMotion, hasFinePointer } from "./motion";
 
 let lenis: Lenis | null = null;
 
-if (!prefersReducedMotion()) {
+if (!prefersReducedMotion() && hasFinePointer()) {
   lenis = new Lenis({
     duration: 1.1,
     easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
