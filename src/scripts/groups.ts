@@ -148,7 +148,7 @@ export function initGroups() {
     // de TODO el scroll de la página: cambiar de sección costaba cinco gestos de
     // rueda. El techo en px importa tanto como el factor — sin él, en una
     // pantalla de 1440px de alto el zoom volvería a costar casi 800px.
-    const HANDOFF = isMobile() ? Math.min(stageH * 0.22, 180) : Math.min(stageH * 0.55, 520);
+    const HANDOFF = isMobile() ? Math.min(stageH * 0.30, 240) : Math.min(stageH * 0.55, 520);
 
     // Zona muerta ("gancho"): scroll que hay que gastar con el grupo ya
     // presentado y QUIETO antes de que arranque el zoom. Sin ella el primer
@@ -293,7 +293,11 @@ export function initGroups() {
   /** Dibuja el zoom y devuelve la opacidad del grupo saliente. */
   const handoff = (out: number, inc: number, tB: number) => {
     const mobile = isMobile();
-    const e = smooth(tB);
+    // En desktop se usa smooth(tB) para una curva ease agradable con el ratón/trackpad.
+    // En móvil se usa tB directamente (lineal al scroll): el dedo ya da la sensación
+    // de movimiento y cualquier curva no-lineal sobre un scrub táctil se siente como
+    // un imán — la animación va más lenta que el dedo y luego "jalonea" para alcanzarlo.
+    const e = mobile ? tB : smooth(tB);
 
     // Los dos únicos grupos que se mueven durante el zoom. Sus capas internas ya
     // están quietas (`y` fijo abajo), así que no necesitan pista propia.
@@ -314,8 +318,10 @@ export function initGroups() {
 
     gsap.set(models[out].el, {
       autoAlpha: outAlpha,
-      scale: mobile ? 1 - 0.08 * e : 1 + 1.6 * e,
-      yPercent: mobile ? -30 * e : 0,
+      // Móvil: escala mínima (1 → 0.96) sin traslación. El yPercent creaba el
+      // efecto "disparo hacia arriba" que se sentía como brinco al levantar el dedo.
+      scale: mobile ? 1 - 0.04 * tB : 1 + 1.6 * e,
+      yPercent: 0,
       zIndex: 24,
       // Mientras se siga viendo, se sigue pudiendo tocar. Matar el hit-testing en
       // tB=0 dejaba la última sección del grupo (Habilidades) a la vista, intacta
@@ -326,8 +332,10 @@ export function initGroups() {
 
     gsap.set(models[inc].el, {
       autoAlpha: inAlpha,
-      scale: mobile ? 0.94 + 0.06 * e : 0.35 + 0.65 * e,
-      yPercent: mobile ? 40 * (1 - e) : 0,
+      // Móvil: escala mínima (0.97 → 1.0) sin traslación. El yPercent de 40% más
+      // la escala creaban el "brinco desde abajo" al entrar la nueva sección.
+      scale: mobile ? 0.97 + 0.03 * tB : 0.35 + 0.65 * e,
+      yPercent: 0,
       zIndex: 30,
       pointerEvents: inAlpha > 0.5 ? "auto" : "none",
     });
