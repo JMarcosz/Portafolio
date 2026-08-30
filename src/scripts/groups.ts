@@ -108,6 +108,19 @@ export function initGroups() {
 
       allSections.forEach((sec) => io.observe(sec));
 
+      const hash = window.location.hash.slice(1);
+      if (hash) {
+        const targetEl = document.getElementById(hash);
+        if (targetEl) {
+          targetEl.scrollIntoView();
+          revealSection(hash);
+          document.dispatchEvent(
+            new CustomEvent("nav:active", { detail: { id: hash } })
+          );
+          return;
+        }
+      }
+
       // Estado inicial del nav: la primera sección.
       const first = allSections[0];
       if (first) {
@@ -469,21 +482,6 @@ export function initGroups() {
     if (bar) gsap.set(bar, { scaleX: progress });
   };
 
-  measure();
-
-  const st = ScrollTrigger.create({
-    trigger: track,
-    start: "top top",
-    end: "bottom bottom",
-    scrub: true,
-    onUpdate: (self) => render(self.progress),
-    onRefreshInit: () => measure(),
-    onRefresh: (self) => render(self.progress),
-  });
-
-  render(0);
-  document.dispatchEvent(new CustomEvent("nav:active", { detail: { id: models[0].sections[0]?.id ?? models[0].navId } }));
-
   // --------------------------------------------------------------- navegación
 
   /** Desplazamiento de `el` dentro de su .scroll-group, en coordenadas de layout. */
@@ -500,7 +498,7 @@ export function initGroups() {
   /** Posición del túnel que deja `offset` (dentro del grupo `gi`) cerca del tope. */
   const scrollForOffset = (gi: number, offset: number | null) => {
     const m = models[gi];
-    const base = st.start + m.anchorPx;
+    const base = st ? st.start + m.anchorPx : m.anchorPx;
     if (offset == null || !m.tall || m.endY === 0) return base;
     const targetY = clamp(0.15 * window.innerHeight - offset, m.endY, 0);
     return base + (targetY / m.endY) * m.travelPx;
@@ -521,7 +519,16 @@ export function initGroups() {
     return scrollForOffset(gi, offsetInGroup(el, group));
   };
 
-  const goTo = (target: number, opts: { duration?: number; onComplete?: () => void } = {}) => {
+  const goTo = (target: number, opts: { duration?: number; immediate?: boolean; onComplete?: () => void } = {}) => {
+    if (opts.immediate) {
+      if (lenis) {
+        lenis.scrollTo(target, { immediate: true });
+      } else {
+        window.scrollTo(0, target);
+      }
+      if (opts.onComplete) opts.onComplete();
+      return;
+    }
     if (lenis) {
       lenis.scrollTo(target, { duration: opts.duration ?? 1.2, onComplete: opts.onComplete });
     } else {
@@ -529,6 +536,57 @@ export function initGroups() {
       if (opts.onComplete) window.setTimeout(opts.onComplete, 400);
     }
   };
+
+  measure();
+
+  const st = ScrollTrigger.create({
+    trigger: track,
+    start: "top top",
+    end: "bottom bottom",
+    scrub: true,
+    onUpdate: (self) => render(self.progress),
+    onRefreshInit: () => measure(),
+    onRefresh: (self) => render(self.progress),
+  });
+
+  const syncHashOrInitial = (immediate = true) => {
+    const hash = window.location.hash.slice(1);
+    if (hash) {
+      const target = scrollForId(hash);
+      if (target != null) {
+        goTo(target, { immediate });
+        const progress = totalPx > 0 ? clamp01(target / totalPx) : 0;
+        render(progress);
+        setActive(hash);
+        return;
+      }
+    }
+    if (immediate) {
+      if (window.scrollY === 0) {
+        render(0);
+        setActive(models[0].sections[0]?.id ?? models[0].navId);
+      } else {
+        const progress = totalPx > 0 ? clamp01(window.scrollY / totalPx) : 0;
+        render(progress);
+      }
+    }
+  };
+
+  syncHashOrInitial(true);
+
+  // Escuchar cambios de hash y navegación atrás/adelante del navegador (incluyendo BFCache)
+  window.addEventListener("hashchange", () => syncHashOrInitial(false));
+
+  window.addEventListener("pageshow", (event) => {
+    if (event.persisted) {
+      ScrollTrigger.refresh();
+      syncHashOrInitial(true);
+    }
+  });
+
+  window.addEventListener("popstate", () => {
+    syncHashOrInitial(true);
+  });
 
   document.addEventListener(
     "click",
