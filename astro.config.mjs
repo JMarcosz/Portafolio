@@ -57,6 +57,24 @@ export default defineConfig({
         return item;
       },
     }),
+    {
+      name: 'sitemap-copy',
+      hooks: {
+        'astro:build:done': async ({ dir }) => {
+          const fs = await import('node:fs/promises');
+          const path = await import('node:path');
+          const { fileURLToPath } = await import('node:url');
+          const distDir = fileURLToPath(dir);
+          const indexPath = path.join(distDir, 'sitemap-index.xml');
+          const aliasPath = path.join(distDir, 'sitemap.xml');
+          try {
+            await fs.copyFile(indexPath, aliasPath);
+          } catch (e) {
+            console.error('Error copying sitemap-index.xml to sitemap.xml:', e);
+          }
+        },
+      },
+    },
   ],
   vite: {
     plugins: [tailwindcss()],

@@ -1,0 +1,16 @@
+# Cabeceras para Cloudflare Pages.
+# https://developers.cloudflare.com/pages/configuration/headers/
+#
+# Cloudflare aplica las reglas de arriba a abajo; si dos coinciden y fijan la
+# misma cabecera, gana la ULTIMA. Por eso el `/*` general va primero y la regla
+# especifica de `/_astro/*` va despues.
+
+# HTML y todo lo demas: sin caché persistente. El navegador revalida en cada
+# visita (respuesta 304 si no cambió), así cada deploy se ve al instante.
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Bundles de Astro: el hash en el nombre cambia con cada build, así que su
+# contenido es inmutable y se puede cachear un año.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable

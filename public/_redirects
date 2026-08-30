@@ -1,0 +1,5 @@
+﻿# Redirección de sitemap.xml hacia sitemap-index.xml
+/sitemap.xml  /sitemap-index.xml  301
+
+# Redirección de apex a www (en Netlify)
+https://jeanmarte.com/*  https://www.jeanmarte.com/:splat  301!

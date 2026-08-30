@@ -2,3 +2,5 @@ User-agent: *
 Allow: /
 
 Sitemap: https://www.jeanmarte.com/sitemap-index.xml
+Sitemap: https://www.jeanmarte.com/sitemap.xml
+

@@ -14,6 +14,12 @@
   status = 301
   force = true
 
+[[redirects]]
+  from = "/sitemap.xml"
+  to = "/sitemap-index.xml"
+  status = 301
+
+
 # Los assets de /_astro/ llevan hash de contenido en el nombre: un cambio genera
 # un nombre nuevo, así que se pueden cachear para siempre. Con el default de
 # Netlify se revalidaban en cada visita.
