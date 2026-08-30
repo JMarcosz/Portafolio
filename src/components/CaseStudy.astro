@@ -18,7 +18,7 @@ const L = t.caseStudy.labels;
 ---
 
 <article class="mx-auto max-w-3xl px-6 pb-24 pt-32">
-  <a href={`${t.home}#proyectos`} class="text-xs uppercase tracking-[0.15em] text-white/55 transition-colors hover:text-white">
+  <a href={t.home} data-back-link class="text-xs uppercase tracking-[0.15em] text-white/55 transition-colors hover:text-white">
     &larr; {t.caseStudy.back}
   </a>
 
@@ -184,3 +184,13 @@ const L = t.caseStudy.labels;
     </a>
   </aside>
 </article>
+
+<script>
+  const backLink = document.querySelector<HTMLAnchorElement>("[data-back-link]");
+  backLink?.addEventListener("click", (e) => {
+    if (window.history.length > 1 && document.referrer && document.referrer.includes(window.location.host)) {
+      e.preventDefault();
+      window.history.back();
+    }
+  });
+</script>
