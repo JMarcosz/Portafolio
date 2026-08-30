@@ -87,8 +87,8 @@ const { about } = getContent(Astro.currentLocale);
   registerSection("sobre-mi", {
     prepare: () => {
       if (heading && copy) {
-        headingLines = new SplitText(heading, { type: "lines", mask: "lines" }).lines;
-        copyLines = new SplitText(copy.querySelectorAll("p"), { type: "lines", mask: "lines" }).lines;
+        headingLines = new SplitText(heading, { type: "lines", mask: "lines", aria: "none" }).lines;
+        copyLines = new SplitText(copy.querySelectorAll("p"), { type: "lines", mask: "lines", aria: "none" }).lines;
         gsap.set([...headingLines, ...copyLines], { yPercent: 105 });
       }
       const highlight = findHighlight();

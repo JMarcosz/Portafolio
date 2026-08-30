@@ -41,12 +41,15 @@ for (const f of certJpgs) {
   await unlink(src); // derivado del PDF que queda al lado; además está en git
 }
 
-// 3. Foto del hero: se muestra a 384px como máximo (lg:h-96).
+// 3. Foto del hero: se muestra a 384px como máximo (lg:h-96) en desktop, 288px en tablet, 224px en mobile.
 {
   const src = path.join(PUB, "foto_personal.webp");
-  const out = path.join(PUB, "foto_personal_768.webp");
-  await sharp(src).resize({ width: 768, withoutEnlargement: true }).webp({ quality: 84 }).toFile(out);
-  await report("foto del hero", src, out);
+  const out384 = path.join(PUB, "foto_personal_384.webp");
+  const out768 = path.join(PUB, "foto_personal_768.webp");
+  await sharp(src).resize({ width: 384, height: 384, fit: "cover" }).webp({ quality: 80, effort: 6 }).toFile(out384);
+  await report("foto hero 384w", src, out384);
+  await sharp(src).resize({ width: 768, height: 768, fit: "cover" }).webp({ quality: 80, effort: 6 }).toFile(out768);
+  await report("foto hero 768w", src, out768);
 }
 
 // 4. Icono del manifest: 106 KB para un PNG de 512x512 es palette sin optimizar.

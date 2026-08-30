@@ -102,7 +102,15 @@ const personSchema = {
     <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin />
     {
       preloadImage && (
-        <link rel="preload" href={preloadImage} as="image" type="image/webp" fetchpriority="high" />
+        <link
+          rel="preload"
+          href={preloadImage}
+          imagesrcset="/foto_personal_384.webp 384w, /foto_personal_768.webp 768w"
+          imagesizes="(min-width: 1024px) 384px, (min-width: 640px) 288px, 224px"
+          as="image"
+          type="image/webp"
+          fetchpriority="high"
+        />
       )
     }
 

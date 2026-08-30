@@ -67,10 +67,12 @@ const { hero, schedule } = getContent(Astro.currentLocale);
         {/* Candidata a LCP: se carga con prioridad alta y sin lazy. El preload
             que la acompaña está en Layout.astro. */}
         <img
-          src={hero.photo}
+          src="/foto_personal_384.webp"
+          srcset="/foto_personal_384.webp 384w, /foto_personal_768.webp 768w"
+          sizes="(min-width: 1024px) 384px, (min-width: 640px) 288px, 224px"
           alt={hero.photoAlt}
-          width="768"
-          height="768"
+          width="384"
+          height="384"
           fetchpriority="high"
           decoding="async"
           class="h-full w-full object-cover object-top"
@@ -103,17 +105,14 @@ const { hero, schedule } = getContent(Astro.currentLocale);
   const circle = document.querySelector<HTMLElement>("[data-hero-circle]");
   const scrollCue = document.querySelector<HTMLElement>("[data-scroll-cue]");
 
-  // El estado oculto se aplica YA, de forma sincrónica, no cuando el preloader termina.
-  // Si se aplicara recién en playHeroIntro(), la cortina abriría sobre un Hero todavía
-  // visible en su estado final (nadie lo ocultó aún) y recién ahí saltaría a oculto
-  // para animar — el "aparece y desaparece" que se ve como bug. Ocultarlo de entrada
-  // hace que la cortina siempre abra sobre el Hero ya en su punto de partida.
+  // El estado inicial del texto se aplica de forma sincrónica para que la cortina
+  // abra sobre el texto listo para animar. La foto (candidata a LCP) NO se oculta
+  // con autoAlpha para que el navegador registre la primera pintura sin demora.
   if (!prefersReducedMotion()) {
     gsap.set([line1, line2], { yPercent: 115 });
     gsap.set(paragraph, { yPercent: 105, autoAlpha: 0 });
-    gsap.set([eyebrow, circle], { autoAlpha: 0 });
+    gsap.set(eyebrow, { autoAlpha: 0 });
     gsap.set(ctas, { autoAlpha: 0, scale: 0.9 });
-    gsap.set(circle, { scale: 0.92 });
   }
 
   const playHeroIntro = () => {
@@ -125,8 +124,7 @@ const { hero, schedule } = getContent(Astro.currentLocale);
       .to(line1, { yPercent: 0, duration: 1 }, "<0.05")
       .to(line2, { yPercent: 0, duration: 1 }, "<0.15")
       .to(paragraph, { yPercent: 0, autoAlpha: 1, duration: 0.85 }, "-=0.6")
-      .to(ctas, { autoAlpha: 1, scale: 1, duration: 0.5, stagger: 0.08, ease: "back.out(1.4)" }, "-=0.3")
-      .to(circle, { autoAlpha: 1, scale: 1, duration: 0.7 }, "-=0.4");
+      .to(ctas, { autoAlpha: 1, scale: 1, duration: 0.5, stagger: 0.08, ease: "back.out(1.4)" }, "-=0.3");
   };
 
   if (document.getElementById("preloader")) {

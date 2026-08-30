@@ -53,7 +53,7 @@ function scheduleUrl(locale: Locale): string {
 
 const shared = {
   hero: {
-    photo: "/foto_personal.webp",
+    photo: "/foto_personal_384.webp",
     cvFile: "/CV Jean Marte Full Stack Spanish Version.pdf",
   },
   /**
