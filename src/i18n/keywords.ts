@@ -1,0 +1,170 @@
+﻿// Diccionario Maestro SEO: Nichos × Servicios × Ubicaciones × Intenciones
+// Utilizado para enriquecer metadatos, datos estructurados (Schema.org JSON-LD) y optimización on-page.
+
+export const BRAND_VARIANTS = [
+  "Jean Marte",
+  "Jean Marte — Desarrollo de Software",
+  "Jean Marte - Desarrollo Web",
+  "Jean Marte Desarrollo Web",
+  "Jean Marte Desarrollador Web",
+  "Jean Marco Marte",
+  "Jean Marco",
+  "Jean Marcos Marte",
+  "Jean Marcos Marte Garcia",
+] as const;
+
+export const GEOGRAPHIC_AREAS = [
+  { "@type": "Country", name: "República Dominicana" },
+  { "@type": "City", name: "Santo Domingo" },
+  { "@type": "AdministrativeArea", name: "Distrito Nacional" },
+  { "@type": "Place", name: "Piantini, Santo Domingo" },
+  { "@type": "Place", name: "Naco, Santo Domingo" },
+  { "@type": "Place", name: "Bella Vista, Santo Domingo" },
+  { "@type": "City", name: "Santo Domingo Este" },
+  { "@type": "City", name: "Santo Domingo Oeste" },
+  { "@type": "City", name: "Santo Domingo Norte" },
+  { "@type": "City", name: "Santiago de los Caballeros" },
+  { "@type": "City", name: "Punta Cana" },
+  { "@type": "City", name: "Bávaro" },
+  { "@type": "City", name: "Higüey" },
+  { "@type": "City", name: "La Romana" },
+  { "@type": "City", name: "Puerto Plata" },
+  { "@type": "City", name: "San Cristóbal" },
+  { "@type": "City", name: "San Pedro de Macorís" },
+  { "@type": "City", name: "La Vega" },
+] as const;
+
+export const SECTOR_SERVICES = [
+  {
+    niche: "Empresas / PYMEs",
+    name: "Desarrollo de Sistemas Empresariales y ERP a Medida",
+    description: "Sistemas web a medida para centralizar clientes (CRM), inventario, facturación, compras y automatización operativa para empresas en Santo Domingo y República Dominicana.",
+  },
+  {
+    niche: "Facturación Electrónica / DGII",
+    name: "Sistemas de Facturación Electrónica e Integración DGII",
+    description: "Emisión de comprobantes fiscales electrónicos (e-CF), NCF, automatización de formatos 606 y 607 e integración directa con la Oficina Virtual de la DGII.",
+  },
+  {
+    niche: "Restaurantes y Gastronomía",
+    name: "Software y POS para Restaurantes",
+    description: "Sistemas para restaurantes en Santo Domingo y RD: control de comandas, gestión de mesas, pedidos online, cocina, inventario y facturación fiscal.",
+  },
+  {
+    niche: "Hoteles, Turismo y Hospitalidad",
+    name: "Software de Gestión Hotelera y Reservas (PMS)",
+    description: "Sistemas para hoteles, resorts, villas y alquileres vacacionales en Punta Cana, Santo Domingo y Puerto Plata: reservas en línea, gestión de huéspedes y habitaciones.",
+  },
+  {
+    niche: "Gimnasios y Centros Fitness",
+    name: "Software de Gestión y Control de Socios para Gimnasios",
+    description: "Sistemas para gimnasios, crossfit y academias deportivas en Santo Domingo y Santiago: control de acceso, cobros recurrentes y membresías.",
+  },
+  {
+    niche: "Logística y Transporte",
+    name: "Plataformas Web de Logística y Almacenes (WMS / TMS)",
+    description: "Sistemas integrales de control de carga, cotizaciones de fletes, gestión de almacenes, seguimiento de despachos y flotas en República Dominicana.",
+  },
+  {
+    niche: "Clínicas y Salud",
+    name: "Software Médico para Clínicas y Consultorios",
+    description: "Sistemas de citas médicas en línea, expedientes de pacientes, agenda de doctores y facturación médica en Santo Domingo y Santiago.",
+  },
+  {
+    niche: "Construcción e Inmobiliarias",
+    name: "Sistemas de Gestión de Obras y CRM Inmobiliario",
+    description: "Software para constructoras e inmobiliarias en Santo Domingo y Punta Cana: control de presupuestos, materiales, contratistas y catálogo de propiedades.",
+  },
+  {
+    niche: "Comercio y Distribuidores",
+    name: "Sistemas Punto de Venta (POS) e Inventario Multialmacén",
+    description: "Software para tiendas y distribuidoras en RD: punto de venta rápido, inventario multisucursal, ecommerce B2B y compras a proveedores.",
+  },
+] as const;
+
+export const KNOWS_ABOUT_LIST = [
+  "Desarrollo de Software a Medida",
+  "Sistemas Empresariales (ERP / CRM)",
+  "Facturación Electrónica DGII (e-CF)",
+  "Automatización de Procesos Empresariales",
+  "Software para Restaurantes (POS)",
+  "Sistemas para Hoteles y Reservas (PMS)",
+  "Software para Gimnasios y Control de Socios",
+  "Sistemas de Logística y Almacenes (WMS)",
+  "Software Médico y Consultorios",
+  "Desarrollo Web Full Stack",
+  "Integración de WhatsApp Business API",
+  "Pasarelas de Pago (CardNet, Azul, Stripe)",
+  "Arquitectura de Software y REST APIs",
+  "Angular",
+  "Vue.js",
+  "Nuxt.js",
+  "React",
+  "Next.js",
+  "TypeScript",
+  "Node.js",
+  ".NET",
+  "Laravel",
+  "PostgreSQL",
+  "SQL Server",
+  "Docker",
+] as const;
+
+export const SEO_KEYWORDS_ES = [
+  // Nivel 1: Marca + Profesión
+  "Jean Marte",
+  "Jean Marte desarrollo de software",
+  "Jean Marte desarrollo web",
+  "desarrollador de software Santo Domingo",
+  "desarrollador de software República Dominicana",
+  "programador Santo Domingo",
+  "desarrollador web Santo Domingo",
+  "desarrollador de software Piantini",
+  "desarrollador de software Naco",
+  // Nivel 2: Macro-Problema Empresarial
+  "desarrollo de sistemas empresariales",
+  "software a medida República Dominicana",
+  "desarrollador de sistemas para empresas",
+  "sistema de inventario y facturación Santo Domingo",
+  "automatización de procesos empresariales RD",
+  "empresa de desarrollo de software Santo Domingo",
+  // Nivel 3 y 4: Nichos Sectoriales + Ubicaciones
+  "sistema para restaurantes en Santo Domingo",
+  "software para restaurantes en RD",
+  "POS para restaurantes República Dominicana",
+  "software para hoteles en Punta Cana",
+  "sistema de reservas para hoteles República Dominicana",
+  "sistema para hoteles Puerto Plata",
+  "sistema de facturación electrónica RD",
+  "software de facturación electrónica DGII",
+  "desarrollador e-CF República Dominicana",
+  "software para gimnasios República Dominicana",
+  "sistema para gimnasios Santo Domingo",
+  "sistema para gimnasios Santiago",
+  "software de logística República Dominicana",
+  "sistema de gestión de almacenes Santo Domingo",
+  "software para clínicas Santo Domingo",
+  "sistema para constructoras República Dominicana",
+  "software inmobiliario Punta Cana",
+  "sistema para tiendas y punto de venta Santo Domingo",
+  // Nivel 5: Alta Intención Transaccional
+  "cotizar sistema empresarial",
+  "contratar desarrollador de software Santo Domingo",
+  "crear sistema para mi negocio República Dominicana",
+  "desarrollo de software a medida Santo Domingo",
+] as const;
+
+export const SEO_KEYWORDS_EN = [
+  "Jean Marte",
+  "Jean Marte software developer",
+  "software developer Santo Domingo",
+  "software engineer Dominican Republic",
+  "custom software development Santo Domingo",
+  "business systems developer Dominican Republic",
+  "restaurant management software Dominican Republic",
+  "hotel booking system Punta Cana",
+  "gym management software Dominican Republic",
+  "logistics software Dominican Republic",
+  "custom web systems Santo Domingo",
+  "hire software developer Dominican Republic",
+] as const;

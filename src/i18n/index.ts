@@ -135,7 +135,7 @@ const shared = {
     email: "jeanmarte22@gmail.com",
   },
   footer: {
-    name: "Jean Marco",
+    name: "Jean Marte",
   },
   socials: [
     { label: "LinkedIn", href: "https://www.linkedin.com/in/jean-marte-a6b070178/", icon: "linkedin" as const },

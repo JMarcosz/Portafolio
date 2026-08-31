@@ -1,12 +1,24 @@
 {
-  "name": "Jean Marco Marte — Ingeniero de Software",
-  "short_name": "Jean Marco",
-  "description": "Portafolio profesional de Jean Marco Marte, Ingeniero de Software Full Stack.",
+  "name": "Jean Marte — Desarrollo de Software y Sistemas Empresariales",
+  "short_name": "Jean Marte",
+  "description": "Portafolio profesional de Jean Marte (Jean Marco Marte), Ingeniero de Software Full Stack.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#050505",
   "theme_color": "#050505",
   "icons": [
+    {
+      "src": "/favicon-48x48.png",
+      "sizes": "48x48",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
     {
       "src": "/icon-192.png",
       "sizes": "192x192",

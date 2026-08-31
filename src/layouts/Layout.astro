@@ -5,6 +5,7 @@ import "../styles/scroll-engine.css";
 // fuente recién se descubre al parsear el CSS, provocando FOUT en la primera pintura.
 import interLatin from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url";
 import { getContent, normalizeLocale } from "../i18n";
+import { BRAND_VARIANTS, KNOWS_ABOUT_LIST, SEO_KEYWORDS_ES, SEO_KEYWORDS_EN } from "../i18n/keywords";
 
 interface Props {
   image?: string;
@@ -32,6 +33,7 @@ interface Props {
 
 const locale = normalizeLocale(Astro.currentLocale);
 const t = getContent(locale);
+const keywords = locale === "en" ? SEO_KEYWORDS_EN.join(", ") : SEO_KEYWORDS_ES.join(", ");
 
 const {
   image = "/og-image.jpg",
@@ -57,10 +59,14 @@ const enURL = new URL(enHref, Astro.site);
 const personSchema = {
   "@context": "https://schema.org",
   "@type": "Person",
-  name: "Jean Marco Marte",
+  name: "Jean Marte",
+  alternateName: BRAND_VARIANTS.filter((n) => n !== "Jean Marte"),
+  givenName: "Jean Marco",
+  familyName: "Marte",
   jobTitle: t.meta.jobTitle,
   url: Astro.site?.toString(),
-  image: ogImageURL.toString(),
+  image: `${Astro.site}logo-web.png`,
+  logo: `${Astro.site}logo-web.png`,
   email: "mailto:jeanmarte22@gmail.com",
   address: { "@type": "PostalAddress", addressCountry: "DO" },
   sameAs: [
@@ -72,18 +78,7 @@ const personSchema = {
     { "@type": "CollegeOrUniversity", name: "Universidad Domínico Americana (UNICDA)" },
     { "@type": "CollegeOrUniversity", name: "Instituto Tecnológico de las Américas (ITLA)" },
   ],
-  knowsAbout: [
-    "Angular",
-    "Vue.js",
-    "Nuxt.js",
-    "React",
-    "Next.js",
-    "TypeScript",
-    "Node.js",
-    ".NET",
-    "Laravel",
-    "Docker",
-  ],
+  knowsAbout: KNOWS_ABOUT_LIST,
 };
 ---
 
@@ -93,9 +88,14 @@ const personSchema = {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Favicon + íconos de app: generados desde la foto real con scripts/generate-assets.mjs -->
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <!-- Favicon + íconos de Google Search y PWA: generados desde logo-web.jpeg -->
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="144x144" href="/favicon-144x144.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#050505" />
 
@@ -116,7 +116,8 @@ const personSchema = {
 
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="author" content="Jean Marco Marte" />
+    <meta name="keywords" content={keywords} />
+    <meta name="author" content="Jean Marte (Jean Marco Marte)" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href={canonicalURL} />
     <link rel="alternate" hreflang="es" href={esURL} />
@@ -126,7 +127,7 @@ const personSchema = {
     <!-- Open Graph -->
     <meta property="og:type" content={ogType} />
     <meta property="og:url" content={canonicalURL} />
-    <meta property="og:site_name" content="Jean Marco Marte" />
+    <meta property="og:site_name" content="Jean Marte" />
     <meta property="og:locale" content={t.meta.localeOg} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -136,6 +137,7 @@ const personSchema = {
     <meta property="og:image:alt" content={t.meta.ogAlt} />
     {ogType === "profile" && <meta property="profile:first_name" content="Jean Marco" />}
     {ogType === "profile" && <meta property="profile:last_name" content="Marte" />}
+    {ogType === "profile" && <meta property="profile:username" content="jeanmarte" />}
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />

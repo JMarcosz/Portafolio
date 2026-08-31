@@ -1,5 +1,6 @@
 ---
 import { getContent, normalizeLocale } from "../i18n";
+import { GEOGRAPHIC_AREAS, BRAND_VARIANTS, SECTOR_SERVICES } from "../i18n/keywords";
 import Layout from "../layouts/Layout.astro";
 import Header from "./Header.astro";
 import Hero from "./Hero.astro";
@@ -38,7 +39,8 @@ const faqSchema = {
 const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "Jean Marco Marte",
+  name: "Jean Marte — Desarrollo de Software y Sistemas Empresariales",
+  alternateName: ["Jean Marte", "Jean Marte - Desarrollo Web", "Jean Marco Marte", "Jean Marte Software RD"],
   url: `${site}/`,
   inLanguage: locale === "en" ? "en-US" : "es-DO",
 };
@@ -48,21 +50,38 @@ const websiteSchema = {
 const serviceSchema = {
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
-  name: "Jean Marco Marte — Desarrollo de software a medida",
+  name: "Jean Marte — Desarrollo de Software y Sistemas Empresariales",
+  alternateName: ["Jean Marte - Desarrollo Web", "Jean Marco Marte", "Jean Marte Software RD"],
   description: t.meta.description,
   url: `${site}${t.home}`,
-  image: `${site}/og-image.jpg`,
+  image: `${site}/logo-web.png`,
+  logo: `${site}/logo-web.png`,
   email: "mailto:jeanmarte22@gmail.com",
-  address: { "@type": "PostalAddress", addressCountry: "DO" },
-  areaServed: { "@type": "Country", name: "República Dominicana" },
-  provider: { "@type": "Person", name: "Jean Marco Marte" },
+  address: { "@type": "PostalAddress", addressCountry: "DO", addressLocality: "Santo Domingo" },
+  areaServed: GEOGRAPHIC_AREAS,
+  provider: {
+    "@type": "Person",
+    name: "Jean Marte",
+    alternateName: ["Jean Marte - Desarrollo Web", "Jean Marco Marte", "Jean Marco"],
+  },
   hasOfferCatalog: {
     "@type": "OfferCatalog",
-    name: t.services.heading2,
-    itemListElement: t.services.items.map((item) => ({
-      "@type": "Offer",
-      itemOffered: { "@type": "Service", name: item.title, description: item.description },
-    })),
+    name: "Servicios de Desarrollo de Software y Sistemas a Medida",
+    itemListElement: [
+      ...t.services.items.map((item) => ({
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: item.title, description: item.description },
+      })),
+      ...SECTOR_SERVICES.map((sector) => ({
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: sector.name,
+          description: sector.description,
+          serviceType: sector.niche,
+        },
+      })),
+    ],
   },
 };
 ---

@@ -9,7 +9,7 @@ import { getContent } from "../i18n";
 const t = getContent("es");
 ---
 
-<Layout title="Página no encontrada | Jean Marco Marte" description="La página que buscas no existe.">
+<Layout title="Página no encontrada | Jean Marte" description="La página que buscas no existe.">
   <Header />
   <main id="contenido" tabindex="-1" class="mx-auto flex min-h-[70vh] max-w-3xl flex-col justify-center px-6 py-32">
     <p class="eyebrow mb-4">Error 404</p>
@@ -20,7 +20,7 @@ const t = getContent("es");
     <div class="mt-8 flex flex-wrap gap-3">
       <a href={t.home} class="btn-primary">Volver al inicio</a>
       <a
-        href={`${t.home}#proyectos`}
+        href={t.home}
         class="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-sm font-semibold text-white/80 transition-colors hover:border-white/30 hover:text-white"
       >
         Ver proyectos

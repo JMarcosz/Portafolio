@@ -10,37 +10,18 @@ import { fileURLToPath } from "node:url";
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = path.join(ROOT, "..", "public");
 const PHOTO = path.join(PUBLIC_DIR, "foto_personal.webp");
+const LOGO = path.join(PUBLIC_DIR, "logo-web.jpeg");
 
 const BG = "#050505";
 const INK = "#f2f1ec";
 const INK_DIM = "rgba(242,241,236,0.55)";
 
-function circleMaskSvg(size) {
-  return Buffer.from(
-    `<svg width="${size}" height="${size}"><circle cx="${size / 2}" cy="${size / 2}" r="${size / 2}" fill="#fff"/></svg>`
-  );
-}
+// ---------- favicon + apple-touch-icon + PWA icons (desde logo-web.jpeg) ----------
 
-/** Foto recortada a círculo, a `size`x`size` px, lista para componer. */
-async function circularPhoto(size) {
-  const resized = await sharp(PHOTO).resize(size, size, { fit: "cover" }).toBuffer();
-  return sharp(resized)
-    .composite([{ input: circleMaskSvg(size), blend: "dest-in" }])
-    .png()
-    .toBuffer();
-}
-
-// ---------- favicon + apple-touch-icon + PWA icons (todos circulares, foto real) ----------
-
-async function buildIcon(size, outFile, { padding = 0 } = {}) {
-  const photoSize = size - padding * 2;
-  const photo = await circularPhoto(photoSize);
-
-  await sharp({
-    create: { width: size, height: size, channels: 4, background: BG },
-  })
-    .composite([{ input: photo, left: padding, top: padding }])
-    .png()
+async function buildLogoIcon(size, outFile) {
+  await sharp(LOGO)
+    .resize(size, size, { fit: "contain" })
+    .png({ quality: 100 })
     .toFile(path.join(PUBLIC_DIR, outFile));
 
   console.log(`✓ ${outFile} (${size}x${size})`);
@@ -109,14 +90,16 @@ async function buildOgImage() {
 
 async function buildManifest() {
   const manifest = {
-    name: "Jean Marco Marte — Ingeniero de Software",
-    short_name: "Jean Marco",
-    description: "Portafolio profesional de Jean Marco Marte, Ingeniero de Software Full Stack.",
+    name: "Jean Marte — Desarrollo de Software y Sistemas Empresariales",
+    short_name: "Jean Marte",
+    description: "Portafolio profesional de Jean Marte (Jean Marco Marte), Ingeniero de Software Full Stack.",
     start_url: "/",
     display: "standalone",
     background_color: BG,
     theme_color: BG,
     icons: [
+      { src: "/favicon-48x48.png", sizes: "48x48", type: "image/png", purpose: "any" },
+      { src: "/favicon-96x96.png", sizes: "96x96", type: "image/png", purpose: "any" },
       { src: "/icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
       { src: "/icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },
     ],
@@ -125,9 +108,12 @@ async function buildManifest() {
   console.log("✓ site.webmanifest");
 }
 
-await buildIcon(64, "favicon.png");
-await buildIcon(180, "apple-touch-icon.png");
-await buildIcon(192, "icon-192.png");
-await buildIcon(512, "icon-512.png");
+await buildLogoIcon(48, "favicon-48x48.png");
+await buildLogoIcon(96, "favicon-96x96.png");
+await buildLogoIcon(144, "favicon-144x144.png");
+await buildLogoIcon(96, "favicon.png");
+await buildLogoIcon(180, "apple-touch-icon.png");
+await buildLogoIcon(192, "icon-192.png");
+await buildLogoIcon(512, "icon-512.png");
 await buildOgImage();
 await buildManifest();
