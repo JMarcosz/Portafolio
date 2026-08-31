@@ -6,6 +6,7 @@ import "../styles/scroll-engine.css";
 import interLatin from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url";
 import { getContent, normalizeLocale } from "../i18n";
 import { BRAND_VARIANTS, KNOWS_ABOUT_LIST, SEO_KEYWORDS_ES, SEO_KEYWORDS_EN } from "../i18n/keywords";
+import Analytics from "@vercel/analytics/astro";
 
 interface Props {
   image?: string;
@@ -221,5 +222,6 @@ const personSchema = {
           .to(mark, { opacity: 0, duration: 0.2, ease: "power2.out" }, "open");
       }
     </script>
+    <Analytics />
   </body>
 </html>
