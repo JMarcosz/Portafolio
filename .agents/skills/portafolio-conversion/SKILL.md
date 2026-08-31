@@ -1,0 +1,329 @@
+---
+name: portafolio-conversion
+description: Reestructura o audita un portafolio de desarrollador para que reduzca el miedo del cliente a contratar, en vez de demostrar habilidad técnica. Úsala al redactar hero, cards de proyecto, casos de estudio, sección "Cómo trabajo", FAQ de objeciones, testimonios o al decidir la jerarquía del sitio.
+---
+
+# Portafolio orientado a conversión
+
+## Purpose
+
+Convertir un portafolio de desarrollador estructurado como **galería técnica** en uno estructurado como **instrumento de venta**.
+
+El problema que resuelve: un portafolio que lista stack y proyectos bonitos es comercialmente inútil porque no responde las tres preguntas que un cliente se hace realmente:
+
+1. ¿Este tipo entiende mi problema?
+2. ¿Puede hacerlo?
+3. ¿Voy a perder mi dinero?
+
+Premisa rectora, no negociable: **el portafolio no existe para demostrar que sabes programar; existe para reducir el miedo del cliente a contratarte.**
+
+## When to use
+
+**Activar cuando** se pida:
+- Escribir o reescribir el hero / headline / CTA principal de un portafolio.
+- Redactar o reordenar cards de proyecto, o crear páginas de caso de estudio.
+- Decidir qué secciones lleva el portafolio y en qué orden.
+- Redactar secciones "Sobre mí", "Cómo trabajo", FAQ, testimonios.
+- Auditar un portafolio existente y decir qué está mal comercialmente.
+- Decidir cuántos proyectos mostrar o cómo evitar saturar la home.
+
+**No activar cuando** se trate de:
+- Implementación técnica sin decisión de contenido (bugs, build, deploy, estilos, animaciones, i18n como mecanismo).
+- Portafolios cuyo público objetivo declarado sean **reclutadores técnicos o entrevistas de empleo**. Esta Skill optimiza para *cliente que compra un sistema*, no para *empresa que contrata un empleado*. Si el objetivo es empleo, decláralo y detente.
+- CVs, cartas de presentación o perfiles de LinkedIn.
+
+## Inputs
+
+**Requeridos**
+| Input | Descripción |
+|---|---|
+| `objetivo` | Confirmación de que el público objetivo es cliente/negocio, no reclutador. |
+| `proyectos` | Para cada proyecto: nombre, problema real del cliente, qué se construyó, participación del autor, stack, resultado verificable, URL de demo. |
+
+**Opcionales**
+| Input | Descripción |
+|---|---|
+| `sitio_actual` | URL o código fuente del portafolio a auditar. |
+| `servicios_reales` | Qué ofrece realmente el autor (entrega de código, revisiones, mantenimiento). Necesario para la FAQ. |
+| `testimonios` | Testimonios reales y verificables, con nombre y negocio. |
+| `experiencia` / `formacion` | Para las secciones de respaldo. |
+| `agendado` | Herramienta/URL de reserva de cita para el CTA principal. |
+| `idioma` | Idioma canónico del copy. |
+
+## Workflow
+
+Ejecutar en orden. No saltar pasos.
+
+### Paso 1 — Clasificar el público
+Confirmar que el objetivo es cliente/negocio. Si es reclutador o empleo → detener (ver *Decision Rules*).
+
+### Paso 2 — Hero (regla de los 5 segundos)
+Construir el bloque visible sin scroll con esta estructura:
+
+```
+[Titular de capacidad orientada a resultado de negocio]
+[Subtítulo: qué problema resuelve, en lenguaje del cliente]
+[CTA primario: reservar/agendar]
+```
+
+Reglas del titular:
+- **Prohibido** abrir con identidad o rol: `Hi, I'm X, Full Stack Developer` y variantes. Es lo que hacen cien mil programadores; termina siendo uno más.
+- El titular describe **lo que el cliente obtiene**, no lo que el autor es.
+- Patrón validado en la fuente: *"Construyo identidad y sistemas web que te ayudan a venderte mejor, agilizar tus ventas y automatizar tu empresa. Cuéntame tu problema."* + botón de reserva de cita.
+- El CTA debe transmitir agenda ocupada (reservar una cita, no "contáctame").
+- Tope duro: el bloque completo ≤ 60 palabras. Si el cliente no resuelve su duda en los primeros segundos, el resto del portafolio no se lee.
+
+### Paso 3 — Traducir capacidades a problemas
+Reescribir toda descripción técnica como problema de negocio.
+
+| Prohibido | Obligatorio |
+|---|---|
+| "Te desarrollo una aplicación full stack" | "Sistemas internos para administrar clientes, datos, inventarios y reservas desde un solo lugar, fácil y sencillo" |
+
+- Usar "fácil y sencillo" y equivalentes: no degradan al autor, comunican que el producto resuelve el problema sin complicaciones ni exceso de botones.
+- Nunca vender una solución a un problema que el cliente no entiende que tiene.
+
+### Paso 4 — Verificar los 6 mensajes
+El portafolio en conjunto debe transmitir, y cada uno debe poder señalarse en una sección concreta:
+
+1. **Sabe lo que hace** → competencia.
+2. **Ya resolvió problemas parecidos** → experiencia relevante.
+3. **No parece improvisado** → profesionalismo.
+4. **Entiende negocios, no sólo código** → valor comercial.
+5. **Es alguien con quien se puede trabajar tranquilo** → confianza.
+6. **El cliente sabe exactamente qué hacer para trabajar contigo** → claridad.
+
+Si algún mensaje no tiene sección asignada, reportarlo como hueco.
+
+### Paso 5 — Home: 3 proyectos destacados
+- Exactamente **3**, máximo 4. No 10. Tratar todos los trabajos como igual de importantes es un error: quedarse sólo con los mejores.
+- Card = **sólo** esto:
+
+```
+[Media: video del sistema en uso > captura espectacular]
+Sistema de gestión para restaurantes
+Plataforma para centralizar pedidos, mesas, empleados y ventas.
+Next.js · PostgreSQL · Node.js
+Ver caso de estudio →
+```
+- Nada más en la card. La media debe dejar intriga.
+- Justo antes de cambiar de sección: enlace a la galería completa ("Descubre mis proyectos" / "See my projects").
+
+### Paso 6 — Caso de estudio por proyecto
+Una página por proyecto en `/projects/<slug>`, con este orden exacto:
+
+```
+Problema → Contexto → Solución → Funcionalidades →
+Decisiones técnicas → Stack → Dificultades → Resultado → Demo
+```
+
+Redacción de cada bloque (patrón de la fuente):
+- **Problema**: cómo operaba el cliente antes y qué dolía. *"El restaurante administraba mesas, pedidos y empleados mediante procesos separados, haciendo complicada la visualización operativa."*
+- **Solución**: qué se centralizó, en lista corta (Mesas, Inventario, Ventas, Reportes, Cierres, Pedidos).
+- **Mi participación**: qué hizo el autor exactamente (arquitectura, UX/UI, frontend, backend, base de datos, despliegue).
+- **Decisiones técnicas**: comentarios que demuestran criterio, no herramientas. *"Elegí PostgreSQL porque el sistema requería relaciones consistentes entre reservas, clientes y pagos."* Mostrar que se sabe **pensar** vale más que listar tecnologías.
+- **Stack**: siempre **después** del resultado o de la decisión, nunca antes. Si vendes herramientas primero y capacidad después, el cliente lee "primero me vende herramientas".
+- **Resultado**: ver *Rules & Constraints* sobre métricas.
+- **Demo**: enlace funcional, en producción. La demo es mejor prueba que cualquier screenshot.
+
+Los dos niveles resultantes:
+- **Home**: "Mira de lo que soy capaz." → ofreces la opción.
+- **Caso de estudio**: "Déjame demostrarte que sé lo que estoy haciendo." → te vendes.
+
+### Paso 7 — Sección "Cómo trabajo"
+Reduce incertidumbre. Seis pasos, texto base:
+
+1. **Descubrimiento** — Entiendo el problema, los usuarios y qué necesidad produce el sistema.
+2. **Arquitectura** — Defino funcionalidades, tecnología y estructura, documentando todo para mayor comprensión del cliente.
+3. **Desarrollo** — Construyo por etapas, manteniendo comunicación en todo momento.
+4. **Testing** — Pruebas, responsividad, seguridad y performance.
+5. **Lanzamiento** — Deployment y configuración final.
+6. **Soporte** — Mantenimiento y monitoreo, con mejoras de ser necesario.
+
+Adaptar la redacción sólo si contradice el proceso real del autor; en ese caso preguntar antes.
+
+### Paso 8 — FAQ de objeciones
+Preguntas **predeterminadas** con respuesta ya escrita. El cliente no escribe nada; se le anticipan las dudas. Set base:
+
+| Objeción | Respuesta base |
+|---|---|
+| ¿Desaparecerás después de pagar? | Recibes avances durante el desarrollo y acceso continuo al progreso. |
+| ¿Qué pasa si necesito cambios? | El alcance y las revisiones se definen antes de comenzar. |
+| ¿Seré dueño del sistema? | Al finalizar el proyecto recibes acceso total al código, cuentas y recursos acordados. Todo se planifica antes de empezar, y tras el lanzamiento se ofrece mantenimiento y evolución del sistema. |
+| No entiendo de programación. | No necesitas conocimientos técnicos: las decisiones se explican desde el impacto en tu negocio. |
+
+**Bloqueo obligatorio**: estas respuestas son compromisos comerciales. No publicarlas sin confirmar con el autor que ofrece realmente cada una.
+
+### Paso 9 — Testimonios
+- **Prohibido**: "Excelente trabajo, 5 estrellas". No ayuda en nada.
+- **Obligatorio**: nombre + negocio + situación anterior + qué se construyó + qué cambió. Ejemplo estructural: *"María, de [negocio]: antes llevábamos las mesas reservadas manualmente. Jean me hizo un sistema donde podemos visualizar clientes, disponibilidad, armar el menú y cobrar en el registro."*
+- Los testimonios específicos son los que más resuelven dudas y orientan sobre la manera de trabajar del autor.
+- Sólo testimonios reales y verificables (ver *Rules & Constraints*).
+
+### Paso 10 — Jerarquía global
+Orden fijo de arriba hacia abajo:
+
+```
+Proyectos reales → Experiencia relevante → Habilidades → Formación / Certificaciones
+```
+
+- Omitir cualquier experiencia laboral que no tenga que ver con el perfil que se quiere vender. No se rellena espacio.
+- Cuando el visitante llegue a estudios o certificaciones ya debe estar pensando "este tipo sabe construir"; esa sección sólo lo confirma.
+
+### Paso 11 — Auditoría de valor por scroll
+Recorrer el sitio de arriba a abajo. Por cada sección responder: *¿qué duda del cliente resuelve esto?*
+- Si una sección no resuelve ninguna → marcar para eliminar o mover.
+- El problema nunca es que el usuario tenga que hacer scroll; el problema es que durante ese scroll no encuentre valor suficiente para justificar seguir bajando.
+
+## Decision Rules
+
+| Condición | Acción |
+|---|---|
+| Público objetivo = reclutador/empleo | Detener. Declarar que esta Skill optimiza para cliente comprador y pedir confirmación de objetivo. |
+| Hay más de 4 proyectos disponibles | Mostrar los 3 mejores en Home; el resto va a la galería `/projects`. |
+| Un proyecto no tiene demo en producción | Va a la galería, no al Home. Si igual se destaca, sustituir la demo por video del sistema en uso y declarar la ausencia. |
+| No existe métrica numérica verificable | Usar resultado cualitativo factual (ver *Rules*). Nunca inventar el número. |
+| Experiencia laboral no relacionada con el perfil | Omitirla. |
+| El sitio actual muestra cards con sólo título + stack + "View project" | Marcarlo como defecto crítico: bonito pero comercialmente inútil. Reescribir con el patrón del Paso 5-6. |
+| El hero empieza por identidad o rol | Defecto crítico. Reescribir según Paso 2. |
+| Stack aparece antes que el resultado | Defecto. Reordenar. |
+| Falta `servicios_reales` | Generar la FAQ marcada como BORRADOR NO PUBLICABLE y pedir confirmación. |
+| Falta `agendado` | Dejar el CTA con placeholder explícito `[URL de agendado pendiente]`. No inventar herramienta. |
+| Falta `idioma` | Usar el idioma predominante del sitio actual; si hay ES y EN, producir el copy en ambos y señalarlo. |
+| Se pide "más contenido en la home" | Rechazar y proponer moverlo al caso de estudio. La home no se satura. |
+
+## Rules & Constraints
+
+1. **No se inventan resultados.** Si no se puede afirmar "aumentó las ventas un 37%", no se pone. Sustituto correcto: *"El sistema reemplazó 4 procesos manuales, agilizando ventas."* Los resultados cualitativos válidos son hechos observables: procesos reemplazados, operación centralizada, mayor agilidad, reducción de errores operativos.
+2. **No se inventan testimonios, clientes, negocios ni citas.** Si no hay testimonios reales, se omite la sección y se reporta como pendiente.
+3. **No se inventan compromisos comerciales** (garantías, plazos, entrega de código, mantenimiento, precios) sin confirmación del autor.
+4. **No se inventan tecnologías** que el proyecto no use, ni participación que el autor no tuvo.
+5. **Resultado antes que tecnología**, siempre.
+6. **Máximo 3 proyectos en Home** (4 excepcional).
+7. **Jerga técnica prohibida en Home y hero.** Los nombres de tecnología sólo aparecen como etiquetas en la card y en el bloque Stack del caso de estudio.
+8. **Toda sección debe resolver una duda del cliente** o no existe.
+9. **Demo por encima de screenshot** como prueba; media (video > imagen) sólo como gancho en la card.
+10. No copiar ni imitar contenido de sitios de terceros mencionados como referencia.
+
+## Error Handling
+
+| Situación | Qué hace el agente |
+|---|---|
+| Falta el problema real de un proyecto | No inventarlo. Emitir `[PENDIENTE: problema real del cliente]` en el borrador y listarlo en *Pendientes*. |
+| Falta el resultado | Emitir `[PENDIENTE: resultado verificable — no inventar métrica]`. |
+| El usuario aporta una métrica sin fuente | Preguntar de dónde sale. Si no hay fuente, convertirla en resultado cualitativo. |
+| Proyecto sin demo ni media | Se puede publicar en galería con descripción; no en Home. |
+| Datos insuficientes para 3 proyectos | Producir los que haya, declarar cuántos faltan y no rellenar con proyectos débiles. |
+| Contradicción entre lo pedido y estas reglas | Enunciar la regla en una frase, entregar la versión conforme y, si el usuario reafirma, entregar también su versión marcando el riesgo. |
+| El usuario pide "hazlo con IA / psicología de venta" para el About | Redactarlo aplicando los mismos principios (problema del cliente, confianza, claridad). No externalizar la tarea. |
+| Resultado parcial | Entregar lo completado, listar explícitamente qué quedó fuera y por qué. |
+
+## Validation
+
+Antes de dar por terminada la tarea, verificar y reportar cada punto:
+
+- [ ] El hero no empieza por rol ni identidad y cabe en ≤60 palabras.
+- [ ] Existe un CTA de reserva de cita visible sin scroll.
+- [ ] Home tiene entre 1 y 4 proyectos, nunca más.
+- [ ] Cada card tiene exactamente: media, título, una línea de valor, hasta 3 tecnologías, CTA a caso de estudio.
+- [ ] Cada caso de estudio sigue el orden Problema → Contexto → Solución → Funcionalidades → Decisiones técnicas → Stack → Dificultades → Resultado → Demo.
+- [ ] En ningún bloque el stack aparece antes que el resultado.
+- [ ] Cada proyecto destacado tiene demo funcional enlazada.
+- [ ] Hay al menos una decisión técnica justificada por proyecto.
+- [ ] Cero métricas numéricas sin fuente. Búsqueda explícita de `%` y cifras para confirmarlo.
+- [ ] Existe sección "Cómo trabajo" con los 6 pasos.
+- [ ] Existe FAQ con al menos las 4 objeciones base, confirmadas contra los servicios reales.
+- [ ] Testimonios, si existen, son específicos y verificables; ninguno genérico.
+- [ ] Orden global: proyectos → experiencia → habilidades → formación.
+- [ ] Ninguna experiencia irrelevante presente.
+- [ ] Los 6 mensajes tienen sección asignada.
+- [ ] Cada sección respondió la pregunta "¿qué duda resuelve?".
+
+Si algún punto falla, no declarar la tarea terminada: reportar el fallo.
+
+## Output
+
+Entregar siempre en este formato:
+
+```markdown
+## Diagnóstico
+[Sólo en auditorías: defectos encontrados, cada uno con la regla que viola. Críticos primero.]
+
+## Estructura propuesta
+[Lista ordenada de secciones y qué duda del cliente resuelve cada una.]
+
+## Copy
+### Hero
+### Cards destacadas (3)
+### Casos de estudio
+### Cómo trabajo
+### FAQ
+### Testimonios
+### Experiencia / Habilidades / Formación
+
+## Pendientes
+[Datos faltantes marcados con [PENDIENTE: ...] y qué debe aportar el autor.]
+
+## Checklist de validación
+[Los ítems de Validation con su estado.]
+```
+
+Reglas de salida:
+- Copy listo para pegar, no descripciones de lo que habría que escribir.
+- Marcar con `[PENDIENTE: ...]` todo lo que dependa de datos que el autor no dio.
+- No entregar la Skill como "terminada" si hay pendientes bloqueantes (FAQ sin confirmar, métricas sin fuente).
+
+## Examples
+
+### Ejemplo 1 — Reescritura de card
+
+**Entrada (defectuosa)**
+```
+Restaurante Dashboard
+Tecnologías: React • Node • Mongo • Tailwind
+View project →
+```
+
+**Salida**
+```
+[video: panel de mesas en uso]
+Sistema de gestión para restaurantes
+Plataforma para centralizar pedidos, mesas, empleados y ventas.
+Next.js · PostgreSQL · Node.js
+Ver caso de estudio →
+```
+*Regla aplicada: la card sólo insinúa; el detalle vive en `/projects/restaurant-management`.*
+
+### Ejemplo 2 — Resultado sin métrica
+
+**Entrada**: "Quiero poner que subió las ventas un 40%."
+**Comprobación**: ¿de dónde sale el 40%? — "no lo sé, es aproximado."
+**Salida**: `Resultado: el sistema reemplazó 4 procesos manuales, centralizando la operación y reduciendo errores operativos.`
+*Regla 1: no se inventan resultados.*
+
+### Ejemplo 3 — Hero
+
+**Entrada**: `Hi, I'm Jean. Soy Full Stack Developer.`
+**Salida**:
+```
+Construyo identidad y sistemas web que te ayudan a venderte mejor,
+agilizar tus ventas y automatizar tu empresa.
+
+Cuéntame tu problema.
+[ Reservar una cita ]
+```
+*Regla: el titular describe lo que el cliente obtiene.*
+
+### Ejemplo 4 — Petición que viola una regla
+
+**Entrada**: "Pon los 10 proyectos en el home."
+**Salida**: "Eso trata los 10 trabajos como si tuvieran la misma importancia. Propongo 3 en Home + galería completa en `/projects`. Aquí está esa versión: […]. Si prefieres los 10, dímelo y lo hago, señalando que diluye los destacados."
+
+## Supuestos declarados
+
+Estos puntos no estaban resueltos en la fuente y se fijaron para hacer la Skill ejecutable. Revisables por el autor:
+
+1. **Un solo sitio**, no uno de CV y otro de venta: la jerarquía única (proyectos → experiencia → habilidades → formación) resuelve ambos usos.
+2. **Demo vs. captura**: media como gancho en la card, demo funcional como prueba en el caso de estudio.
+3. **Regla de los 5 segundos**: operacionalizada como tope de 60 palabras en el bloque sin scroll.
+4. **Formación y experiencia** viven al final del Home como respaldo, no en página aparte.

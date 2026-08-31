@@ -33,9 +33,9 @@ const LEVEL_WIDTH: Record<string, number> = { advanced: 100, solid: 72, daily: 8
             >
               <div>
                 <h3 class="text-base font-semibold">{cat.title}</h3>
-                <p class="mt-1 text-xs text-white/55">{cat.description}</p>
+                <p class="mt-1 text-xs text-white">{cat.description}</p>
               </div>
-              <span class="flex shrink-0 items-center gap-3 text-xs text-white/55">
+              <span class="flex shrink-0 items-center gap-3 text-xs text-white">
                 [ {cat.index} ]
                 <svg class="skill-chevron h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                   <path d="M6 9l6 6 6-6" />
@@ -58,8 +58,8 @@ const LEVEL_WIDTH: Record<string, number> = { advanced: 100, solid: 72, daily: 8
                   {cat.skills.map((skill) => (
                     <div>
                       <div class="mb-2 flex items-center justify-between text-xs">
-                        <span class="text-white/70">{skill.label}</span>
-                        <span class="text-white/55">{skills.levels[skill.level as keyof typeof skills.levels]}</span>
+                        <span class="text-white">{skill.label}</span>
+                        <span class="text-white">{skills.levels[skill.level as keyof typeof skills.levels]}</span>
                       </div>
                       {/* El nivel ya está ahí arriba como texto: la barra es
                           decoración y no necesita rol propio. */}

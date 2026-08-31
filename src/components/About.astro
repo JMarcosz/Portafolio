@@ -8,12 +8,12 @@ const { about } = getContent(Astro.currentLocale);
     <div>
       <p class="eyebrow mb-4">{about.eyebrow}</p>
       <h2 id="sobre-mi-title" data-about-heading class="text-4xl font-bold tracking-tight">
-        <span class="block text-white/90">{about.title1}</span>
+        <span class="block text-white">{about.title1}</span>
         <span class="block font-extrabold">{about.title2}</span>
       </h2>
     </div>
 
-    <div data-about-copy class="space-y-4 text-sm leading-relaxed text-white/50">
+    <div data-about-copy class="space-y-4 text-sm leading-relaxed text-white">
       {about.paragraphs.map((p) => <p>{p}</p>)}
       <p>
         {about.highlightIntro}<span data-about-highlight class="font-semibold text-white">{about.highlight}</span>{about.paragraphAfterHighlight}
@@ -37,7 +37,7 @@ const { about } = getContent(Astro.currentLocale);
             ) : (
               <p class="text-3xl font-bold tracking-tight">{stat.value}</p>
             )}
-            <p class="mt-1 text-[11px] uppercase tracking-wider text-white/55">{stat.label}</p>
+            <p class="mt-1 text-[11px] uppercase tracking-wider text-white">{stat.label}</p>
           </div>
         );
       })

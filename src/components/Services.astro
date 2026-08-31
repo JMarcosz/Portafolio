@@ -9,15 +9,15 @@ const { services } = getContent(Astro.currentLocale);
     {services.heading1}<br />
     <span class="font-extrabold">{services.heading2}</span>
   </h2>
-  <p class="mt-6 max-w-md text-sm leading-relaxed text-white/50">{services.intro}</p>
+  <p class="mt-6 max-w-md text-sm leading-relaxed text-white">{services.intro}</p>
 
   <div class="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2">
     {
       services.items.map((item, i) => (
         <article data-service-card class="card p-6">
-          <span class="text-xs text-white/55">[ {String(i + 1).padStart(2, "0")} ]</span>
+          <span class="text-xs text-white">[ {String(i + 1).padStart(2, "0")} ]</span>
           <h3 class="mt-3 text-base font-semibold">{item.title}</h3>
-          <p class="mt-2 text-sm leading-relaxed text-white/50">{item.description}</p>
+          <p class="mt-2 text-sm leading-relaxed text-white">{item.description}</p>
         </article>
       ))
     }

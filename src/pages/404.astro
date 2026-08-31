@@ -13,15 +13,15 @@ const t = getContent("es");
   <Header />
   <main id="contenido" tabindex="-1" class="mx-auto flex min-h-[70vh] max-w-3xl flex-col justify-center px-6 py-32">
     <p class="eyebrow mb-4">Error 404</p>
-    <h1 class="text-4xl font-bold tracking-tight md:text-5xl">Esta página no existe</h1>
-    <p class="mt-4 max-w-md text-sm leading-relaxed text-white/55">
+    <h1 class="text-4xl font-bold tracking-tight md:text-5xl text-white">Esta página no existe</h1>
+    <p class="mt-4 max-w-md text-sm leading-relaxed text-white">
       El enlace que seguiste está roto o la página cambió de dirección. Desde el inicio podés llegar a todo lo demás.
     </p>
     <div class="mt-8 flex flex-wrap gap-3">
       <a href={t.home} class="btn-primary">Volver al inicio</a>
       <a
         href={t.home}
-        class="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-sm font-semibold text-white/80 transition-colors hover:border-white/30 hover:text-white"
+        class="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:border-white/30 hover:bg-white/5"
       >
         Ver proyectos
       </a>

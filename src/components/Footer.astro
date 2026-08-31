@@ -7,12 +7,12 @@ const { footer, home } = getContent(Astro.currentLocale);
   <div class="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-8 sm:flex-row sm:items-center sm:justify-between">
     <div>
       <p class="text-sm font-bold tracking-tight">{footer.name.toUpperCase()}</p>
-      <p class="text-xs text-white/55">{footer.role}</p>
+      <p class="text-xs text-white">{footer.role}</p>
     </div>
-    <a href={`${home}#contacto`} class="text-sm text-white/60 hover:text-white">{footer.contact}</a>
+    <a href={`${home}#contacto`} class="text-sm text-white hover:underline">{footer.contact}</a>
   </div>
   <div class="border-t border-white/5">
-    <div class="mx-auto max-w-6xl px-6 py-4 text-[11px] text-white/55">
+    <div class="mx-auto max-w-6xl px-6 py-4 text-[11px] text-white">
       © {footer.year} Ing. {footer.name}. {footer.rights}
     </div>
   </div>
