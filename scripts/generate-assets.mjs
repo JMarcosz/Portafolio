@@ -86,28 +86,6 @@ async function buildOgImage() {
   console.log(`✓ og-image.jpg (${size}x${size})`);
 }
 
-// ---------- manifest ----------
-
-async function buildManifest() {
-  const manifest = {
-    name: "Jean Marte — Desarrollo de Software y Sistemas Empresariales",
-    short_name: "Jean Marte",
-    description: "Portafolio profesional de Jean Marte (Jean Marco Marte), Ingeniero de Software Full Stack.",
-    start_url: "/",
-    display: "standalone",
-    background_color: BG,
-    theme_color: BG,
-    icons: [
-      { src: "/favicon-48x48.png", sizes: "48x48", type: "image/png", purpose: "any" },
-      { src: "/favicon-96x96.png", sizes: "96x96", type: "image/png", purpose: "any" },
-      { src: "/icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
-      { src: "/icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },
-    ],
-  };
-  await writeFile(path.join(PUBLIC_DIR, "site.webmanifest"), JSON.stringify(manifest, null, 2));
-  console.log("✓ site.webmanifest");
-}
-
 await buildLogoIcon(48, "favicon-48x48.png");
 await buildLogoIcon(96, "favicon-96x96.png");
 await buildLogoIcon(144, "favicon-144x144.png");
@@ -116,4 +94,3 @@ await buildLogoIcon(180, "apple-touch-icon.png");
 await buildLogoIcon(192, "icon-192.png");
 await buildLogoIcon(512, "icon-512.png");
 await buildOgImage();
-await buildManifest();
