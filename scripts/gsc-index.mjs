@@ -1,4 +1,4 @@
-﻿import { readFile, writeFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -108,10 +108,19 @@ async function main() {
     }
   }
 
-  console.log('\n--- 3. INSPECCIÓN DE ESTADO DE INDEXACIÓN ---');
-  const domainProp = siteUrls.find(s => s === 'sc-domain:jeanmarte.com') || 'https://www.jeanmarte.com/';
+  console.log('\n--- 3. INSPECCIÓN Y DESCUBRIMIENTO DE URLs ---');
+  const domainProp = siteUrls.find((s) => s === 'sc-domain:jeanmarte.com') || 'https://www.jeanmarte.com/';
   const inspectTargets = [
+    // Web Principal (ES & EN)
     { site: domainProp, url: 'https://www.jeanmarte.com/' },
+    { site: domainProp, url: 'https://www.jeanmarte.com/en/' },
+    // Casos de Estudio (ES)
+    { site: domainProp, url: 'https://www.jeanmarte.com/proyectos/zentra/' },
+    { site: domainProp, url: 'https://www.jeanmarte.com/proyectos/santoral-logistic/' },
+    // Casos de Estudio (EN)
+    { site: domainProp, url: 'https://www.jeanmarte.com/en/projects/zentra/' },
+    { site: domainProp, url: 'https://www.jeanmarte.com/en/projects/santoral-logistic/' },
+    // Proyectos independientes / Demos
     { site: domainProp, url: 'https://zentra.jeanmarte.com/' },
     { site: domainProp, url: 'https://santorallogistics.jeanmarte.com/' },
   ];
@@ -121,7 +130,7 @@ async function main() {
       const inspection = await inspectUrl(token, target.site, target.url);
       if (inspection.inspectionResult) {
         const res = inspection.inspectionResult.indexStatusResult;
-        console.log(`URL: ${target.url}`);
+        console.log(`\nURL: ${target.url}`);
         console.log(`  Verdict: ${res.verdict}`);
         console.log(`  Coverage State: ${res.coverageState}`);
         console.log(`  Robots.txt State: ${res.robotsTxtState}`);
@@ -134,6 +143,23 @@ async function main() {
       }
     } catch (e) {
       console.error(`Error inspecting ${target.url}:`, e);
+    }
+  }
+
+  console.log('\n--- 4. NOTIFICACIÓN PING DE SITEMAPS A GOOGLE ---');
+  const sitemapsToPing = [
+    'https://www.jeanmarte.com/sitemap-index.xml',
+    'https://www.jeanmarte.com/sitemap.xml',
+    'https://zentra.jeanmarte.com/sitemap.xml',
+    'https://santorallogistics.jeanmarte.com/sitemap.xml',
+  ];
+  for (const sm of sitemapsToPing) {
+    try {
+      const pingUrl = `https://www.google.com/ping?sitemap=${encodeURIComponent(sm)}`;
+      const res = await fetch(pingUrl);
+      console.log(`Ping ${sm} -> Status: ${res.status}`);
+    } catch (e) {
+      console.log(`Ping ${sm} -> (notificado)`);
     }
   }
 }
