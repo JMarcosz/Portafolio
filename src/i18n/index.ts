@@ -138,7 +138,7 @@ const shared = {
     name: "Jean Marte",
   },
   socials: [
-    { label: "LinkedIn", href: "https://www.linkedin.com/in/jean-marte-a6b070178/", icon: "linkedin" as const },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/jean-marco-marte/", icon: "linkedin" as const },
     { label: "Instagram", href: "https://www.instagram.com/jeanwebdesing/", icon: "instagram" as const },
     { label: "WhatsApp", href: `https://wa.me/${WHATSAPP_NUMBER}`, icon: "whatsapp" as const },
     { label: "Email", href: "mailto:jeanmarte22@gmail.com", icon: "email" as const },
