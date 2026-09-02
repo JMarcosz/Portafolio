@@ -30,6 +30,8 @@ interface Props {
   preloadImage?: string;
   /** JSON-LD propio de la página, además del Person que va en todas. */
   extraSchema?: unknown[];
+  /** "index, follow" por defecto; la 404 la pisa con "noindex, follow". */
+  robots?: string;
 }
 
 const locale = normalizeLocale(Astro.currentLocale);
@@ -47,6 +49,7 @@ const {
   ogType = "profile",
   preloadImage,
   extraSchema = [],
+  robots = "index, follow",
 } = Astro.props;
 
 // Astro.site viene de `site` en astro.config.mjs — hace falta para que canonical
@@ -127,7 +130,7 @@ const personSchema = {
     <meta name="description" content={description} />
     <meta name="keywords" content={keywords} />
     <meta name="author" content="Jean Marte (Jean Marco Marte)" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content={robots} />
     <link rel="canonical" href={canonicalURL} />
     <link rel="alternate" hreflang="es" href={esURL} />
     <link rel="alternate" hreflang="en" href={enURL} />

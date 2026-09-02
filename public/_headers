@@ -20,3 +20,11 @@
 # contenido es inmutable y se puede cachear un año.
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
+
+# Imágenes .webp y certificados descargables: no cambian tras publicarse,
+# cachear 30 días evita redescargarlos en cada visita.
+/*.webp
+  Cache-Control: public, max-age=2592000
+
+/Certificados Portafolio/*
+  Cache-Control: public, max-age=2592000

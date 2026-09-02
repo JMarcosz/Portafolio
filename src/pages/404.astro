@@ -9,7 +9,11 @@ import { getContent } from "../i18n";
 const t = getContent("es");
 ---
 
-<Layout title="Página no encontrada | Jean Marte" description="La página que buscas no existe.">
+<Layout
+  title="Página no encontrada | Jean Marte"
+  description="La página que buscas no existe."
+  robots="noindex, follow"
+>
   <Header />
   <main id="contenido" tabindex="-1" class="mx-auto flex min-h-[70vh] max-w-3xl flex-col justify-center px-6 py-32">
     <p class="eyebrow mb-4">Error 404</p>
