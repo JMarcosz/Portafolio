@@ -84,6 +84,14 @@ const shared = {
       imageHeight: 3393,
       thumb: "/santorallogisticsv2-card.webp",
     },
+    "bunu-shop": {
+      link: "https://github.com/JMarcosz/BunuShop",
+      demo: "https://bunushop.store",
+      image: "/bunushop.webp",
+      imageWidth: 1200,
+      imageHeight: 750,
+      thumb: "/bunushop-card.webp",
+    },
   } as Record<
     string,
     { link: string; demo: string; image: string; imageWidth: number; imageHeight: number; thumb: string }

@@ -173,6 +173,65 @@
             "[PENDIENTE: resultado observable en la operación diaria — qué cambió para el equipo]"
           ]
         }
+      },
+      {
+        "slug": "bunu-shop",
+        "badge": "Proyecto de cliente",
+        "title": "Sitio web y posicionamiento en Google",
+        "valueLine": "Una marca que solo existía en Instagram ahora aparece en Google cuando alguien busca su nombre o sus productos.",
+        "tags": ["Astro", "Tailwind", "SEO"],
+        "caseStudy": {
+          "name": "Bunu Shop",
+          "tagline": "Accesorios y joyería artesanal — Colombia",
+          "problema": "Bunu Shop vendía accesorios y joyería hechos a mano únicamente desde una cuenta de Instagram. No tenía sitio web ni presencia en buscadores: cualquier persona que buscara la marca por su nombre en Google no encontraba nada — ni una ficha, ni un enlace, ni un rastro. Para un cliente potencial que buscaba piezas artesanales únicas en Bogotá, Medellín, el resto de Colombia o desde el exterior, la marca era invisible.",
+          "contexto": "Bunu Shop es un negocio de accesorios personalizados y hechos a mano con sede en Gamarra, Cesar, con envíos a toda Colombia e internacionales. Toda su operación comercial y su catálogo vivían dentro de Instagram, una plataforma a la que nadie llega desde una búsqueda en Google. El encargo fue darle a la marca una dirección propia en la web y hacer que apareciera cuando alguien la busca.",
+          "solucion": [
+            "Sitio web propio en bunushop.store",
+            "Catálogo de piezas navegable fuera de Instagram",
+            "Páginas optimizadas para búsquedas de marca y de producto",
+            "Enlace directo a Instagram y a pedidos por WhatsApp",
+            "Google Search Console para vigilar y corregir la indexación",
+            "Google Analytics para ver de dónde llega el tráfico"
+          ],
+          "funcionalidades": [
+            "Sitio estático y rápido, construido con Astro y Tailwind y desplegado en Vercel.",
+            "Estructura de contenido pensada para SEO: títulos, descripciones y datos de la marca legibles por Google.",
+            "Catálogo de accesorios y joyería con las piezas destacadas, fuera del feed de Instagram.",
+            "Llamados a la acción hacia pedidos por WhatsApp y hacia el perfil de Instagram (@bunu_shop15).",
+            "Sitemap enviado a Google Search Console para acelerar la indexación.",
+            "Medición de visitas, origen del tráfico y comportamiento con Google Analytics."
+          ],
+          "participacion": [
+            "Estrategia de presencia web y SEO",
+            "Diseño y maquetación del sitio",
+            "Desarrollo frontend",
+            "Configuración de dominio y despliegue",
+            "Search Console y Analytics"
+          ],
+          "decisiones": [
+            {
+              "titulo": "Un dominio propio, no otro perfil en una plataforma ajena",
+              "texto": "Instagram es de Instagram: su contenido no se posiciona como una web propia y las reglas las pone la plataforma. Un dominio como bunushop.store es un activo de la marca — se puede optimizar, medir y hacer crecer sin depender del algoritmo de una red social."
+            },
+            {
+              "titulo": "Astro porque el SEO empieza por la velocidad",
+              "texto": "Un sitio de catálogo no necesita un framework pesado. Astro genera HTML estático que carga casi al instante, y Google premia esa velocidad en el posicionamiento. Menos JavaScript, más páginas que rankean."
+            },
+            {
+              "titulo": "Medir desde el primer día con Search Console y Analytics",
+              "texto": "Sin datos, «aumentar el alcance» es una corazonada. Search Console muestra por qué búsquedas aparece la marca y qué páginas indexó Google; Analytics muestra de dónde llega la gente. Con eso las decisiones dejan de ser a ciegas."
+            }
+          ],
+          "stack": ["Astro", "TailwindCSS", "TypeScript", "Vercel", "Google Search Console", "Google Analytics"],
+          "dificultades": [
+            "Partir de cero en buscadores: un dominio nuevo no tiene historial ni autoridad, así que la indexación y el posicionamiento de marca llevan tiempo y hay que acompañarlos con Search Console, no esperar a que ocurra solo."
+          ],
+          "resultado": [
+            "La marca ya aparece en Google cuando alguien busca «Bunu Shop», con enlace al sitio y visibilidad de su perfil de Instagram.",
+            "El sitio en bunushop.store le da a la marca una dirección propia que se puede compartir, medir y posicionar.",
+            "Con Search Console y Analytics se mide el alcance y el origen del tráfico, y la visibilidad del negocio aumentó frente a la etapa de solo Instagram."
+          ]
+        }
       }
     ]
   },

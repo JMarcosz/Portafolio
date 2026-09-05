@@ -173,6 +173,65 @@
             "[PENDING: observable result in daily operation — what changed for the team]"
           ]
         }
+      },
+      {
+        "slug": "bunu-shop",
+        "badge": "Client project",
+        "title": "Website and Google visibility",
+        "valueLine": "A brand that only existed on Instagram now shows up on Google when someone searches its name or its products.",
+        "tags": ["Astro", "Tailwind", "SEO"],
+        "caseStudy": {
+          "name": "Bunu Shop",
+          "tagline": "Handmade accessories and jewelry — Colombia",
+          "problema": "Bunu Shop sold handmade accessories and jewelry from a single Instagram account. It had no website and no presence in search engines: anyone searching for the brand by name on Google found nothing — no listing, no link, no trace. For a potential customer looking for unique handcrafted pieces in Bogotá, Medellín, the rest of Colombia or from abroad, the brand was invisible.",
+          "contexto": "Bunu Shop is a personalized, handmade accessories business based in Gamarra, Cesar, shipping across Colombia and internationally. Its entire commercial operation and catalog lived inside Instagram, a platform nobody reaches from a Google search. The brief was to give the brand its own address on the web and make it show up when someone looks for it.",
+          "solucion": [
+            "Own website at bunushop.store",
+            "Product catalog browsable outside Instagram",
+            "Pages optimized for brand and product searches",
+            "Direct link to Instagram and to WhatsApp orders",
+            "Google Search Console to monitor and fix indexing",
+            "Google Analytics to see where traffic comes from"
+          ],
+          "funcionalidades": [
+            "Fast static site, built with Astro and Tailwind and deployed on Vercel.",
+            "Content structure built for SEO: titles, descriptions and brand data readable by Google.",
+            "Accessories and jewelry catalog with the featured pieces, outside the Instagram feed.",
+            "Calls to action toward WhatsApp orders and the Instagram profile (@bunu_shop15).",
+            "Sitemap submitted to Google Search Console to speed up indexing.",
+            "Measurement of visits, traffic source and behavior with Google Analytics."
+          ],
+          "participacion": [
+            "Web presence and SEO strategy",
+            "Site design and layout",
+            "Frontend development",
+            "Domain setup and deployment",
+            "Search Console and Analytics"
+          ],
+          "decisiones": [
+            {
+              "titulo": "An own domain, not another profile on someone else's platform",
+              "texto": "Instagram belongs to Instagram: its content doesn't rank like an owned website and the platform makes the rules. A domain like bunushop.store is a brand asset — it can be optimized, measured and grown without depending on a social network's algorithm."
+            },
+            {
+              "titulo": "Astro because SEO starts with speed",
+              "texto": "A catalog site doesn't need a heavy framework. Astro generates static HTML that loads almost instantly, and Google rewards that speed in ranking. Less JavaScript, more pages that rank."
+            },
+            {
+              "titulo": "Measure from day one with Search Console and Analytics",
+              "texto": "Without data, \"grow the reach\" is a hunch. Search Console shows which searches surface the brand and which pages Google indexed; Analytics shows where people come from. With that, decisions stop being blind."
+            }
+          ],
+          "stack": ["Astro", "TailwindCSS", "TypeScript", "Vercel", "Google Search Console", "Google Analytics"],
+          "dificultades": [
+            "Starting from zero in search engines: a new domain has no history or authority, so indexing and brand ranking take time and have to be nudged along with Search Console rather than waited out."
+          ],
+          "resultado": [
+            "The brand now appears on Google when someone searches \"Bunu Shop\", with a link to the site and visibility for its Instagram profile.",
+            "The site at bunushop.store gives the brand its own address that can be shared, measured and ranked.",
+            "With Search Console and Analytics the reach and traffic source are measured, and the business's visibility grew compared to the Instagram-only stage."
+          ]
+        }
       }
     ]
   },

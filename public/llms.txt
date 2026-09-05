@@ -22,6 +22,7 @@ Jean Marte diseña, construye y mantiene sistemas internos a medida: CRM/ERP, in
 - [Home (EN)](https://www.jeanmarte.com/en/): English version of the homepage.
 - [Caso de estudio: Zentra](https://www.jeanmarte.com/proyectos/zentra/)
 - [Caso de estudio: Santoral Logistic](https://www.jeanmarte.com/proyectos/santoral-logistic/)
+- [Caso de estudio: Bunu Shop](https://www.jeanmarte.com/proyectos/bunu-shop/)
 
 ## Contacto
 
