@@ -39,7 +39,7 @@
     "paragraphAfterHighlight": ", porque un sistema que no encaja con la operación real termina abandonado a los dos meses. Por eso cada decisión te la explico por su efecto en tu negocio, no por la tecnología que lleva detrás.",
     "stats": [
       { "value": "3+", "label": "Años construyendo software" },
-      { "value": "2", "label": "Sistemas en producción" },
+      { "value": "3", "label": "Sistemas en producción" },
       { "value": "6", "label": "Certificaciones" },
       { "value": "ES/EN", "label": "Trabajo bilingüe" }
     ]
