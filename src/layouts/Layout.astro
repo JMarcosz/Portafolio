@@ -30,6 +30,8 @@ interface Props {
   preloadImage?: string;
   /** JSON-LD propio de la página, además del Person que va en todas. */
   extraSchema?: unknown[];
+  /** "index, follow" por defecto; la 404 la pisa con "noindex, follow". */
+  robots?: string;
 }
 
 const locale = normalizeLocale(Astro.currentLocale);
@@ -47,6 +49,7 @@ const {
   ogType = "profile",
   preloadImage,
   extraSchema = [],
+  robots = "index, follow",
 } = Astro.props;
 
 // Astro.site viene de `site` en astro.config.mjs — hace falta para que canonical
@@ -99,13 +102,13 @@ const personSchema = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- Favicon + íconos para navegadores y Google Search: generados desde logo-web.jpeg -->
-    <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
     <link rel="icon" type="image/png" sizes="144x144" href="/favicon-144x144.png" />
     <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#050505" />
 
     <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin />
@@ -127,7 +130,7 @@ const personSchema = {
     <meta name="description" content={description} />
     <meta name="keywords" content={keywords} />
     <meta name="author" content="Jean Marte (Jean Marco Marte)" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content={robots} />
     <link rel="canonical" href={canonicalURL} />
     <link rel="alternate" hreflang="es" href={esURL} />
     <link rel="alternate" hreflang="en" href={enURL} />

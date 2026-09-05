@@ -1,3 +1,9 @@
+# NOTA: el sitio en producción (www.jeanmarte.com) se está sirviendo desde
+# Vercel, no desde Netlify — las cabeceras que realmente aplican en vivo
+# coinciden con public/_headers, no con lo definido en este archivo. Si el
+# host real vuelve a ser Netlify en el futuro, revisar que ambos archivos
+# sigan diciendo lo mismo (ver public/_headers y public/_redirects).
+
 [build]
   command = "npm run build"
   publish = "dist"

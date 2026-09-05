@@ -7,6 +7,13 @@
 
 # HTML y todo lo demas: sin caché persistente. El navegador revalida en cada
 # visita (respuesta 304 si no cambió), así cada deploy se ve al instante.
+#
+# NOTA: comprobado en vivo con curl (2026-09-02) que estas cabeceras de este
+# bloque `/*` — X-Content-Type-Options, X-Frame-Options, Referrer-Policy,
+# Permissions-Policy, Content-Security-Policy — NO llegan al navegador en
+# Vercel (solo Strict-Transport-Security aparece, y es probablemente el
+# default automático de Vercel para dominios HTTPS, no este archivo). La
+# copia real y activa de estas cabeceras está ahora en vercel.json.
 /*
   Cache-Control: public, max-age=0, must-revalidate
   X-Content-Type-Options: nosniff
@@ -23,3 +30,18 @@
 # contenido es inmutable y se puede cachear un año.
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
+
+# Imágenes .webp y certificados descargables: no cambian tras publicarse,
+# cachear 30 días evita redescargarlos en cada visita.
+#
+# NOTA: esta regla de /*.webp NO se aplica en Vercel (comprobado en vivo con
+# curl: /_astro/* sí toma su Cache-Control de este archivo, /*.webp no) — un
+# comodín de sufijo sin carpeta no calza con el matching de Vercel para
+# _headers. La regla real y activa está en vercel.json (usa regex). Se deja
+# esta también por si el sitio vuelve a correr en Cloudflare Pages/Netlify,
+# donde sí funciona.
+/*.webp
+  Cache-Control: public, max-age=2592000
+
+/Certificados Portafolio/*
+  Cache-Control: public, max-age=2592000

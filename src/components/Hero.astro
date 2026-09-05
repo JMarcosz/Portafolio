@@ -24,13 +24,13 @@ const { hero, schedule } = getContent(Astro.currentLocale);
         class="text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl"
       >
         <span class="block overflow-hidden">
-          <span class="block text-white/90" data-hero-line1>{hero.title1}</span>
+          <span class="block text-white" data-hero-line1>{hero.title1}</span>
         </span>
         <span class="block overflow-hidden">
-          <span class="block" data-hero-line2>{hero.title2}</span>
+          <span class="block text-white" data-hero-line2>{hero.title2}</span>
         </span>
       </h1>
-      <p class="mt-6 max-w-md text-sm leading-relaxed text-white/50" data-hero-paragraph>
+      <p class="mt-6 max-w-md text-sm leading-relaxed text-white" data-hero-paragraph>
         {hero.description}
       </p>
       <div class="mt-8 flex flex-wrap items-center gap-3">
@@ -48,7 +48,7 @@ const { hero, schedule } = getContent(Astro.currentLocale);
           target="_blank"
           rel="noopener noreferrer"
           data-hero-cta
-          class="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-sm font-semibold text-white/80 transition-colors hover:border-white/30 hover:text-white"
+          class="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:border-white/30 hover:text-white"
         >
           {hero.cvLabel}
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -84,7 +84,7 @@ const { hero, schedule } = getContent(Astro.currentLocale);
   <button
     type="button"
     data-scroll-cue
-    class="absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-white/55 transition-colors hover:text-white/60"
+    class="absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-white transition-opacity hover:opacity-80"
     aria-label={hero.scrollAria}
   >
     <span>{hero.scroll}</span>

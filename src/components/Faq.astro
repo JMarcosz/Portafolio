@@ -16,10 +16,10 @@ const { faq } = getContent(Astro.currentLocale);
         // <details> nativo: funciona sin JS y el navegador ya se encarga del
         // estado expandido para lectores de pantalla. No hace falta ARIA propio.
         <details class="faq-item group">
-          <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-6 text-left text-base font-medium text-white/85 transition-colors hover:text-white">
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-6 text-left text-base font-medium text-white transition-opacity hover:opacity-80">
             {item.q}
             <svg
-              class="faq-chevron h-4 w-4 shrink-0 text-white/55 transition-transform duration-300"
+              class="faq-chevron h-4 w-4 shrink-0 text-white transition-transform duration-300"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -29,7 +29,7 @@ const { faq } = getContent(Astro.currentLocale);
               <path d="M6 9l6 6 6-6" />
             </svg>
           </summary>
-          <p class="max-w-2xl pb-6 text-sm leading-relaxed text-white/50">{item.a}</p>
+          <p class="max-w-2xl pb-6 text-sm leading-relaxed text-white">{item.a}</p>
         </details>
       ))
     }

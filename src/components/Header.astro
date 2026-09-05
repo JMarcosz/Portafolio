@@ -36,7 +36,7 @@ const nav = t.nav.map((item) => ({ ...item, href: `${home}${item.href}` }));
             href={item.href}
             data-nav-link
             data-header-item
-            class="nav-link whitespace-nowrap text-[11px] font-medium uppercase tracking-[0.15em] text-white/50 opacity-0 transition-colors hover:text-white"
+            class="nav-link whitespace-nowrap text-[11px] font-medium uppercase tracking-[0.15em] text-white opacity-0 transition-opacity hover:opacity-80"
           >
             {item.label}
           </a>
@@ -52,9 +52,9 @@ const nav = t.nav.map((item) => ({ ...item, href: `${home}${item.href}` }));
         aria-label={t.header.langAria}
         class="flex h-8 items-center gap-1.5 rounded-lg border border-white/10 px-2.5 text-[11px] font-semibold uppercase tracking-[0.15em] opacity-0 transition-colors hover:border-white/25"
       >
-        <span class={locale === "es" ? "text-white" : "text-white/55"}>ES</span>
-        <span class="text-white/30" aria-hidden="true">/</span>
-        <span class={locale === "en" ? "text-white" : "text-white/55"}>EN</span>
+        <span class={locale === "es" ? "text-white" : "text-white/60"}>ES</span>
+        <span class="text-white/40" aria-hidden="true">/</span>
+        <span class={locale === "en" ? "text-white" : "text-white/60"}>EN</span>
       </a>
 
       <button
@@ -64,7 +64,7 @@ const nav = t.nav.map((item) => ({ ...item, href: `${home}${item.href}` }));
         aria-label={t.header.menuOpen}
         aria-expanded="false"
         aria-controls="mobile-menu"
-        class="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 text-white/70 opacity-0 lg:hidden"
+        class="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 text-white opacity-0 lg:hidden"
       >
         <svg id="menu-icon-open" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M4 6h16M4 12h16M4 18h16"></path>
@@ -82,7 +82,7 @@ const nav = t.nav.map((item) => ({ ...item, href: `${home}${item.href}` }));
         <a
           href={item.href}
           data-nav-link
-          class="nav-link border-b border-white/5 py-3 text-xs font-medium uppercase tracking-[0.15em] text-white/60 last:border-none hover:text-white"
+          class="nav-link border-b border-white/5 py-3 text-xs font-medium uppercase tracking-[0.15em] text-white last:border-none hover:opacity-80"
         >
           {item.label}
         </a>
@@ -234,8 +234,7 @@ const nav = t.nav.map((item) => ({ ...item, href: `${home}${item.href}` }));
     const hash = `#${REPR.get(id) ?? id}`;
     links.forEach((link) => {
       const isActive = link.hash === hash;
-      link.classList.toggle("text-white", isActive);
-      link.classList.toggle("text-white/50", !isActive);
+      link.classList.toggle("font-bold", isActive);
       if (isActive && link.closest("nav")?.id !== "mobile-menu") {
         moveRailTo(link);
       }

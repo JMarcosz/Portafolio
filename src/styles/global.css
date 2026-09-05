@@ -80,7 +80,7 @@
 
 @layer components {
   .eyebrow {
-    @apply text-xs font-medium uppercase tracking-[0.2em] text-white/55;
+    @apply text-xs font-medium uppercase tracking-[0.2em] text-white;
   }
 
   .card {
@@ -88,7 +88,7 @@
   }
 
   .pill {
-    @apply inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[11px] font-medium text-white/60;
+    @apply inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[11px] font-medium text-white;
   }
 
   .btn-primary {

@@ -1,0 +1,30 @@
+# Jean Marte (Jean Marco Marte)
+
+> Ingeniero de software full stack en Santo Domingo, República Dominicana. Desarrolla sistemas web a medida (ERP/CRM, facturación electrónica DGII, POS para restaurantes, gestión hotelera, control de gimnasios, logística y almacenes, software médico, CRM inmobiliario) para empresas en República Dominicana.
+
+Jean Marte diseña, construye y mantiene sistemas internos a medida: CRM/ERP, inventario, facturación y automatización operativa. Stack principal: Angular, Vue.js, Nuxt.js, React, Next.js, TypeScript, Node.js, .NET, Laravel, PostgreSQL, SQL Server, Docker. Zona de servicio: Santo Domingo (Piantini, Naco, Bella Vista, Distrito Nacional) y el resto de República Dominicana (Santiago de los Caballeros, Punta Cana, Bávaro, Higüey, La Romana, Puerto Plata, San Cristóbal, San Pedro de Macorís, La Vega).
+
+## Servicios
+
+- Desarrollo de Sistemas Empresariales y ERP a Medida (CRM, inventario, facturación, compras)
+- Sistemas de Facturación Electrónica e Integración DGII (e-CF, NCF, formatos 606/607)
+- Software y POS para Restaurantes (comandas, mesas, pedidos online, cocina, inventario)
+- Software de Gestión Hotelera y Reservas / PMS (hoteles, resorts, alquileres vacacionales)
+- Software de Gestión y Control de Socios para Gimnasios (control de acceso, cobros recurrentes)
+- Plataformas Web de Logística y Almacenes / WMS-TMS (fletes, despachos, flotas)
+- Software Médico para Clínicas y Consultorios (citas, expedientes, facturación médica)
+- Sistemas de Gestión de Obras y CRM Inmobiliario (constructoras, inmobiliarias)
+- Sistemas Punto de Venta (POS) e Inventario Multialmacén (tiendas, distribuidoras, ecommerce B2B)
+
+## Páginas
+
+- [Inicio (ES)](https://www.jeanmarte.com/): perfil, servicios, proceso de trabajo, preguntas frecuentes y contacto.
+- [Home (EN)](https://www.jeanmarte.com/en/): English version of the homepage.
+- [Caso de estudio: Zentra](https://www.jeanmarte.com/proyectos/zentra/)
+- [Caso de estudio: Santoral Logistic](https://www.jeanmarte.com/proyectos/santoral-logistic/)
+
+## Contacto
+
+- Email: jeanmarte22@gmail.com
+- LinkedIn: https://www.linkedin.com/in/jean-marco-marte/
+- GitHub: https://github.com/JMarcosz
