@@ -46,5 +46,11 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
     Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://api.web3forms.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://api.web3forms.com;"
+    # Google Tag Manager + GA4 + Vercel Analytics necesitan hosts extra:
+    #   script-src  -> gtm.js y gtag/js se sirven desde googletagmanager.com
+    #   connect-src -> GA4 manda los hits por sendBeacon/fetch a *.google-analytics.com
+    #                  (incluye endpoints regionales tipo region1.google-analytics.com)
+    #   frame-src   -> el <noscript> de GTM inserta un iframe a googletagmanager.com/ns.html
+    # Vercel Web Analytics usa /_vercel/insights (mismo origen), ya cubierto por 'self'.
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://api.web3forms.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://*.g.doubleclick.net; frame-src https://www.googletagmanager.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://api.web3forms.com;"
 
