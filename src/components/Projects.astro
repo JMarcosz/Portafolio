@@ -1,6 +1,7 @@
 ---
-import { getContent } from "../i18n";
-const { projects: p } = getContent(Astro.currentLocale);
+import { getContent, normalizeLocale } from "../i18n";
+const locale = normalizeLocale(Astro.currentLocale);
+const { projects: p } = getContent(locale);
 const items = p.items;
 ---
 
@@ -92,6 +93,18 @@ const items = p.items;
       ))
     }
   </div>
+
+  {/* La home muestra los destacados; el resto de la galeria vive en /proyectos/.
+      Sin este enlace, esa pagina solo se alcanzaba desde el pie. */}
+  <a
+    href={locale === "en" ? "/en/projects/" : "/proyectos/"}
+    class="mt-10 inline-flex items-center gap-2 text-sm font-medium text-white hover:underline"
+  >
+    {p.viewAll}
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M5 12h14M12 5l7 7-7 7" />
+    </svg>
+  </a>
 </section>
 
 <script>

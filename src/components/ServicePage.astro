@@ -78,6 +78,42 @@ const related = t.projects.items.find((p) => p.slug === service.relatedProject);
     )
   }
 
+  {/* El testimonio va donde mata la objecion del servicio concreto, no en una
+      seccion aparte al final. Es cita de la clienta: se publica textual y
+      atribuida, y el copy de alrededor nunca reformula su cifra como promesa. */}
+  {
+    "testimonial" in service && service.testimonial && (
+      <figure class="mt-14 border-l-2 border-white/25 pl-6">
+        <blockquote class="text-base leading-relaxed text-white">
+          <p>“{service.testimonial.quote}”</p>
+        </blockquote>
+        <figcaption class="mt-4 text-sm text-white/70">
+          <span class="font-semibold text-white">{service.testimonial.name}</span>
+          {" · "}
+          {service.testimonial.role}
+        </figcaption>
+      </figure>
+    )
+  }
+
+  {
+    "guide" in service && service.guide && (
+      <section class="mt-14 card p-6">
+        <p class="eyebrow mb-3">{service.guide.label}</p>
+        <p class="text-sm leading-relaxed text-white">{service.guide.text}</p>
+        <a
+          href={`/guias/${service.guide.slug}/`}
+          class="mt-5 inline-flex items-center gap-2 text-sm font-medium text-white hover:underline"
+        >
+          {service.guide.cta}
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </a>
+      </section>
+    )
+  }
+
   <section class="mt-14">
     <h2 class="text-2xl font-bold tracking-tight text-white">{t.faq.eyebrow}</h2>
     <dl class="mt-6 divide-y divide-white/10 border-y border-white/10">

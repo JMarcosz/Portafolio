@@ -37,7 +37,7 @@
     }
   ],
   "hero": {
-    "eyebrow": "Custom software development",
+    "eyebrow": "Custom software development in Santo Domingo, Dominican Republic",
     "title1": "Web systems that bring",
     "title2": "order to your business",
     "description": "I bring into one place what you run today across spreadsheets, WhatsApp and paper: clients, inventory, invoicing and reports. Simple and straightforward, with no one else needed to operate it.",
@@ -46,7 +46,14 @@
     "photoAlt": "Photo of Jean Marte",
     "nameAria": "Jean Marte (Jean Marco Marte) — Full Stack Software Engineer",
     "scroll": "Scroll",
-    "scrollAria": "Go to the next section"
+    "scrollAria": "Go to the next section",
+    "quickLabel": "I'm looking for",
+    "quickLinks": [
+      {
+        "label": "See projects",
+        "href": "/en/projects/"
+      }
+    ]
   },
   "about": {
     "eyebrow": "Who you'll be working with",
@@ -291,7 +298,8 @@
           ]
         }
       }
-    ]
+    ],
+    "viewAll": "See all projects"
   },
   "projectsIndex": {
     "eyebrow": "Selected work",
@@ -331,15 +339,19 @@
     "items": [
       {
         "title": "The system your business needs",
-        "description": "Internal systems to manage clients, data, inventory, bookings and invoicing from one place. Built to match how you actually work — simple and straightforward to use."
+        "description": "Internal systems to manage clients, inventory, bookings and invoicing from one place: point of sale for shops, freight and dispatch control for logistics and courier, member management for gyms. Built to match how you actually work."
       },
       {
-        "title": "Automating what's done by hand",
-        "description": "That repetitive process eating someone's hours every week: invoices being typed in, reports assembled by hand, messages answered one by one. It can be automated."
+        "title": "Automating what's still done by hand",
+        "description": "That repetitive process eating someone's hours every week: tax filings typed invoice by invoice, reports assembled by hand, messages answered one at a time."
+      },
+      {
+        "title": "Getting your business found on Google",
+        "description": "If someone searches for your brand or what you sell and can't find you, today you don't exist outside your social accounts. Your own site, a catalogue you can share, and the search work that makes the query lead back to you."
       },
       {
         "title": "Maintenance and evolution",
-        "description": "After launch the system stays alive: I fix bugs, keep an eye on uptime and add whatever the business starts asking for. You're not left alone with a delivered system."
+        "description": "After launch the system stays alive: I fix bugs, keep an eye on uptime and add what the business asks for. You're not left alone with a delivered system."
       },
       {
         "title": "Keeping it all standing",
@@ -387,6 +399,14 @@
       {
         "q": "I don't know if I really need a system.",
         "a": "The initial assessment is free. I look at how your business runs today and tell you what's actually needed — even if the answer is that you don't need to hire me yet."
+      },
+      {
+        "q": "How much does it cost?",
+        "a": "It depends on scope, which is why I don't publish a flat rate: sorting out a business's invoicing isn't the same job as building a system with inventory, users and reports. What sets the price is how many processes are involved, whether it has to connect to something you already use, and how many people will work inside it. The initial assessment is free: I look at how your operation runs today and tell you what's needed before we talk numbers."
+      },
+      {
+        "q": "How long does it take?",
+        "a": "The timeline is agreed in writing before we start, along with the scope, and it comes from what the system actually has to do. I build in stages: you see progress throughout instead of waiting months for a single delivery. If something is going to slip, you hear it when it happens, not at the end."
       },
       {
         "q": "Will you disappear once I've paid?",
@@ -683,7 +703,9 @@
     "colContact": "Let's talk",
     "allProjects": "See all projects",
     "whatsappLabel": "WhatsApp",
-    "phoneDisplay": "+1 829 906 9256"
+    "phoneDisplay": "+1 829 906 9256",
+    "guides": "Guides",
+    "dgiiService": "606/607 automation"
   },
   "header": {
     "save": "Save",

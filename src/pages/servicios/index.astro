@@ -1,0 +1,147 @@
+---
+// Hub de servicios. Se creó cuando hubo cinco páginas detrás: un hub con un solo
+// ítem le hace perder el tiempo al visitante en vez de orientarlo.
+//
+// Las familias no son decorado. Ordenan la oferta según la duda que trae el
+// visitante: si su problema es interno, si es que no lo encuentran, o si es que
+// nadie sostiene lo que ya tiene.
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { getContent, getServicePages } from "../../i18n";
+
+const t = getContent("es");
+const site = "https://www.jeanmarte.com";
+const servicios = getServicePages();
+
+const FAMILIAS = [
+  {
+    eyebrow: "Sistemas",
+    title: "Que tu operación funcione por dentro",
+    description: "Cuando el problema es que la información vive repartida y nadie tiene la foto completa.",
+    slugs: ["automatizacion-606-607-dgii", "logistica-courier"],
+  },
+  {
+    eyebrow: "Presencia",
+    title: "Que te encuentren por fuera",
+    description: "Cuando el negocio existe y vende, pero fuera de tus redes no aparece.",
+    slugs: ["paginas-web", "posicionamiento-google"],
+  },
+  {
+    eyebrow: "Continuidad",
+    title: "Que siga en pie después",
+    description: "Porque un sistema que sostiene un negocio no se entrega: se mantiene.",
+    slugs: ["soporte-mantenimiento"],
+  },
+];
+
+const listSchema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "Servicios",
+  description:
+    "Desarrollo de sistemas a medida, automatización fiscal, páginas web, posicionamiento en Google y mantenimiento, en Santo Domingo y República Dominicana.",
+  url: `${site}/servicios/`,
+  inLanguage: "es-DO",
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: servicios.map((s, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: s.title,
+      url: `${site}/servicios/${s.slug}/`,
+    })),
+  },
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Inicio", item: `${site}/` },
+    { "@type": "ListItem", position: 2, name: "Servicios", item: `${site}/servicios/` },
+  ],
+};
+---
+
+<Layout
+  title="Servicios — sistemas, presencia web y mantenimiento en RD | Jean Marte"
+  description="Automatización fiscal 606/607, sistemas de logística, páginas web, posicionamiento en Google y mantenimiento. Para negocios en Santo Domingo y toda República Dominicana."
+  esHref="/servicios/"
+  enHref="/en/"
+  ogType="website"
+  extraSchema={[listSchema, breadcrumbSchema]}
+>
+  <Header otherHref="/en/" />
+  <main id="contenido" tabindex="-1" class="pt-16">
+    <section class="mx-auto max-w-4xl section-y px-6">
+      <p class="eyebrow mb-4">Cómo puedo ayudarte</p>
+      <h1 class="text-4xl font-bold leading-[1.1] tracking-tight text-white md:text-5xl">
+        Que tu negocio funcione por dentro y se encuentre por fuera
+      </h1>
+      <p class="mt-6 max-w-2xl text-sm leading-relaxed text-white">
+        Antes de proponerte nada quiero entender cómo trabajas hoy. Estas son las tres cosas
+        que suelen estar rotas, y lo que hago en cada una.
+      </p>
+
+      {
+        FAMILIAS.map((familia) => (
+          <section class="mt-16">
+            <p class="eyebrow mb-3">{familia.eyebrow}</p>
+            <h2 class="text-2xl font-bold tracking-tight text-white">{familia.title}</h2>
+            <p class="mt-3 max-w-2xl text-sm leading-relaxed text-white">{familia.description}</p>
+
+            <div class="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2">
+              {familia.slugs.map((slug) => {
+                const s = servicios.find((x) => x.slug === slug);
+                return (
+                  s && (
+                    <article class="card flex flex-col p-6">
+                      <h3 class="text-base font-semibold">
+                        <a href={`/servicios/${s.slug}/`} class="text-white transition-opacity hover:opacity-80">
+                          {s.title}
+                        </a>
+                      </h3>
+                      <p class="mt-3 flex-1 text-sm leading-relaxed text-white">{s.metaDescription}</p>
+                      <a
+                        href={`/servicios/${s.slug}/`}
+                        class="mt-5 inline-flex items-center gap-2 text-sm font-medium text-white hover:underline"
+                      >
+                        Ver el servicio
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                      </a>
+                    </article>
+                  )
+                );
+              })}
+            </div>
+          </section>
+        ))
+      }
+
+      <section class="mt-20 card p-8">
+        <h2 class="text-xl font-bold tracking-tight text-white">¿No sabes por dónde empezar?</h2>
+        <p class="mt-3 max-w-xl text-sm leading-relaxed text-white">
+          No hace falta que traigas una solución pensada ni que sepas de tecnología. Cuéntame
+          cómo funciona tu operación hoy y qué te está costando. La primera conversación es gratuita.
+        </p>
+        <a href={t.schedule} target="_blank" rel="noopener noreferrer" class="btn-primary mt-6 text-sm">
+          {t.contact.scheduleCta}
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </a>
+      </section>
+
+      <a href={t.home} class="mt-14 inline-flex items-center gap-2 text-sm text-white hover:underline">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+        {t.caseStudy.back}
+      </a>
+    </section>
+  </main>
+  <Footer />
+</Layout>

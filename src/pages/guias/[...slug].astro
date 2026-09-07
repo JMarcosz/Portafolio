@@ -1,0 +1,168 @@
+---
+import { getCollection, render } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { getContent, getServicePage } from "../../i18n";
+
+export async function getStaticPaths() {
+  const guias = await getCollection("guias");
+  return guias.map((guia) => ({ params: { slug: guia.id }, props: { guia } }));
+}
+
+const { guia } = Astro.props;
+const { Content } = await render(guia);
+const t = getContent("es");
+const site = "https://www.jeanmarte.com";
+const url = `${site}/guias/${guia.id}/`;
+const service = guia.data.service ? getServicePage(guia.data.service) : undefined;
+
+// Article, no BlogPosting: esto es material de referencia, no una bitácora.
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: guia.data.title,
+  description: guia.data.description,
+  url,
+  mainEntityOfPage: { "@type": "WebPage", "@id": url },
+  author: { "@type": "Person", name: "Jean Marte (Jean Marco Marte)", url: `${site}/` },
+  publisher: { "@type": "Person", name: "Jean Marte (Jean Marco Marte)", url: `${site}/` },
+  datePublished: guia.data.publishedAt.toISOString().slice(0, 10),
+  ...(guia.data.updatedAt ? { dateModified: guia.data.updatedAt.toISOString().slice(0, 10) } : {}),
+  inLanguage: "es-DO",
+};
+
+const faqSchema = guia.data.faq.length
+  ? {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: guia.data.faq.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: { "@type": "Answer", text: item.a },
+      })),
+    }
+  : null;
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Inicio", item: `${site}/` },
+    { "@type": "ListItem", position: 2, name: "Guías", item: `${site}/guias/` },
+    { "@type": "ListItem", position: 3, name: guia.data.title, item: url },
+  ],
+};
+
+const fecha = new Intl.DateTimeFormat("es-DO", { dateStyle: "long", timeZone: "UTC" }).format(guia.data.publishedAt);
+---
+
+<Layout
+  title={guia.data.metaTitle ?? guia.data.title}
+  description={guia.data.description}
+  esHref={`/guias/${guia.id}/`}
+  enHref="/en/"
+  ogType="article"
+  extraSchema={[articleSchema, breadcrumbSchema, ...(faqSchema ? [faqSchema] : [])]}
+>
+  <Header otherHref="/en/" />
+  <main id="contenido" tabindex="-1" class="pt-16">
+    <article class="mx-auto max-w-3xl section-y px-6">
+      <p class="eyebrow mb-4">Guía</p>
+      <h1 class="text-4xl font-bold leading-[1.1] tracking-tight text-white md:text-5xl">
+        {guia.data.title}
+      </h1>
+      <p class="mt-4 text-xs text-white/60">
+        <time datetime={guia.data.publishedAt.toISOString().slice(0, 10)}>{fecha}</time>
+      </p>
+
+      <p class="mt-8 border-l-2 border-white/25 pl-5 text-base leading-relaxed text-white">
+        {guia.data.answer}
+      </p>
+
+      <div class="guia-prose mt-12">
+        <Content />
+      </div>
+
+      {
+        guia.data.faq.length > 0 && (
+          <section class="mt-14">
+            <h2 class="text-2xl font-bold tracking-tight text-white">Preguntas frecuentes</h2>
+            <dl class="mt-6 divide-y divide-white/10 border-y border-white/10">
+              {guia.data.faq.map((item) => (
+                <div class="py-5">
+                  <dt class="text-base font-semibold text-white">{item.q}</dt>
+                  <dd class="mt-2 text-sm leading-relaxed text-white">{item.a}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        )
+      }
+
+      {
+        service && (
+          <section class="mt-14 card p-8">
+            <p class="eyebrow mb-3">Si prefieres no hacerlo a mano</p>
+            <h2 class="text-xl font-bold tracking-tight text-white">{service.title}</h2>
+            <p class="mt-3 text-sm leading-relaxed text-white">{service.answer}</p>
+            <a href={`/servicios/${service.slug}/`} class="btn-primary mt-6 text-sm">
+              Ver el servicio
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </a>
+          </section>
+        )
+      }
+
+      <a href={t.home} class="mt-14 inline-flex items-center gap-2 text-sm text-white hover:underline">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+        {t.caseStudy.back}
+      </a>
+    </article>
+  </main>
+  <Footer />
+</Layout>
+
+<style is:global>
+  /* El cuerpo de la guía viene de Markdown, así que no lleva clases: se estiliza
+     por elemento dentro de este contenedor. */
+  .guia-prose > * + * {
+    margin-top: 1.25rem;
+  }
+  .guia-prose h2 {
+    margin-top: 3rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #fff;
+  }
+  .guia-prose h3 {
+    margin-top: 2rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #fff;
+  }
+  .guia-prose p,
+  .guia-prose li {
+    font-size: 0.875rem;
+    line-height: 1.75;
+    color: #fff;
+  }
+  .guia-prose ul,
+  .guia-prose ol {
+    padding-left: 1.25rem;
+  }
+  .guia-prose ul { list-style: disc; }
+  .guia-prose ol { list-style: decimal; }
+  .guia-prose li + li { margin-top: 0.5rem; }
+  .guia-prose strong { font-weight: 600; color: #fff; }
+  .guia-prose hr {
+    margin-top: 3rem;
+    border-color: rgb(255 255 255 / 0.1);
+  }
+  .guia-prose em { color: rgb(255 255 255 / 0.6); }
+</style>

@@ -33,6 +33,28 @@ const { hero, schedule } = getContent(Astro.currentLocale);
       <p class="mt-6 max-w-md text-sm leading-relaxed text-white" data-hero-paragraph>
         {hero.description}
       </p>
+      {/* Ruta rapida. El visitante que llega desde una busqueda concreta no
+          quiere recorrer la home entera: quiere ir a lo suyo. Son enlaces
+          reales a paginas, no anclas del tunel. */}
+      <nav class="mt-7" aria-label={hero.quickLabel}>
+        <p class="text-[11px] uppercase tracking-[0.15em] text-white/50">{hero.quickLabel}</p>
+        <ul class="mt-3 flex flex-wrap gap-2">
+          {
+            hero.quickLinks.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  data-hero-quick
+                  class="inline-flex rounded-full border border-white/15 px-3 py-1.5 text-xs text-white transition-colors hover:border-white/35 hover:bg-white/5"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
       <div class="mt-8 flex flex-wrap items-center gap-3">
         <a
           href={schedule}
@@ -102,6 +124,7 @@ const { hero, schedule } = getContent(Astro.currentLocale);
   const line2 = document.querySelector<HTMLElement>("[data-hero-line2]");
   const paragraph = document.querySelector<HTMLElement>("[data-hero-paragraph]");
   const ctas = document.querySelectorAll<HTMLElement>("[data-hero-cta]");
+  const quick = document.querySelectorAll<HTMLElement>("[data-hero-quick]");
   const circle = document.querySelector<HTMLElement>("[data-hero-circle]");
   const scrollCue = document.querySelector<HTMLElement>("[data-scroll-cue]");
 
@@ -113,6 +136,7 @@ const { hero, schedule } = getContent(Astro.currentLocale);
     gsap.set(paragraph, { yPercent: 105, autoAlpha: 0 });
     gsap.set(eyebrow, { autoAlpha: 0 });
     gsap.set(ctas, { autoAlpha: 0, scale: 0.9 });
+    gsap.set(quick, { autoAlpha: 0, y: 8 });
   }
 
   const playHeroIntro = () => {
@@ -124,6 +148,7 @@ const { hero, schedule } = getContent(Astro.currentLocale);
       .to(line1, { yPercent: 0, duration: 1 }, "<0.05")
       .to(line2, { yPercent: 0, duration: 1 }, "<0.15")
       .to(paragraph, { yPercent: 0, autoAlpha: 1, duration: 0.85 }, "-=0.6")
+      .to(quick, { autoAlpha: 1, y: 0, duration: 0.4, stagger: 0.05 }, "-=0.45")
       .to(ctas, { autoAlpha: 1, scale: 1, duration: 0.5, stagger: 0.08, ease: "back.out(1.4)" }, "-=0.3");
   };
 

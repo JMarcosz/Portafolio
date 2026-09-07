@@ -37,7 +37,7 @@
     }
   ],
   "hero": {
-    "eyebrow": "Desarrollo de software a medida",
+    "eyebrow": "Desarrollo de software a medida en Santo Domingo, República Dominicana",
     "title1": "Sistemas web que ordenan",
     "title2": "la operación de tu negocio",
     "description": "Soy Jean Marco Marte (Jean Marte), ingeniero de software. Centralizo en un solo lugar lo que hoy llevas en hojas de cálculo, WhatsApp y papel: clientes, inventario, facturación y reportes en República Dominicana.",
@@ -46,7 +46,30 @@
     "photoAlt": "Foto de Jean Marte (Jean Marco Marte)",
     "nameAria": "Jean Marco Marte (Jean Marte) — Ingeniero de Software Full Stack",
     "scroll": "Scroll",
-    "scrollAria": "Bajar a la siguiente sección"
+    "scrollAria": "Bajar a la siguiente sección",
+    "quickLabel": "Voy buscando",
+    "quickLinks": [
+      {
+        "label": "Automatizar el 606 y 607",
+        "href": "/servicios/automatizacion-606-607-dgii/"
+      },
+      {
+        "label": "Una página web",
+        "href": "/servicios/paginas-web/"
+      },
+      {
+        "label": "Aparecer en Google",
+        "href": "/servicios/posicionamiento-google/"
+      },
+      {
+        "label": "Ver proyectos",
+        "href": "/proyectos/"
+      },
+      {
+        "label": "Precios y plazos",
+        "href": "/#faq"
+      }
+    ]
   },
   "about": {
     "eyebrow": "Con quién vas a trabajar",
@@ -291,7 +314,8 @@
           ]
         }
       }
-    ]
+    ],
+    "viewAll": "Ver todos los proyectos"
   },
   "projectsIndex": {
     "eyebrow": "Trabajo seleccionado",
@@ -331,13 +355,17 @@
     "items": [
       {
         "title": "El sistema que tu negocio necesita",
-        "description": "Sistemas internos para administrar clientes, datos, inventarios, reservas y facturación desde un solo lugar. Hecho a la medida de cómo trabajas, fácil y sencillo de usar."
+        "description": "Sistemas internos para administrar clientes, inventario, reservas y facturación desde un solo lugar: punto de venta para tiendas y colmados, control de carga y despachos para logística y courier, control de socios para gimnasios. Hecho a la medida de cómo trabajas."
       },
       {
         "title": "Automatizar lo que hoy se hace a mano",
         "description": "Ese proceso repetitivo que se lleva horas de alguien cada semana: los formatos 606 y 607 de la DGII que se digitan factura por factura, reportes que se arman a mano, mensajes que se responden uno por uno.",
         "href": "/servicios/automatizacion-606-607-dgii/",
         "linkLabel": "Automatización del 606 y 607 →"
+      },
+      {
+        "title": "Que tu negocio aparezca en Google",
+        "description": "Si alguien busca tu marca o lo que vendes y no te encuentra, hoy no existes fuera de tus redes. Sitio web propio, catálogo que se puede compartir, y el trabajo de posicionamiento para que la búsqueda te devuelva a ti."
       },
       {
         "title": "Mantenimiento y evolución",
@@ -389,6 +417,14 @@
       {
         "q": "No sé si de verdad necesito un sistema.",
         "a": "La evaluación inicial es gratuita. Analizo cómo funciona tu negocio hoy y te digo qué hace falta, incluso si la respuesta es que todavía no necesitas contratarme."
+      },
+      {
+        "q": "¿Cuánto cuesta?",
+        "a": "Depende del alcance, y por eso no publico una tarifa fija: no cuesta lo mismo ordenar la facturación de un negocio que construir un sistema con inventario, usuarios y reportes. Lo que determina el precio es cuántos procesos entran, si hay que conectarlo con algo que ya usas y cuánta gente va a trabajar dentro. La evaluación inicial es gratuita: reviso cómo funciona tu operación hoy y te digo qué hace falta antes de hablar de números."
+      },
+      {
+        "q": "¿Cuánto tarda?",
+        "a": "El plazo se define por escrito antes de empezar, junto con el alcance, y sale de lo que el sistema tiene que hacer. Construyo por etapas: ves avances durante todo el proceso en vez de esperar meses a una entrega única. Si algo se va a atrasar, te enteras cuando pasa, no al final."
       },
       {
         "q": "¿Vas a desaparecer después de que te pague?",
@@ -685,7 +721,9 @@
     "colContact": "Hablemos",
     "allProjects": "Ver todos los proyectos",
     "whatsappLabel": "WhatsApp",
-    "phoneDisplay": "+1 829 906 9256"
+    "phoneDisplay": "+1 829 906 9256",
+    "guides": "Guías",
+    "dgiiService": "Automatización 606/607"
   },
   "header": {
     "save": "Guardar",

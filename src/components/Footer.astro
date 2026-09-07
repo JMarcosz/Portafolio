@@ -14,9 +14,19 @@ const { footer, home, projects, schedule, contact } = t;
 
 const projectsIndex = locale === "en" ? "/en/projects/" : "/proyectos/";
 
-const siteLinks = t.nav
-  .filter((item) => ["#sobre-mi", "#servicios", "#proceso", "#experiencia"].includes(item.href))
-  .map((item) => ({ label: item.label, href: `${home}${item.href}` }));
+const siteLinks = [
+  ...t.nav
+    .filter((item) => ["#sobre-mi", "#servicios", "#proceso"].includes(item.href))
+    .map((item) => ({ label: item.label, href: `${home}${item.href}` })),
+  // Rutas propias, sólo en español: las páginas de servicio y las guías no
+  // tienen par en inglés a propósito.
+  ...(locale === "es"
+    ? [
+        { label: footer.guides, href: "/guias/" },
+        { label: footer.dgiiService, href: "/servicios/automatizacion-606-607-dgii/" },
+      ]
+    : []),
+];
 ---
 
 <footer data-footer class="border-t border-white/10">

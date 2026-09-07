@@ -1,0 +1,82 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { getContent } from "../../i18n";
+
+const t = getContent("es");
+const site = "https://www.jeanmarte.com";
+const guias = (await getCollection("guias")).sort(
+  (a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf(),
+);
+
+const listSchema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "Guías",
+  description: "Guías prácticas sobre cumplimiento fiscal y sistemas para negocios en República Dominicana.",
+  url: `${site}/guias/`,
+  inLanguage: "es-DO",
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: guias.map((g, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: g.data.title,
+      url: `${site}/guias/${g.id}/`,
+    })),
+  },
+};
+---
+
+<Layout
+  title="Guías — cumplimiento fiscal y sistemas para negocios en RD | Jean Marte"
+  description="Guías prácticas sobre los formatos 606 y 607 de la DGII y sobre sistemas para negocios en República Dominicana. Escritas para que sirvan aunque no me contrates."
+  esHref="/guias/"
+  enHref="/en/"
+  ogType="website"
+  extraSchema={[listSchema]}
+>
+  <Header otherHref="/en/" />
+  <main id="contenido" tabindex="-1" class="pt-16">
+    <section class="mx-auto max-w-3xl section-y px-6">
+      <p class="eyebrow mb-4">Guías</p>
+      <h1 class="text-4xl font-bold leading-[1.1] tracking-tight text-white md:text-5xl">
+        Cómo funcionan las cosas que te quitan tiempo
+      </h1>
+      <p class="mt-6 text-sm leading-relaxed text-white">
+        Guías escritas para que las puedas seguir tú mismo. Si después de leerlas resuelves
+        el problema sin mí, perfecto: para eso están.
+      </p>
+
+      <ul class="mt-14 space-y-4">
+        {
+          guias.map((guia) => (
+            <li class="card p-6">
+              <h2 class="text-lg font-semibold">
+                <a href={`/guias/${guia.id}/`} class="text-white transition-opacity hover:opacity-80">
+                  {guia.data.title}
+                </a>
+              </h2>
+              <p class="mt-2 text-sm leading-relaxed text-white">{guia.data.description}</p>
+              <p class="mt-4 text-xs text-white/60">
+                <time datetime={guia.data.publishedAt.toISOString().slice(0, 10)}>
+                  {new Intl.DateTimeFormat("es-DO", { dateStyle: "long", timeZone: "UTC" }).format(guia.data.publishedAt)}
+                </time>
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+
+      <a href={t.home} class="mt-14 inline-flex items-center gap-2 text-sm text-white hover:underline">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+        {t.caseStudy.back}
+      </a>
+    </section>
+  </main>
+  <Footer />
+</Layout>

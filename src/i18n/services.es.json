@@ -28,7 +28,7 @@
       {
         "heading": "El sistema ya existe y está en producción",
         "paragraphs": [
-          "No es una propuesta en papel. Zentra hace exactamente esto y se puede probar hoy: subes una foto de una factura y ves el dato extraído junto al documento original.",
+          "No es una propuesta en papel. Zentra es un producto en producción que hace exactamente esto, y tiene una prueba gratuita de 14 días sin tarjeta: puedes verlo funcionando con tus propias facturas antes de hablar conmigo.",
           "La regla de diseño es que la IA extrae y la persona confirma. El sistema nunca da por bueno un dato sin que alguien lo vea, porque un error en una declaración fiscal no se arregla con un botón de deshacer."
         ]
       },
@@ -76,6 +76,274 @@
     ],
     "ctaTitle": "¿Cuántas horas te lleva cerrar el mes?",
     "ctaText": "Cuéntame cómo armas hoy el 606 y el 607. La primera conversación es gratuita.",
-    "relatedProject": "zentra"
+    "relatedProject": "zentra",
+    "guide": {
+      "slug": "formatos-606-607-dgii",
+      "label": "¿Prefieres entender el proceso primero?",
+      "text": "Escribí una guía con qué declara cada formato, quién está obligado, cuándo se presentan y por qué la Oficina Virtual rechaza los archivos. Es gratis y sirve aunque no me contrates.",
+      "cta": "Leer la guía del 606 y 607"
+    }
+  },
+  "paginas-web": {
+    "slug": "paginas-web",
+    "eyebrow": "Presencia",
+    "title": "Páginas web y landing pages para negocios",
+    "metaTitle": "Páginas web para negocios en Santo Domingo y RD | Jean Marte",
+    "metaDescription": "Sitio web propio para un negocio que hoy sólo existe en Instagram o en el boca a boca. Catálogo navegable, rápido y pensado para que Google lo entienda.",
+    "answer": "Una página web es la única dirección en internet que es tuya. Un perfil de Instagram lo controla Instagram: no se posiciona como una web propia y las reglas las pone la plataforma. Un dominio propio se puede optimizar, medir y hacer crecer sin depender del algoritmo de una red social.",
+    "sections": [
+      {
+        "heading": "Para quién es esto",
+        "paragraphs": [
+          "Para el negocio que ya vende pero cuyo catálogo vive dentro de un feed: alguien pregunta por un producto, hay que buscar la publicación de hace tres meses y mandarle la captura.",
+          "Y para el que ya tiene sitio pero es una tarjeta de presentación de hace cinco años: lento, sin catálogo y sin nada que Google pueda entender."
+        ]
+      },
+      {
+        "heading": "Qué incluye",
+        "items": [
+          "Dominio propio configurado, con certificado de seguridad.",
+          "Catálogo o secciones navegables fuera de la red social.",
+          "Sitio estático y rápido: menos espera, menos gente que se va antes de que cargue.",
+          "Estructura de contenido legible por Google desde el primer día.",
+          "Llamados a la acción hacia WhatsApp y hacia tus redes.",
+          "Google Search Console y Analytics conectados, para ver qué pasa y no adivinar."
+        ]
+      },
+      {
+        "heading": "Por qué la velocidad no es un capricho",
+        "paragraphs": [
+          "Un sitio de catálogo no necesita un framework pesado. Uso Astro, que genera páginas estáticas que cargan casi al instante, y Google premia esa velocidad en el posicionamiento.",
+          "Es la misma decisión que tomé para Bunu Shop, y es parte de por qué el sitio pudo empezar a rankear en semanas y no en meses."
+        ]
+      },
+      {
+        "heading": "Precio y plazo",
+        "paragraphs": [
+          "Depende de cuántas secciones lleve, de si hay catálogo y de cuánto contenido haya que preparar. Un sitio de presencia con catálogo es un proyecto de semanas, no de meses.",
+          "La evaluación inicial es gratuita: miro lo que tienes hoy y te digo qué hace falta."
+        ]
+      }
+    ],
+    "testimonial": {
+      "quote": "La página quedó super bien, el trabajo fue rápido e impecable. Logré que mi página pasara de no tener visualización a estar posicionada en menos de una semana. Lo recomiendo 100%, mil gracias.",
+      "name": "Isabel Correa",
+      "role": "CEO de Alquimia Lab"
+    },
+    "faq": [
+      {
+        "q": "¿Necesito una página si ya vendo por Instagram?",
+        "a": "Instagram sirve para que te descubran; una página sirve para que te encuentren. Son cosas distintas. Quien te busca por tu nombre en Google, o busca lo que vendes, no llega a un perfil de red social igual que llega a una web. Lo ideal es tener las dos y que se enlacen."
+      },
+      {
+        "q": "¿La página la puedo actualizar yo?",
+        "a": "Depende de cómo la montemos, y se decide antes de empezar: hay sitios donde tiene sentido que edites el contenido tú, y otros donde lo práctico es que los cambios pasen por mí. Se define en la conversación inicial, no después."
+      },
+      {
+        "q": "¿El dominio queda a mi nombre?",
+        "a": "Sí. Al finalizar recibes acceso total al código, al dominio y a las cuentas acordadas. El dominio es un activo de tu marca, no mío."
+      },
+      {
+        "q": "¿Cuánto tarda en aparecer en Google?",
+        "a": "Aparecer por el nombre de tu marca suele ser cuestión de días o pocas semanas si el sitio está bien construido y se envía a Search Console. Competir por términos genéricos es otra cosa y toma meses: no te voy a prometer lo contrario."
+      }
+    ],
+    "ctaTitle": "¿Tu negocio existe fuera de Instagram?",
+    "ctaText": "Cuéntame qué vendes y a quién. La primera conversación es gratuita.",
+    "relatedProject": "bunu-shop"
+  },
+  "posicionamiento-google": {
+    "slug": "posicionamiento-google",
+    "eyebrow": "Presencia",
+    "title": "Posicionamiento de marca en Google",
+    "metaTitle": "Posicionamiento en Google para negocios en RD | Jean Marte",
+    "metaDescription": "Que tu negocio aparezca cuando alguien busca tu marca o lo que vendes. Search Console, contenido que Google entiende y medición real, no promesas de primera posición.",
+    "answer": "Posicionar una marca es hacer que Google la entienda y la devuelva cuando alguien la busca. Empieza por lo básico: que tus páginas se puedan rastrear e indexar, que digan claramente de qué van, y que exista una forma de medir qué está pasando. Sin eso, lo demás es adivinar.",
+    "sections": [
+      {
+        "heading": "El problema casi siempre es el mismo",
+        "paragraphs": [
+          "Un negocio existe, vende, tiene clientes contentos — y no aparece. Buscas su nombre en Google y sale cualquier cosa menos él.",
+          "Casi nunca es cuestión de trucos. Es que no hay una página que Google pueda indexar, o la hay pero no dice en texto lo que el negocio hace, o nadie la enlaza desde ningún sitio."
+        ]
+      },
+      {
+        "heading": "Qué hago",
+        "items": [
+          "Reviso qué está indexado hoy y qué no, con Search Console sobre tu propio dominio.",
+          "Arreglo lo que impide indexar: páginas huérfanas, sitemap, redirecciones, contenido que sólo existe dentro de JavaScript.",
+          "Ajusto títulos, descripciones y encabezados para que digan lo que la gente busca, sin volverlos ilegibles para una persona.",
+          "Añado datos estructurados para que Google entienda qué tipo de negocio eres y dónde operas.",
+          "Conecto Analytics para ver de dónde llega el tráfico.",
+          "Te entrego lo que se midió y lo que falta, no un informe de vanidad."
+        ]
+      },
+      {
+        "heading": "Lo que no te voy a prometer",
+        "paragraphs": [
+          "No vendo primera posición garantizada. Nadie controla el ranking de Google, y quien te lo garantice te está vendiendo humo.",
+          "Lo que sí es alcanzable, y es lo que suele faltar: que tu marca te devuelva a ti cuando la buscan, que tus páginas estén indexadas, y que exista medición para saber si algo funciona.",
+          "Competir por términos genéricos y muy buscados es otra liga: toma meses y depende de cuánta autoridad tenga tu dominio. Te lo digo antes, no después."
+        ]
+      },
+      {
+        "heading": "Precio y plazo",
+        "paragraphs": [
+          "Depende del estado en que esté el sitio y de cuántas páginas haya que revisar. Una auditoría con las correcciones prioritarias es un trabajo acotado; sostener el posicionamiento en el tiempo es un acompañamiento.",
+          "La evaluación inicial es gratuita: reviso qué tiene indexado tu dominio hoy y te digo si hay algo que arreglar."
+        ]
+      }
+    ],
+    "testimonial": {
+      "quote": "Quedé sin palabras, el resultado fue sorprendente. Nunca me imaginé que tendría mi página en la web. Pasé de tener 0 presencia a tener el ranking número 1 dentro de mi nicho.",
+      "name": "Mary Sorelly",
+      "role": "CEO de Bunu Shop"
+    },
+    "faq": [
+      {
+        "q": "¿Cuánto tarda en verse un resultado?",
+        "a": "Para búsquedas de tu propia marca, semanas. Para términos genéricos con competencia, meses — y depende de la antigüedad y la autoridad de tu dominio. Un dominio nuevo parte de cero por definición."
+      },
+      {
+        "q": "¿Me garantizas la primera posición?",
+        "a": "No, y desconfía de quien lo haga. El ranking lo decide Google con señales que nadie controla del todo. Lo que sí se puede hacer es quitar lo que te impide aparecer, y medir lo que pasa."
+      },
+      {
+        "q": "¿Sirve si sólo tengo Instagram?",
+        "a": "Primero necesitas algo que Google pueda indexar. Un perfil de red social no se posiciona como una web propia. El orden es: sitio propio, después posicionamiento."
+      },
+      {
+        "q": "¿Cómo sé que está funcionando?",
+        "a": "Con Search Console y Analytics conectados a tu dominio, que son tuyos y puedes mirar cuando quieras. Ahí se ve por qué búsquedas apareces, en qué posición y cuánta gente entra. No hace falta creerme."
+      }
+    ],
+    "ctaTitle": "¿Te buscan y no te encuentran?",
+    "ctaText": "Dime el nombre de tu negocio y reviso qué tiene indexado Google hoy. Gratis.",
+    "relatedProject": "bunu-shop"
+  },
+  "logistica-courier": {
+    "slug": "logistica-courier",
+    "eyebrow": "Sistemas",
+    "title": "Sistemas para logística, carga y courier",
+    "metaTitle": "Software de logística y courier en República Dominicana | Jean Marte",
+    "metaDescription": "Cotizaciones, embarques, inventario y clientes en un solo sistema. Plataforma a medida para operaciones de carga y logística en República Dominicana.",
+    "answer": "Un sistema de logística sirve para que responder «¿en qué va esta carga?» tome un segundo y no media hora. Reúne en un solo lugar las cotizaciones, las órdenes de embarque, el inventario del almacén y los datos del cliente, de forma que el dato se capture una vez y viaje solo por el resto del proceso.",
+    "sections": [
+      {
+        "heading": "Cómo trabaja hoy una operación sin sistema",
+        "paragraphs": [
+          "Las cotizaciones viven en un Excel, los embarques en otro, el inventario en un cuaderno y los clientes en la cabeza de quien lleva más tiempo.",
+          "Cada uno tiene su propia versión de la verdad. Responder algo tan simple como en qué estado está una carga obliga a juntar información de varios sitios, y cuando dos no coinciden nadie sabe cuál es el bueno."
+        ]
+      },
+      {
+        "heading": "Qué se centraliza",
+        "items": [
+          "Cotizaciones: generación, seguimiento y conversión a orden.",
+          "Órdenes de embarque ligadas a la cotización que las originó, para no recapturar los mismos datos.",
+          "Inventario y operaciones de almacén.",
+          "Clientes y sus contactos, consultables desde cualquier módulo.",
+          "Catálogos base de la operación: monedas, modos de transporte, tipos de bulto y puertos.",
+          "Un solo lugar donde mirar, con permisos por rol."
+        ]
+      },
+      {
+        "heading": "Qué está probado y qué no",
+        "paragraphs": [
+          "Lo que ves arriba está construido y en producción para Maed Logistic Trading, una operación de comercio y logística de carga: se cotiza, se embarca y se almacena. El caso de estudio está publicado con las decisiones técnicas detrás.",
+          "El courier de paquetería y casillero es una operación parecida pero no idéntica: cambia el volumen, el tipo de bulto y el trato con el cliente final. Puedo construirlo, y te lo digo claro: mi caso probado es carga, no casillero."
+        ]
+      },
+      {
+        "heading": "Precio y plazo",
+        "paragraphs": [
+          "Depende de cuántos módulos entren y de si hay que migrar datos de sistemas anteriores. Un MVP con el flujo principal es un proyecto por etapas: ves avances desde las primeras semanas.",
+          "La evaluación inicial es gratuita: me cuentas cómo se mueve una carga hoy, de principio a fin, y te digo qué se puede ordenar primero."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "q": "¿Puedo empezar por un solo módulo?",
+        "a": "Sí, y suele ser lo sensato. Se arranca por donde más duele —normalmente cotizaciones y embarques— y el resto se agrega cuando el equipo ya está usando lo primero. Construir los seis módulos antes de que nadie use ninguno es la forma más rápida de que el sistema termine abandonado."
+      },
+      {
+        "q": "¿Se puede migrar lo que tengo en Excel?",
+        "a": "En general sí, y se evalúa antes de empezar. Lo que importa no es tanto el formato como qué tan consistentes están los datos: si el mismo cliente aparece escrito de cuatro maneras, eso hay que limpiarlo, y ese trabajo también se planifica."
+      },
+      {
+        "q": "¿Funciona para courier de casillero?",
+        "a": "Se puede construir, pero mi caso en producción es de carga y logística, no de casillero. Prefiero decírtelo antes que construirlo: si tu operación es casillero, sería el primero de ese tipo y así te lo plantearía."
+      },
+      {
+        "q": "¿Cuánta gente puede usarlo a la vez?",
+        "a": "Se define en la arquitectura, con permisos por rol para que cada quien vea lo suyo. El sistema de Santoral se diseñó para un equipo interno con un único modelo de permisos, que es lo que evita duplicar el mantenimiento."
+      }
+    ],
+    "ctaTitle": "¿Cuánto tardas hoy en saber dónde está una carga?",
+    "ctaText": "Cuéntame cómo se mueve un embarque de principio a fin. La primera conversación es gratuita.",
+    "relatedProject": "santoral-logistic"
+  },
+  "soporte-mantenimiento": {
+    "slug": "soporte-mantenimiento",
+    "eyebrow": "Continuidad",
+    "title": "Soporte técnico y mantenimiento de sistemas",
+    "metaTitle": "Soporte y mantenimiento de sistemas web en RD | Jean Marte",
+    "metaDescription": "Servidor, dominio, certificados, respaldos y monitoreo. Mantenimiento y soporte para que el sistema que ya tienes siga en pie y siga creciendo.",
+    "answer": "El mantenimiento es lo que hace que un sistema siga sirviendo dos años después de entregado. Cubre lo que no se ve —servidor, dominio, certificados de seguridad, copias de respaldo y monitoreo— más la corrección de errores y las mejoras que el negocio vaya pidiendo.",
+    "sections": [
+      {
+        "heading": "El problema de después del lanzamiento",
+        "paragraphs": [
+          "Muchos proyectos terminan el día de la entrega. El sistema funciona, se paga la factura y ahí queda: el certificado vence, nadie renueva el dominio, el servidor se llena, y un día algo deja de andar sin que haya a quién llamar.",
+          "Un sistema que sostiene la operación de un negocio no es un producto que se entrega: es algo que se mantiene."
+        ]
+      },
+      {
+        "heading": "Qué cubre",
+        "items": [
+          "Servidor y entorno: que esté en pie, actualizado y con espacio.",
+          "Dominio y certificados de seguridad, renovados antes de que venzan.",
+          "Copias de respaldo, y la comprobación de que se pueden restaurar.",
+          "Monitoreo: enterarme de que algo falló antes de que me lo digas tú.",
+          "Corrección de errores.",
+          "Mejoras y funcionalidades nuevas cuando el negocio las pida."
+        ]
+      },
+      {
+        "heading": "De dónde viene esto",
+        "paragraphs": [
+          "No es una línea añadida al final de la propuesta. Antes de trabajar por mi cuenta fui analista de sistemas e infraestructura en Valiente Fernández: administré SAP Business One sobre servidores Linux, di soporte a entornos de producción bajo acuerdos de nivel de servicio y hacía monitoreo diario con foco en continuidad operacional.",
+          "Como freelance he gestionado infraestructura en AWS, Azure, Hostinger y Cloudflare, con servidores VPS, DNS y certificados. La parte que no se ve es la que más he hecho."
+        ]
+      },
+      {
+        "heading": "Precio y plazo",
+        "paragraphs": [
+          "El mantenimiento se cotiza como acompañamiento continuo, no por proyecto, y depende de cuántos sistemas cubra y de qué tan crítica sea la operación.",
+          "Si el sistema no lo construí yo, primero hago una revisión para saber en qué estado está antes de comprometerme a sostenerlo. Esa revisión te la digo por adelantado."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "q": "¿Mantienes sistemas que no construiste tú?",
+        "a": "Sí, con una revisión previa. Necesito ver en qué estado está el código, el servidor y los respaldos antes de comprometerme: comprometerse a sostener algo que no se ha mirado es cómo se quedan mal los dos."
+      },
+      {
+        "q": "¿Qué pasa si el sistema se cae un domingo?",
+        "a": "Los tiempos de respuesta se acuerdan por escrito antes de empezar, y dependen de qué tan crítica sea la operación. No es lo mismo un sitio de catálogo que un sistema del que depende la facturación diaria. Lo definimos según tu caso, no con una promesa genérica."
+      },
+      {
+        "q": "¿Está incluido en el precio del proyecto?",
+        "a": "El primer período de acompañamiento tras el lanzamiento se define junto con el alcance del proyecto. Después continúa como servicio aparte si lo quieres. Todo queda por escrito antes de empezar."
+      },
+      {
+        "q": "¿Y si un día quiero llevármelo a otro proveedor?",
+        "a": "Te llevas todo: código, dominio, cuentas y accesos son tuyos desde el principio. No trabajo con sistemas rehenes."
+      }
+    ],
+    "ctaTitle": "¿Quién sostiene tu sistema hoy?",
+    "ctaText": "Cuéntame qué tienes funcionando y quién lo cuida. La primera conversación es gratuita."
   }
 }
