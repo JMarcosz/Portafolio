@@ -9,6 +9,7 @@ import Projects from "./Projects.astro";
 import Services from "./Services.astro";
 import Process from "./Process.astro";
 import Faq from "./Faq.astro";
+import Testimonials from "./Testimonials.astro";
 import Experience from "./Experience.astro";
 import Education from "./Education.astro";
 import Certificates from "./Certificates.astro";
@@ -57,6 +58,10 @@ const serviceSchema = {
   image: `${site}/logo-web.png`,
   logo: `${site}/logo-web.png`,
   email: "mailto:jeanmarte22@gmail.com",
+  // NAP completo. El telefono existia sólo dentro del enlace de WhatsApp: para
+  // un servicio local, un negocio sin telefono declarado es un negocio sin
+  // senal de contacto para Google.
+  telephone: "+1-829-906-9256",
   address: { "@type": "PostalAddress", addressCountry: "DO", addressLocality: "Santo Domingo" },
   areaServed: GEOGRAPHIC_AREAS,
   provider: {
@@ -116,6 +121,7 @@ const serviceSchema = {
           <div class="group-inner">
             <Process />
             <Faq />
+            <Testimonials />
           </div>
         </section>
 

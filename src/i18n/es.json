@@ -7,13 +7,34 @@
     "localeOg": "es_DO"
   },
   "nav": [
-    { "label": "Inicio", "href": "#inicio" },
-    { "label": "Sobre mí", "href": "#sobre-mi" },
-    { "label": "Proyectos", "href": "#proyectos" },
-    { "label": "Servicios", "href": "#servicios" },
-    { "label": "Proceso", "href": "#proceso" },
-    { "label": "Experiencia", "href": "#experiencia" },
-    { "label": "Contacto", "href": "#contacto" }
+    {
+      "label": "Inicio",
+      "href": "#inicio"
+    },
+    {
+      "label": "Sobre mí",
+      "href": "#sobre-mi"
+    },
+    {
+      "label": "Proyectos",
+      "href": "#proyectos"
+    },
+    {
+      "label": "Servicios",
+      "href": "#servicios"
+    },
+    {
+      "label": "Proceso",
+      "href": "#proceso"
+    },
+    {
+      "label": "Experiencia",
+      "href": "#experiencia"
+    },
+    {
+      "label": "Contacto",
+      "href": "#contacto"
+    }
   ],
   "hero": {
     "eyebrow": "Desarrollo de software a medida",
@@ -38,10 +59,22 @@
     "highlight": "cómo trabaja tu negocio hoy",
     "paragraphAfterHighlight": ", porque un sistema que no encaja con la operación real termina abandonado a los dos meses. Por eso cada decisión te la explico por su efecto en tu negocio, no por la tecnología que lleva detrás.",
     "stats": [
-      { "value": "3+", "label": "Años construyendo software" },
-      { "value": "3", "label": "Sistemas en producción" },
-      { "value": "6", "label": "Certificaciones" },
-      { "value": "ES/EN", "label": "Trabajo bilingüe" }
+      {
+        "value": "2022",
+        "label": "Construyendo software desde"
+      },
+      {
+        "value": "3",
+        "label": "Sistemas en producción"
+      },
+      {
+        "value": "4",
+        "label": "Certificaciones"
+      },
+      {
+        "value": "ES/EN",
+        "label": "Trabajo bilingüe"
+      }
     ]
   },
   "projects": {
@@ -57,7 +90,11 @@
         "badge": "Producto propio",
         "title": "Automatización fiscal 606/607",
         "valueLine": "Convierte facturas en papel, PDF o foto en los archivos que la DGII pide, sin digitarlas a mano.",
-        "tags": ["Vue 3", "NestJS", "PostgreSQL"],
+        "tags": [
+          "Vue 3",
+          "NestJS",
+          "PostgreSQL"
+        ],
         "caseStudy": {
           "name": "Zentra",
           "tagline": "Automatización fiscal para República Dominicana",
@@ -100,7 +137,13 @@
               "texto": "Un comprobante pertenece a una empresa, a un período y a una clasificación, y esas relaciones tienen que ser consistentes o el archivo generado no cuadra. Es exactamente el caso para una base relacional."
             }
           ],
-          "stack": ["Vue 3", "NestJS", "PostgreSQL", "Google Gemini", "Docker"],
+          "stack": [
+            "Vue 3",
+            "NestJS",
+            "PostgreSQL",
+            "Google Gemini",
+            "Docker"
+          ],
           "dificultades": [
             "La entrada real no son PDFs limpios: es papel térmico descolorido y fotos torcidas tomadas con el teléfono. El escáner tenía que asumir eso como el caso normal, no como la excepción.",
             "[PENDIENTE: dificultades técnicas reales que quieras contar — qué costó más y cómo lo resolviste]"
@@ -117,7 +160,11 @@
         "badge": "Proyecto de cliente",
         "title": "Plataforma logística de carga",
         "valueLine": "Cotizaciones, embarques, inventario y clientes en un solo sistema, en vez de procesos separados.",
-        "tags": ["Laravel 12", "React 19", "PostgreSQL"],
+        "tags": [
+          "Laravel 12",
+          "React 19",
+          "PostgreSQL"
+        ],
         "caseStudy": {
           "name": "Santoral Logistic",
           "tagline": "Para Maed Logistic Trading",
@@ -179,7 +226,11 @@
         "badge": "Proyecto de cliente",
         "title": "Sitio web y posicionamiento en Google",
         "valueLine": "Una marca que solo existía en Instagram ahora aparece en Google cuando alguien busca su nombre o sus productos.",
-        "tags": ["Astro", "Tailwind", "SEO"],
+        "tags": [
+          "Astro",
+          "Tailwind",
+          "SEO"
+        ],
         "caseStudy": {
           "name": "Bunu Shop",
           "tagline": "Accesorios y joyería artesanal — Colombia",
@@ -222,7 +273,14 @@
               "texto": "Sin datos, «aumentar el alcance» es una corazonada. Search Console muestra por qué búsquedas aparece la marca y qué páginas indexó Google; Analytics muestra de dónde llega la gente. Con eso las decisiones dejan de ser a ciegas."
             }
           ],
-          "stack": ["Astro", "TailwindCSS", "TypeScript", "Vercel", "Google Search Console", "Google Analytics"],
+          "stack": [
+            "Astro",
+            "TailwindCSS",
+            "TypeScript",
+            "Vercel",
+            "Google Search Console",
+            "Google Analytics"
+          ],
           "dificultades": [
             "Partir de cero en buscadores: un dominio nuevo no tiene historial ni autoridad, así que la indexación y el posicionamiento de marca llevan tiempo y hay que acompañarlos con Search Console, no esperar a que ocurra solo."
           ],
@@ -234,6 +292,14 @@
         }
       }
     ]
+  },
+  "projectsIndex": {
+    "eyebrow": "Trabajo seleccionado",
+    "title": "Sistemas y sitios que ya están funcionando",
+    "description": "Cada proyecto empezó igual: entender cómo trabaja el negocio antes de escribir una línea de código. Acá está el resultado de cada uno, con el problema que resolvió y las decisiones que hubo detrás.",
+    "backHome": "Volver al inicio",
+    "metaTitle": "Proyectos — sistemas y sitios en producción | Jean Marte",
+    "metaDescription": "Casos de estudio de sistemas web en producción: automatización fiscal 606/607 para la DGII, plataforma de logística de carga y posicionamiento en Google. El problema, la solución y el resultado de cada uno."
   },
   "caseStudy": {
     "eyebrow": "Caso de estudio",
@@ -269,7 +335,9 @@
       },
       {
         "title": "Automatizar lo que hoy se hace a mano",
-        "description": "Ese proceso repetitivo que se lleva horas de alguien cada semana: facturas que se digitan, reportes que se arman a mano, mensajes que se responden uno por uno. Se puede automatizar."
+        "description": "Ese proceso repetitivo que se lleva horas de alguien cada semana: los formatos 606 y 607 de la DGII que se digitan factura por factura, reportes que se arman a mano, mensajes que se responden uno por uno.",
+        "href": "/servicios/automatizacion-606-607-dgii/",
+        "linkLabel": "Automatización del 606 y 607 →"
       },
       {
         "title": "Mantenimiento y evolución",
@@ -344,6 +412,26 @@
       }
     ]
   },
+  "testimonials": {
+    "eyebrow": "Lo que dicen quienes ya trabajaron conmigo",
+    "heading1": "No tienes que",
+    "heading2": "Creerme a Mí",
+    "items": [
+      {
+        "quote": "Quedé sin palabras, el resultado fue sorprendente. Nunca me imaginé que tendría mi página en la web. Pasé de tener 0 presencia a tener el ranking número 1 dentro de mi nicho.",
+        "name": "Mary Sorelly",
+        "role": "CEO de Bunu Shop",
+        "project": "bunu-shop"
+      },
+      {
+        "quote": "La página quedó super bien, el trabajo fue rápido e impecable. Logré que mi página pasara de no tener visualización a estar posicionada en menos de una semana. Lo recomiendo 100%, mil gracias.",
+        "name": "Isabel Correa",
+        "role": "CEO de Alquimia Lab",
+        "project": null
+      }
+    ],
+    "seeCase": "Ver el caso"
+  },
   "experience": {
     "eyebrow": "Experiencia profesional",
     "heading1": "Dónde he",
@@ -361,7 +449,13 @@
           "Contenerización de aplicaciones y estandarización de entornos de desarrollo y despliegue utilizando Docker.",
           "Trabajo con sistemas empresariales que incluyen módulos de recursos humanos, CRM, contabilidad y operaciones."
         ],
-        "tags": ["Nuxt.js", "Vue.js", "Docker", "REST API", "JSON"]
+        "tags": [
+          "Nuxt.js",
+          "Vue.js",
+          "Docker",
+          "REST API",
+          "JSON"
+        ]
       },
       {
         "period": "NOV 2023 — SEP 2025",
@@ -374,7 +468,13 @@
           "Realicé mantenimiento de infraestructura, monitoreo diario de sistemas y soporte técnico basado en SLA.",
           "Desarrollé soluciones SQL avanzadas, incluyendo procedimientos almacenados, vistas, cubos de datos y reportes con SAP Crystal Reports."
         ],
-        "tags": ["SAP Business One", "SQL Server", "Linux", "DGII", "Crystal Reports"]
+        "tags": [
+          "SAP Business One",
+          "SQL Server",
+          "Linux",
+          "DGII",
+          "Crystal Reports"
+        ]
       },
       {
         "period": "2022 — PRESENTE",
@@ -387,7 +487,13 @@
           "Plataformas web y tiendas online con WordPress, Elementor y WooCommerce, incluyendo plantillas personalizadas en PHP.",
           "Automatización de procesos financieros con Google Apps Script y gestión integral de infraestructura: AWS, Azure, Hostinger, Cloudflare, servidores VPS con Apache, DNS y certificados SSL."
         ],
-        "tags": ["React", "Laravel", "Python", "WordPress", "AWS"]
+        "tags": [
+          "React",
+          "Laravel",
+          "Python",
+          "WordPress",
+          "AWS"
+        ]
       }
     ]
   },
@@ -423,7 +529,11 @@
         "title": "Desarrollo Web Front-End con Angular",
         "institution": "ITLA",
         "description": "Autenticación y validación de rutas con Guards, consumo dinámico de APIs, gestión de LocalStorage y componentes reutilizables con TailwindCSS.",
-        "tags": ["Angular", "TailwindCSS", "APIs REST"]
+        "tags": [
+          "Angular",
+          "TailwindCSS",
+          "APIs REST"
+        ]
       },
       {
         "slug": "powerbi",
@@ -431,15 +541,10 @@
         "title": "Analista de Datos - Power BI",
         "institution": "Udemy",
         "description": "Formación en análisis y visualización de datos con Power BI para la toma de decisiones de negocio.",
-        "tags": ["Power BI", "Análisis de Datos"]
-      },
-      {
-        "slug": "english-a2",
-        "year": "2024",
-        "title": "English Certificate A2-Level",
-        "institution": "International English Test",
-        "description": "Certificación de nivel de inglés A2 (elemental).",
-        "tags": ["Inglés", "A2"]
+        "tags": [
+          "Power BI",
+          "Análisis de Datos"
+        ]
       },
       {
         "slug": "scrum",
@@ -447,7 +552,10 @@
         "title": "Fundamentos de Scrum",
         "institution": "soylider.net",
         "description": "Principios y fundamentos del framework ágil Scrum.",
-        "tags": ["Scrum", "Agile"]
+        "tags": [
+          "Scrum",
+          "Agile"
+        ]
       },
       {
         "slug": "community-management",
@@ -455,15 +563,10 @@
         "title": "Community Management & Marketing Digital",
         "institution": "ITLA",
         "description": "Gestión de redes sociales y estrategias de marketing digital.",
-        "tags": ["Marketing Digital", "Redes Sociales"]
-      },
-      {
-        "slug": "cisco-it-essentials",
-        "year": "2022",
-        "title": "Cisco Certified IT Essentials",
-        "institution": "Cisco Networking Academy",
-        "description": "Fundamentos de hardware, software y redes de computadoras.",
-        "tags": ["Redes", "Hardware"]
+        "tags": [
+          "Marketing Digital",
+          "Redes Sociales"
+        ]
       }
     ]
   },
@@ -482,10 +585,22 @@
         "title": "Lo que el usuario ve",
         "description": "Interfaces claras, accesibles y rápidas en el navegador",
         "skills": [
-          { "label": "Angular", "level": "advanced" },
-          { "label": "Vue.js / Nuxt.js", "level": "advanced" },
-          { "label": "React / Next.js", "level": "solid" },
-          { "label": "TypeScript", "level": "advanced" }
+          {
+            "label": "Angular",
+            "level": "advanced"
+          },
+          {
+            "label": "Vue.js / Nuxt.js",
+            "level": "advanced"
+          },
+          {
+            "label": "React / Next.js",
+            "level": "solid"
+          },
+          {
+            "label": "TypeScript",
+            "level": "advanced"
+          }
         ]
       },
       {
@@ -493,10 +608,22 @@
         "title": "Lo que hace funcionar el sistema",
         "description": "APIs, bases de datos y lógica de servidor",
         "skills": [
-          { "label": "NestJS / Node.js", "level": "solid" },
-          { "label": "Laravel / PHP", "level": "solid" },
-          { "label": "PostgreSQL / SQL Server", "level": "advanced" },
-          { "label": "APIs REST y autenticación", "level": "advanced" }
+          {
+            "label": "NestJS / Node.js",
+            "level": "solid"
+          },
+          {
+            "label": "Laravel / PHP",
+            "level": "solid"
+          },
+          {
+            "label": "PostgreSQL / SQL Server",
+            "level": "advanced"
+          },
+          {
+            "label": "APIs REST y autenticación",
+            "level": "advanced"
+          }
         ]
       },
       {
@@ -504,10 +631,22 @@
         "title": "Lo que lo mantiene en pie",
         "description": "Despliegue, servidores y trabajo en equipo",
         "skills": [
-          { "label": "Docker", "level": "solid" },
-          { "label": "Git", "level": "daily" },
-          { "label": "Linux / VPS", "level": "solid" },
-          { "label": "AWS / Azure / Cloudflare", "level": "solid" }
+          {
+            "label": "Docker",
+            "level": "solid"
+          },
+          {
+            "label": "Git",
+            "level": "daily"
+          },
+          {
+            "label": "Linux / VPS",
+            "level": "solid"
+          },
+          {
+            "label": "AWS / Azure / Cloudflare",
+            "level": "solid"
+          }
         ]
       }
     ]
@@ -519,7 +658,7 @@
     "description": "No hace falta que traigas una solución pensada ni que sepas de tecnología. Cuéntame cómo funciona tu operación hoy y qué te está costando. La primera conversación es gratuita.",
     "scheduleCta": "Agendar una llamada",
     "orForm": "o escríbeme por aquí",
-    "location": "República Dominicana · Remoto",
+    "location": "Santo Domingo, RD · Presencial y remoto",
     "fieldEmail": "[ Correo ]",
     "fieldLocation": "[ Ubicación ]",
     "labelName": "Nombre",
@@ -537,9 +676,16 @@
     "notConfigured": "El formulario aún no está conectado (falta configurar la Access Key de Web3Forms)."
   },
   "footer": {
-    "role": "Sistemas web a medida · República Dominicana",
+    "role": "Sistemas web a medida · Santo Domingo, República Dominicana",
+    "area": "Presencial en Santo Domingo (Piantini, Naco, Distrito Nacional) y desarrollo remoto para toda República Dominicana.",
     "contact": "Contacto",
-    "rights": "Todos los derechos reservados."
+    "rights": "Todos los derechos reservados.",
+    "colProjects": "Proyectos",
+    "colSite": "El sitio",
+    "colContact": "Hablemos",
+    "allProjects": "Ver todos los proyectos",
+    "whatsappLabel": "WhatsApp",
+    "phoneDisplay": "+1 829 906 9256"
   },
   "header": {
     "save": "Guardar",

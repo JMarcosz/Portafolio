@@ -4,6 +4,7 @@ import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
 import CaseStudy from "../../components/CaseStudy.astro";
 import { getContent, getProjects, projectPath } from "../../i18n";
+import { caseStudySchema } from "../../lib/schema";
 
 export function getStaticPaths() {
   return getProjects("es").map((project) => ({
@@ -36,6 +37,8 @@ const breadcrumbSchema = {
     { "@type": "ListItem", position: 3, name: cs.name, item: `${site}${projectPath("es", project.slug)}` },
   ],
 };
+
+const articleSchema = caseStudySchema(project, "es");
 ---
 
 <!-- image = el recorte 16:9, no la captura de pagina completa: una
@@ -50,7 +53,7 @@ const breadcrumbSchema = {
   esHref={projectPath("es", project.slug)}
   enHref={projectPath("en", project.slug)}
   ogType="article"
-  extraSchema={[breadcrumbSchema]}
+  extraSchema={[articleSchema, breadcrumbSchema]}
 >
   <Header otherHref={projectPath("en", project.slug)} />
   <main id="contenido" tabindex="-1">

@@ -7,13 +7,34 @@
     "localeOg": "en_US"
   },
   "nav": [
-    { "label": "Home", "href": "#inicio" },
-    { "label": "About", "href": "#sobre-mi" },
-    { "label": "Projects", "href": "#proyectos" },
-    { "label": "Services", "href": "#servicios" },
-    { "label": "Process", "href": "#proceso" },
-    { "label": "Experience", "href": "#experiencia" },
-    { "label": "Contact", "href": "#contacto" }
+    {
+      "label": "Home",
+      "href": "#inicio"
+    },
+    {
+      "label": "About",
+      "href": "#sobre-mi"
+    },
+    {
+      "label": "Projects",
+      "href": "#proyectos"
+    },
+    {
+      "label": "Services",
+      "href": "#servicios"
+    },
+    {
+      "label": "Process",
+      "href": "#proceso"
+    },
+    {
+      "label": "Experience",
+      "href": "#experiencia"
+    },
+    {
+      "label": "Contact",
+      "href": "#contacto"
+    }
   ],
   "hero": {
     "eyebrow": "Custom software development",
@@ -38,10 +59,22 @@
     "highlight": "how your business actually works today",
     "paragraphAfterHighlight": ", because a system that doesn't fit the real operation gets abandoned within two months. That's why every decision is explained by its effect on your business, not by the technology behind it.",
     "stats": [
-      { "value": "3+", "label": "Years building software" },
-      { "value": "3", "label": "Systems in production" },
-      { "value": "6", "label": "Certifications" },
-      { "value": "EN/ES", "label": "Bilingual work" }
+      {
+        "value": "2022",
+        "label": "Building software since"
+      },
+      {
+        "value": "3",
+        "label": "Systems in production"
+      },
+      {
+        "value": "4",
+        "label": "Certifications"
+      },
+      {
+        "value": "EN/ES",
+        "label": "Bilingual work"
+      }
     ]
   },
   "projects": {
@@ -57,7 +90,11 @@
         "badge": "Own product",
         "title": "606/607 tax filing automation",
         "valueLine": "Turns paper, PDF or photographed invoices into the files the tax authority asks for, with no manual typing.",
-        "tags": ["Vue 3", "NestJS", "PostgreSQL"],
+        "tags": [
+          "Vue 3",
+          "NestJS",
+          "PostgreSQL"
+        ],
         "caseStudy": {
           "name": "Zentra",
           "tagline": "Tax filing automation for the Dominican Republic",
@@ -100,7 +137,13 @@
               "texto": "A receipt belongs to a company, a period and a classification, and those relationships have to stay consistent or the generated file won't add up. That's exactly the case for a relational database."
             }
           ],
-          "stack": ["Vue 3", "NestJS", "PostgreSQL", "Google Gemini", "Docker"],
+          "stack": [
+            "Vue 3",
+            "NestJS",
+            "PostgreSQL",
+            "Google Gemini",
+            "Docker"
+          ],
           "dificultades": [
             "The real input isn't clean PDFs: it's faded thermal paper and crooked phone photos. The scanner had to treat that as the normal case, not the exception.",
             "[PENDING: real technical difficulties worth telling — what was hardest and how you solved it]"
@@ -117,7 +160,11 @@
         "badge": "Client project",
         "title": "Freight logistics platform",
         "valueLine": "Quotes, shipments, inventory and clients in a single system, instead of separate processes.",
-        "tags": ["Laravel 12", "React 19", "PostgreSQL"],
+        "tags": [
+          "Laravel 12",
+          "React 19",
+          "PostgreSQL"
+        ],
         "caseStudy": {
           "name": "Santoral Logistic",
           "tagline": "For Maed Logistic Trading",
@@ -179,7 +226,11 @@
         "badge": "Client project",
         "title": "Website and Google visibility",
         "valueLine": "A brand that only existed on Instagram now shows up on Google when someone searches its name or its products.",
-        "tags": ["Astro", "Tailwind", "SEO"],
+        "tags": [
+          "Astro",
+          "Tailwind",
+          "SEO"
+        ],
         "caseStudy": {
           "name": "Bunu Shop",
           "tagline": "Handmade accessories and jewelry — Colombia",
@@ -222,7 +273,14 @@
               "texto": "Without data, \"grow the reach\" is a hunch. Search Console shows which searches surface the brand and which pages Google indexed; Analytics shows where people come from. With that, decisions stop being blind."
             }
           ],
-          "stack": ["Astro", "TailwindCSS", "TypeScript", "Vercel", "Google Search Console", "Google Analytics"],
+          "stack": [
+            "Astro",
+            "TailwindCSS",
+            "TypeScript",
+            "Vercel",
+            "Google Search Console",
+            "Google Analytics"
+          ],
           "dificultades": [
             "Starting from zero in search engines: a new domain has no history or authority, so indexing and brand ranking take time and have to be nudged along with Search Console rather than waited out."
           ],
@@ -234,6 +292,14 @@
         }
       }
     ]
+  },
+  "projectsIndex": {
+    "eyebrow": "Selected work",
+    "title": "Systems and sites already running",
+    "description": "Every project started the same way: understanding how the business works before writing a line of code. Here is the outcome of each one, with the problem it solved and the decisions behind it.",
+    "backHome": "Back to home",
+    "metaTitle": "Projects — systems and sites in production | Jean Marte",
+    "metaDescription": "Case studies of web systems in production: DGII tax automation for the 606/607 filings, a freight logistics platform, and Google visibility. The problem, the solution and the result of each one."
   },
   "caseStudy": {
     "eyebrow": "Case study",
@@ -344,6 +410,26 @@
       }
     ]
   },
+  "testimonials": {
+    "eyebrow": "From the people I've already worked with",
+    "heading1": "You Don't Have to",
+    "heading2": "Take My Word",
+    "items": [
+      {
+        "quote": "I was speechless — the result was astonishing. I never imagined I'd have my own page on the web. I went from zero presence to ranking number one in my niche.",
+        "name": "Mary Sorelly",
+        "role": "CEO of Bunu Shop",
+        "project": "bunu-shop"
+      },
+      {
+        "quote": "The site turned out great, and the work was fast and flawless. My page went from no visibility at all to ranking in less than a week. I recommend him 100%, thank you so much.",
+        "name": "Isabel Correa",
+        "role": "CEO of Alquimia Lab",
+        "project": null
+      }
+    ],
+    "seeCase": "See the case study"
+  },
   "experience": {
     "eyebrow": "Professional experience",
     "heading1": "Where I've",
@@ -361,7 +447,13 @@
           "Containerizing applications and standardizing development and deployment environments with Docker.",
           "Working with enterprise systems spanning HR, CRM, accounting and operations modules."
         ],
-        "tags": ["Nuxt.js", "Vue.js", "Docker", "REST API", "JSON"]
+        "tags": [
+          "Nuxt.js",
+          "Vue.js",
+          "Docker",
+          "REST API",
+          "JSON"
+        ]
       },
       {
         "period": "NOV 2023 — SEP 2025",
@@ -374,7 +466,13 @@
           "Handled infrastructure maintenance, daily system monitoring and SLA-based technical support.",
           "Built advanced SQL solutions, including stored procedures, views, data cubes and reports with SAP Crystal Reports."
         ],
-        "tags": ["SAP Business One", "SQL Server", "Linux", "DGII", "Crystal Reports"]
+        "tags": [
+          "SAP Business One",
+          "SQL Server",
+          "Linux",
+          "DGII",
+          "Crystal Reports"
+        ]
       },
       {
         "period": "2022 — PRESENT",
@@ -387,7 +485,13 @@
           "Websites and online stores with WordPress, Elementor and WooCommerce, including custom PHP templates.",
           "Financial process automation with Google Apps Script and end-to-end infrastructure management: AWS, Azure, Hostinger, Cloudflare, VPS servers with Apache, DNS and SSL certificates."
         ],
-        "tags": ["React", "Laravel", "Python", "WordPress", "AWS"]
+        "tags": [
+          "React",
+          "Laravel",
+          "Python",
+          "WordPress",
+          "AWS"
+        ]
       }
     ]
   },
@@ -423,7 +527,11 @@
         "title": "Front-End Web Development with Angular",
         "institution": "ITLA",
         "description": "Route authentication and validation with Guards, dynamic API consumption, LocalStorage management and reusable components with TailwindCSS.",
-        "tags": ["Angular", "TailwindCSS", "REST APIs"]
+        "tags": [
+          "Angular",
+          "TailwindCSS",
+          "REST APIs"
+        ]
       },
       {
         "slug": "powerbi",
@@ -431,15 +539,10 @@
         "title": "Data Analyst - Power BI",
         "institution": "Udemy",
         "description": "Training in data analysis and visualization with Power BI for business decision-making.",
-        "tags": ["Power BI", "Data Analysis"]
-      },
-      {
-        "slug": "english-a2",
-        "year": "2024",
-        "title": "English Certificate A2-Level",
-        "institution": "International English Test",
-        "description": "A2 (elementary) English level certification.",
-        "tags": ["English", "A2"]
+        "tags": [
+          "Power BI",
+          "Data Analysis"
+        ]
       },
       {
         "slug": "scrum",
@@ -447,7 +550,10 @@
         "title": "Scrum Fundamentals",
         "institution": "soylider.net",
         "description": "Principles and fundamentals of the agile Scrum framework.",
-        "tags": ["Scrum", "Agile"]
+        "tags": [
+          "Scrum",
+          "Agile"
+        ]
       },
       {
         "slug": "community-management",
@@ -455,15 +561,10 @@
         "title": "Community Management & Digital Marketing",
         "institution": "ITLA",
         "description": "Social media management and digital marketing strategy.",
-        "tags": ["Digital Marketing", "Social Media"]
-      },
-      {
-        "slug": "cisco-it-essentials",
-        "year": "2022",
-        "title": "Cisco Certified IT Essentials",
-        "institution": "Cisco Networking Academy",
-        "description": "Fundamentals of computer hardware, software and networking.",
-        "tags": ["Networking", "Hardware"]
+        "tags": [
+          "Digital Marketing",
+          "Social Media"
+        ]
       }
     ]
   },
@@ -482,10 +583,22 @@
         "title": "What the user sees",
         "description": "Clear, accessible and fast interfaces in the browser",
         "skills": [
-          { "label": "Angular", "level": "advanced" },
-          { "label": "Vue.js / Nuxt.js", "level": "advanced" },
-          { "label": "React / Next.js", "level": "solid" },
-          { "label": "TypeScript", "level": "advanced" }
+          {
+            "label": "Angular",
+            "level": "advanced"
+          },
+          {
+            "label": "Vue.js / Nuxt.js",
+            "level": "advanced"
+          },
+          {
+            "label": "React / Next.js",
+            "level": "solid"
+          },
+          {
+            "label": "TypeScript",
+            "level": "advanced"
+          }
         ]
       },
       {
@@ -493,10 +606,22 @@
         "title": "What makes the system run",
         "description": "APIs, databases and server-side logic",
         "skills": [
-          { "label": "NestJS / Node.js", "level": "solid" },
-          { "label": "Laravel / PHP", "level": "solid" },
-          { "label": "PostgreSQL / SQL Server", "level": "advanced" },
-          { "label": "REST APIs and authentication", "level": "advanced" }
+          {
+            "label": "NestJS / Node.js",
+            "level": "solid"
+          },
+          {
+            "label": "Laravel / PHP",
+            "level": "solid"
+          },
+          {
+            "label": "PostgreSQL / SQL Server",
+            "level": "advanced"
+          },
+          {
+            "label": "REST APIs and authentication",
+            "level": "advanced"
+          }
         ]
       },
       {
@@ -504,10 +629,22 @@
         "title": "What keeps it standing",
         "description": "Deployment, servers and teamwork",
         "skills": [
-          { "label": "Docker", "level": "solid" },
-          { "label": "Git", "level": "daily" },
-          { "label": "Linux / VPS", "level": "solid" },
-          { "label": "AWS / Azure / Cloudflare", "level": "solid" }
+          {
+            "label": "Docker",
+            "level": "solid"
+          },
+          {
+            "label": "Git",
+            "level": "daily"
+          },
+          {
+            "label": "Linux / VPS",
+            "level": "solid"
+          },
+          {
+            "label": "AWS / Azure / Cloudflare",
+            "level": "solid"
+          }
         ]
       }
     ]
@@ -519,7 +656,7 @@
     "description": "You don't need to arrive with a solution in mind or know anything about technology. Tell me how your operation works today and what's costing you. The first conversation is free.",
     "scheduleCta": "Book a call",
     "orForm": "or write to me here",
-    "location": "Dominican Republic · Remote",
+    "location": "Santo Domingo, DR · On-site and remote",
     "fieldEmail": "[ Email ]",
     "fieldLocation": "[ Location ]",
     "labelName": "Name",
@@ -537,9 +674,16 @@
     "notConfigured": "The form isn't connected yet (the Web3Forms Access Key still needs to be configured)."
   },
   "footer": {
-    "role": "Custom web systems · Dominican Republic",
+    "role": "Custom web systems · Santo Domingo, Dominican Republic",
+    "area": "On-site in Santo Domingo (Piantini, Naco, Distrito Nacional) and remote development across the Dominican Republic.",
     "contact": "Contact",
-    "rights": "All rights reserved."
+    "rights": "All rights reserved.",
+    "colProjects": "Projects",
+    "colSite": "Site",
+    "colContact": "Let's talk",
+    "allProjects": "See all projects",
+    "whatsappLabel": "WhatsApp",
+    "phoneDisplay": "+1 829 906 9256"
   },
   "header": {
     "save": "Save",

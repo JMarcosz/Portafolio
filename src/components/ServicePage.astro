@@ -1,0 +1,112 @@
+---
+// Página de servicio. La estructura persigue dos cosas a la vez:
+//   - Que el visitante con prisa encuentre la respuesta arriba: `answer` es un
+//     párrafo de 40-60 palabras justo bajo el H1, que es el formato que Google
+//     extrae como fragmento destacado.
+//   - Que la página tenga sustancia propia (>400 palabras) y no sea una
+//     plantilla rellenada, que es lo que Google trata como contenido delgado.
+import type { ServicePage } from "../i18n";
+import { getContent } from "../i18n";
+
+interface Props {
+  service: ServicePage;
+}
+
+const { service } = Astro.props;
+const t = getContent("es");
+const related = t.projects.items.find((p) => p.slug === service.relatedProject);
+---
+
+<article class="mx-auto max-w-3xl section-y px-6">
+  <p class="eyebrow mb-4">{service.eyebrow}</p>
+  <h1 class="text-4xl font-bold leading-[1.1] tracking-tight text-white md:text-5xl">{service.title}</h1>
+
+  <p class="mt-8 border-l-2 border-white/25 pl-5 text-base leading-relaxed text-white">
+    {service.answer}
+  </p>
+
+  {
+    service.sections.map((section) => (
+      <section class="mt-14">
+        <h2 class="text-2xl font-bold tracking-tight text-white">{section.heading}</h2>
+        {"paragraphs" in section &&
+          section.paragraphs?.map((p) => (
+            <p class="mt-4 text-sm leading-relaxed text-white">{p}</p>
+          ))}
+        {"items" in section && section.items && (
+          <ul class="mt-4 space-y-2">
+            {section.items.map((item) => (
+              <li class="flex gap-3 text-sm leading-relaxed text-white">
+                <span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-white/50" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    ))
+  }
+
+  {
+    related && (
+      <section class="mt-14">
+        <div class="card p-6">
+          <p class="eyebrow mb-3">{t.caseStudy.eyebrow}</p>
+          <h2 class="text-lg font-semibold text-white">{related.caseStudy.name}</h2>
+          <p class="mt-2 text-sm leading-relaxed text-white">{related.valueLine}</p>
+          <div class="mt-5 flex flex-wrap gap-3">
+            <a href={related.href} class="btn-primary text-sm">
+              {t.projects.viewCase}
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </a>
+            <a
+              href={related.demo}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white transition-colors hover:border-white/30 hover:bg-white/5"
+            >
+              {t.projects.viewDemo}
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M7 17L17 7M17 7H9M17 7v8" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="mt-14">
+    <h2 class="text-2xl font-bold tracking-tight text-white">{t.faq.eyebrow}</h2>
+    <dl class="mt-6 divide-y divide-white/10 border-y border-white/10">
+      {
+        service.faq.map((item) => (
+          <div class="py-5">
+            <dt class="text-base font-semibold text-white">{item.q}</dt>
+            <dd class="mt-2 text-sm leading-relaxed text-white">{item.a}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <section class="mt-14 card p-8">
+    <h2 class="text-xl font-bold tracking-tight text-white">{service.ctaTitle}</h2>
+    <p class="mt-3 text-sm leading-relaxed text-white">{service.ctaText}</p>
+    <a href={t.schedule} target="_blank" rel="noopener noreferrer" class="btn-primary mt-6 text-sm">
+      {t.contact.scheduleCta}
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M5 12h14M12 5l7 7-7 7" />
+      </svg>
+    </a>
+  </section>
+
+  <a href={t.home} class="mt-14 inline-flex items-center gap-2 text-sm text-white hover:underline">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M19 12H5M12 19l-7-7 7-7" />
+    </svg>
+    {t.caseStudy.back}
+  </a>
+</article>

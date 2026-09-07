@@ -9,6 +9,7 @@
 //   t.hero.title2, t.projects.items[0].demo, t.schedule, t.socials, ...
 import es from "./es.json";
 import en from "./en.json";
+import serviciosEs from "./services.es.json";
 
 export const LOCALES = ["es", "en"] as const;
 export type Locale = (typeof LOCALES)[number];
@@ -75,6 +76,7 @@ const shared = {
       imageWidth: 1200,
       imageHeight: 6456,
       thumb: "/zentrav2-card.webp",
+      publishedAt: "2026-08-29",
     },
     "santoral-logistic": {
       link: "https://github.com/JMarcosz/SantoralLogistic",
@@ -83,6 +85,7 @@ const shared = {
       imageWidth: 1200,
       imageHeight: 3393,
       thumb: "/santorallogisticsv2-card.webp",
+      publishedAt: "2026-08-29",
     },
     "bunu-shop": {
       link: "https://github.com/JMarcosz/BunuShop",
@@ -91,10 +94,25 @@ const shared = {
       imageWidth: 1200,
       imageHeight: 750,
       thumb: "/bunushop-card.webp",
+      publishedAt: "2026-09-05",
     },
   } as Record<
     string,
-    { link: string; demo: string; image: string; imageWidth: number; imageHeight: number; thumb: string }
+    {
+      link: string;
+      demo: string;
+      image: string;
+      imageWidth: number;
+      imageHeight: number;
+      thumb: string;
+      /**
+       * Fecha real en que el caso se publicó en el sitio, sacada del historial de
+       * git — no una fecha inventada para satisfacer al schema. Alimenta
+       * `datePublished` del Article: sin ella el caso no es elegible para los
+       * resultados enriquecidos de artículo.
+       */
+      publishedAt: string;
+    }
   >,
   /**
    * Imagen y PDF de cada certificado, indexados por slug. Un slug sin entrada
@@ -163,7 +181,15 @@ function merge(dict: Dict, locale: Locale) {
       ...dict.projects,
       items: dict.projects.items.map((item) => ({
         ...item,
-        ...(shared.projects[item.slug] ?? { link: "", demo: "", image: "", imageWidth: 0, imageHeight: 0, thumb: "" }),
+        ...(shared.projects[item.slug] ?? {
+          link: "",
+          demo: "",
+          image: "",
+          imageWidth: 0,
+          imageHeight: 0,
+          thumb: "",
+          publishedAt: "",
+        }),
         href: projectPath(locale, item.slug),
       })),
     },
@@ -203,4 +229,20 @@ export function getProject(locale: string | null | undefined, slug: string): Pro
 /** Todos los proyectos de un idioma — usado por `getStaticPaths`. */
 export function getProjects(locale: Locale): Project[] {
   return CONTENT[locale].projects.items;
+}
+
+// --- Páginas de servicio -----------------------------------------------------
+//
+// Sólo en español, y a propósito: el mercado busca estos servicios en español,
+// y `/en/` acumula 14 impresiones en posición 9,1. Espejar cada página de
+// servicio al inglés serían páginas delgadas que nadie busca.
+
+export type ServicePage = (typeof serviciosEs)[keyof typeof serviciosEs];
+
+export function getServicePages(): ServicePage[] {
+  return Object.values(serviciosEs);
+}
+
+export function getServicePage(slug: string): ServicePage | undefined {
+  return (serviciosEs as Record<string, ServicePage>)[slug];
 }

@@ -1,16 +1,83 @@
 ---
-import { getContent } from "../i18n";
-const { footer, home } = getContent(Astro.currentLocale);
+// El footer es el mecanismo de enlazado interno más barato del sitio: sale en
+// TODAS las páginas. Antes sólo tenía un `#contacto`, así que los casos de
+// estudio quedaban colgando de la home — que además es una página con túnel de
+// scroll. Search Console los reportaba sin indexar.
+//
+// También es donde vive la señal local (NAP): dirección de servicio y teléfono
+// visible en texto, no sólo dentro de un botón.
+import { getContent, normalizeLocale, projectPath } from "../i18n";
+
+const locale = normalizeLocale(Astro.currentLocale);
+const t = getContent(locale);
+const { footer, home, projects, schedule, contact } = t;
+
+const projectsIndex = locale === "en" ? "/en/projects/" : "/proyectos/";
+
+const siteLinks = t.nav
+  .filter((item) => ["#sobre-mi", "#servicios", "#proceso", "#experiencia"].includes(item.href))
+  .map((item) => ({ label: item.label, href: `${home}${item.href}` }));
 ---
 
 <footer data-footer class="border-t border-white/10">
-  <div class="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-8 sm:flex-row sm:items-center sm:justify-between">
-    <div>
-      <p class="text-sm font-bold tracking-tight">{footer.name.toUpperCase()}</p>
-      <p class="text-xs text-white">{footer.role}</p>
+  <div class="mx-auto max-w-6xl px-6 py-12">
+    <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="lg:col-span-1">
+        <p class="text-sm font-bold tracking-tight">{footer.name.toUpperCase()}</p>
+        <p class="mt-1 text-xs text-white">{footer.role}</p>
+        <p class="mt-4 max-w-xs text-xs leading-relaxed text-white/70">{footer.area}</p>
+      </div>
+
+      <nav aria-label={footer.colProjects}>
+        <p class="eyebrow mb-4">{footer.colProjects}</p>
+        <ul class="space-y-2 text-xs">
+          {
+            projects.items.map((project) => (
+              <li>
+                <a href={projectPath(locale, project.slug)} class="text-white hover:underline">
+                  {project.caseStudy.name}
+                </a>
+              </li>
+            ))
+          }
+          <li>
+            <a href={projectsIndex} class="text-white/70 hover:underline">{footer.allProjects}</a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav aria-label={footer.colSite}>
+        <p class="eyebrow mb-4">{footer.colSite}</p>
+        <ul class="space-y-2 text-xs">
+          {
+            siteLinks.map((link) => (
+              <li>
+                <a href={link.href} class="text-white hover:underline">{link.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <div>
+        <p class="eyebrow mb-4">{footer.colContact}</p>
+        <ul class="space-y-2 text-xs">
+          <li>
+            <a href={schedule} target="_blank" rel="noopener noreferrer" class="text-white hover:underline">
+              {footer.whatsappLabel}: {footer.phoneDisplay}
+            </a>
+          </li>
+          <li>
+            <a href={`mailto:${contact.email}`} class="text-white hover:underline">{contact.email}</a>
+          </li>
+          <li>
+            <a href={`${home}#contacto`} class="text-white/70 hover:underline">{footer.contact}</a>
+          </li>
+        </ul>
+      </div>
     </div>
-    <a href={`${home}#contacto`} class="text-sm text-white hover:underline">{footer.contact}</a>
   </div>
+
   <div class="border-t border-white/5">
     <div class="mx-auto max-w-6xl px-6 py-4 text-[11px] text-white">
       © {footer.year} Ing. {footer.name}. {footer.rights}

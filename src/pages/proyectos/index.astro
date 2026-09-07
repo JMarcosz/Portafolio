@@ -1,0 +1,54 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import ProjectsIndex from "../../components/ProjectsIndex.astro";
+import { getContent } from "../../i18n";
+
+const t = getContent("es");
+const site = "https://www.jeanmarte.com";
+
+// CollectionPage + ItemList: le dice a Google que esto es un índice y cuáles son
+// sus miembros, en vez de dejar que infiera la relación desde los enlaces.
+const listSchema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: t.projectsIndex.title,
+  description: t.projectsIndex.metaDescription,
+  url: `${site}/proyectos/`,
+  inLanguage: "es-DO",
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: t.projects.items.map((project, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: project.caseStudy.name,
+      url: `${site}${project.href}`,
+    })),
+  },
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: t.nav[0]?.label ?? "Inicio", item: `${site}${t.home}` },
+    { "@type": "ListItem", position: 2, name: "Proyectos", item: `${site}/proyectos/` },
+  ],
+};
+---
+
+<Layout
+  title={t.projectsIndex.metaTitle}
+  description={t.projectsIndex.metaDescription}
+  esHref="/proyectos/"
+  enHref="/en/projects/"
+  ogType="website"
+  extraSchema={[listSchema, breadcrumbSchema]}
+>
+  <Header otherHref="/en/projects/" />
+  <main id="contenido" tabindex="-1" class="pt-16">
+    <ProjectsIndex />
+  </main>
+  <Footer />
+</Layout>

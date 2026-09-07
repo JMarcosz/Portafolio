@@ -46,6 +46,23 @@ export default defineConfig({
           ];
         }
 
+        // Mismo caso para las páginas índice traducidas: el par no comparte
+        // segmento, así que hay que declararlo a mano. Se añaden aquí los pares
+        // nuevos a medida que existan.
+        const INDEX_PAIRS = [
+          { es: '/proyectos/', en: '/en/projects/' },
+          { es: '/servicios/', en: '/en/services/' },
+        ];
+        const pair = INDEX_PAIRS.find(
+          (p) => item.url === `${SITE}${p.es}` || item.url === `${SITE}${p.en}`,
+        );
+        if (pair) {
+          item.links = [
+            { lang: 'es', url: `${SITE}${pair.es}` },
+            { lang: 'en', url: `${SITE}${pair.en}` },
+          ];
+        }
+
         // x-default apuntando al español. Para el par de la home lo genera la
         // propia integración, así que sólo se añade donde falta — declararlo dos
         // veces es un error de hreflang, no un refuerzo.

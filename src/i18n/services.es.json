@@ -1,0 +1,81 @@
+{
+  "automatizacion-606-607-dgii": {
+    "slug": "automatizacion-606-607-dgii",
+    "eyebrow": "Cumplimiento fiscal",
+    "title": "Automatización de los formatos 606 y 607 de la DGII",
+    "metaTitle": "Automatizar los formatos 606 y 607 de la DGII | Jean Marte",
+    "metaDescription": "Deja de digitar factura por factura para armar el 606 y el 607. Lectura de facturas en papel, PDF o foto, validación de RNC y NCF, y el archivo TXT listo para la Oficina Virtual.",
+    "answer": "El 606 y el 607 son los reportes mensuales de compras y de ventas que la DGII exige a cada RNC con actividad. Automatizarlos significa que las facturas dejan de digitarse a mano: se leen, se les valida el RNC y el NCF, y se genera el archivo TXT que subes a la Oficina Virtual.",
+    "sections": [
+      {
+        "heading": "Cómo se hace hoy en la mayoría de las empresas",
+        "paragraphs": [
+          "Cada mes alguien se sienta con la pila de facturas y las transcribe una por una a una hoja de cálculo: RNC, NCF, fecha, monto, ITBIS. Es trabajo manual, repetitivo y frágil.",
+          "Un RNC mal copiado o un NCF inválido hace que la Oficina Virtual rechace el archivo completo, y hay que revisar todo de nuevo — normalmente con la fecha límite encima. El error no aparece cuando se comete, sino al final, cuando ya no hay tiempo."
+        ]
+      },
+      {
+        "heading": "Qué automatizo",
+        "items": [
+          "Lectura de facturas en papel térmico, PDF y fotos tomadas con el teléfono.",
+          "Extracción automática de RNC, NCF, fecha, monto e ITBIS.",
+          "Validación de RNC y NCF con los algoritmos Módulo 10 y Módulo 11, antes de generar nada.",
+          "Pantalla de revisión que muestra el documento original al lado del dato extraído.",
+          "Generación del archivo TXT en el formato oficial de la Oficina Virtual.",
+          "Procesamiento por lotes para cerrar un período completo de una sola pasada."
+        ]
+      },
+      {
+        "heading": "El sistema ya existe y está en producción",
+        "paragraphs": [
+          "No es una propuesta en papel. Zentra hace exactamente esto y se puede probar hoy: subes una foto de una factura y ves el dato extraído junto al documento original.",
+          "La regla de diseño es que la IA extrae y la persona confirma. El sistema nunca da por bueno un dato sin que alguien lo vea, porque un error en una declaración fiscal no se arregla con un botón de deshacer."
+        ]
+      },
+      {
+        "heading": "Qué no hago",
+        "paragraphs": [
+          "No soy proveedor de servicios de facturación electrónica certificado ante la DGII, y no emito comprobantes fiscales electrónicos (e-CF) por ti.",
+          "El e-CF y el 606/607 son obligaciones distintas: el e-CF es emitir tus facturas con firma digital, y para eso necesitas un certificado de un proveedor acreditado por INDOTEL y habilitarte ante la DGII. El 606 y el 607 son el reporte mensual de lo que compraste y vendiste, y siguen siendo obligatorios después de que emitas e-CF.",
+          "Si lo que necesitas es habilitarte como emisor electrónico, te digo a dónde ir. Si lo que te consume horas cada mes es armar el 606 y el 607, eso sí es lo mío."
+        ]
+      },
+      {
+        "heading": "Precio y plazo",
+        "paragraphs": [
+          "El precio depende del volumen de documentos que maneja tu empresa, de si necesitas conectarlo con un sistema que ya usas y de cuántas personas van a trabajar dentro.",
+          "La evaluación inicial es gratuita: reviso cómo llevas hoy el proceso y te digo qué se puede automatizar y qué no vale la pena, incluso si la respuesta es que todavía no necesitas contratarme."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "q": "¿Qué son los formatos 606 y 607 de la DGII?",
+        "a": "Son los reportes mensuales que la DGII exige a los contribuyentes con actividad. El 606 declara las compras de bienes y servicios; el 607 declara las ventas e ingresos. Ambos se suben a la Oficina Virtual como un archivo de texto con un formato específico."
+      },
+      {
+        "q": "¿Esto me sirve si ya emito facturas electrónicas (e-CF)?",
+        "a": "Sí. Emitir e-CF no elimina la obligación de presentar el 606 y el 607: siguen siendo reportes mensuales aparte. De hecho, el volumen de documentos que hay que reportar suele crecer cuando la operación se digitaliza."
+      },
+      {
+        "q": "¿Me habilitas como emisor electrónico ante la DGII?",
+        "a": "No. No soy proveedor de facturación electrónica certificado. Para emitir e-CF necesitas un certificado de firma digital de un proveedor acreditado por INDOTEL y completar la habilitación ante la DGII. Si me preguntas, te oriento sobre el camino, pero el trabajo que yo hago es la automatización del 606 y el 607."
+      },
+      {
+        "q": "¿Sirve con facturas en papel o tienen que estar en digital?",
+        "a": "Sirve con papel. El sistema está hecho asumiendo que la entrada real es papel térmico descolorido y fotos torcidas tomadas con el teléfono, no PDFs limpios. Eso es el caso normal, no la excepción."
+      },
+      {
+        "q": "¿Y si la lectura automática se equivoca en un dato?",
+        "a": "Por eso ningún dato se da por bueno sin revisión. Cada campo extraído se muestra al lado del documento original para que lo confirmes antes de generar el archivo. La automatización te ahorra la digitación, no la responsabilidad."
+      },
+      {
+        "q": "¿Qué pasa si la Oficina Virtual rechaza mi archivo?",
+        "a": "La idea es que no llegue a pasar: el RNC y el NCF se validan dentro del sistema, con los algoritmos Módulo 10 y Módulo 11, antes de generar el TXT. Es la diferencia entre corregir en tu escritorio y que te rechacen el envío."
+      }
+    ],
+    "ctaTitle": "¿Cuántas horas te lleva cerrar el mes?",
+    "ctaText": "Cuéntame cómo armas hoy el 606 y el 607. La primera conversación es gratuita.",
+    "relatedProject": "zentra"
+  }
+}

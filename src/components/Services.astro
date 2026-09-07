@@ -18,6 +18,13 @@ const { services } = getContent(Astro.currentLocale);
           <span class="text-xs text-white">[ {String(i + 1).padStart(2, "0")} ]</span>
           <h3 class="mt-3 text-base font-semibold">{item.title}</h3>
           <p class="mt-2 text-sm leading-relaxed text-white">{item.description}</p>
+          {/* Los servicios que ya tienen pagina propia la enlazan desde aca: es
+              el unico camino interno hacia ellas desde la home. */}
+          {"href" in item && item.href && (
+            <a href={item.href} class="mt-4 inline-block text-sm font-medium text-white hover:underline">
+              {item.linkLabel}
+            </a>
+          )}
         </article>
       ))
     }
