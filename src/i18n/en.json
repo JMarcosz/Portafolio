@@ -37,10 +37,10 @@
     }
   ],
   "hero": {
-    "eyebrow": "Custom software development in Santo Domingo, Dominican Republic",
+    "eyebrow": "Custom software development · Santo Domingo, DR",
     "title1": "Web systems that bring",
     "title2": "order to your business",
-    "description": "I bring into one place what you run today across spreadsheets, WhatsApp and paper: clients, inventory, invoicing and reports. Simple and straightforward, with no one else needed to operate it.",
+    "description": "Clients, inventory, invoicing and reports in one place, instead of scattered across spreadsheets, WhatsApp and paper.",
     "cta": "Book a call",
     "cvLabel": "View CV",
     "photoAlt": "Photo of Jean Marte",
@@ -50,7 +50,7 @@
     "quickLabel": "I'm looking for",
     "quickLinks": [
       {
-        "label": "See projects",
+        "label": "Projects",
         "href": "/en/projects/"
       }
     ]
@@ -60,7 +60,7 @@
     "title1": "Your Operation",
     "title2": "Comes First",
     "paragraphs": [
-      "I work with businesses that already run, but whose operation is scattered across spreadsheets, WhatsApp threads and paper. My job is turning that into a system: one system, that your team can use without a manual."
+      "I'm Jean Marco Marte (Jean Marte), a software engineer based in Santo Domingo. I work with businesses that already run but that outgrew the way they organise themselves. My job is turning that into a system: one system, that your team can use without a manual."
     ],
     "highlightIntro": "Before writing a single line of code I want to understand ",
     "highlight": "how your business actually works today",
