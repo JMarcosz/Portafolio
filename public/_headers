@@ -5,6 +5,31 @@
 # misma cabecera, gana la ULTIMA. Por eso el `/*` general va primero y la regla
 # especifica de `/_astro/*` va despues.
 
+# robots.txt: nunca cachear (evita que un CDN sirva una version vieja tras un
+# cambio) y X-Robots-Tag noindex para que el propio archivo no aparezca como
+# resultado en las SERPs de Google.
+/robots.txt
+  Cache-Control: no-cache, no-store, must-revalidate
+  X-Robots-Tag: noindex, nofollow
+
+# llms.txt: nunca cachear y forzar el content-type de texto plano.
+/llms.txt
+  Cache-Control: no-cache, no-store, must-revalidate
+  Content-Type: text/plain; charset=utf-8
+
+# Sitemaps: cache corto (1h) para que Google vea cambios pronto, pero noindex
+# porque el XML del sitemap no debe aparecer como resultado de búsqueda.
+/sitemap*.xml
+  Cache-Control: public, max-age=3600, must-revalidate
+  X-Robots-Tag: noindex, follow
+
+# Gemelos .md de cada pagina (ver middleware.ts): solo existe el mecanismo de
+# negociacion por Accept en Vercel, pero si alguien pide el .md directo aqui
+# tambien debe llegar como texto plano y no indexarse aparte del HTML.
+/*.md
+  Content-Type: text/markdown; charset=utf-8
+  X-Robots-Tag: noindex, nofollow
+
 # HTML y todo lo demas: sin caché persistente. El navegador revalida en cada
 # visita (respuesta 304 si no cambió), así cada deploy se ve al instante.
 #

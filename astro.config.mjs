@@ -92,6 +92,90 @@ export default defineConfig({
         },
       },
     },
+    {
+      name: 'markdown-mirror',
+      hooks: {
+        // Genera un `index.md` junto a cada `index.html`: el contenido de
+        // <main id="contenido"> (nav, footer y scripts quedan fuera porque
+        // viven fuera de ese landmark) pasado por Turndown. `middleware.ts`
+        // reescribe ahí las requests que mandan `Accept: text/markdown` — el
+        // sitio es 100% estático (sin adapter/SSR), así que el middleware de
+        // Vercel es el único lugar donde se puede negociar por ese header.
+        'astro:build:done': async ({ dir }) => {
+          const fs = await import('node:fs/promises');
+          const path = await import('node:path');
+          const { fileURLToPath } = await import('node:url');
+          const { default: TurndownService } = await import('turndown');
+          const distDir = fileURLToPath(dir);
+
+          const turndown = new TurndownService({ headingStyle: 'atx', hr: '---' });
+
+          const decodeEntities = (value) =>
+            value
+              .replace(/&amp;/g, '&')
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+              .replace(/&quot;/g, '"')
+              .replace(/&#0?39;|&apos;/g, "'");
+
+          async function walk(currentDir) {
+            const entries = await fs.readdir(currentDir, { withFileTypes: true });
+            for (const entry of entries) {
+              const fullPath = path.join(currentDir, entry.name);
+              if (entry.isDirectory()) {
+                await walk(fullPath);
+                continue;
+              }
+              if (entry.name !== 'index.html') continue;
+
+              const html = await fs.readFile(fullPath, 'utf-8');
+              const mainMatch = html.match(/<main[^>]*id="contenido"[\s\S]*?<\/main>/i);
+              if (!mainMatch) continue;
+
+              const titleMatch = html.match(/<title>([\s\S]*?)<\/title>/i);
+              const descMatch = html.match(/<meta name="description" content="([^"]*)"/i);
+
+              // Turndown no filtra <script>/<style>: su texto quedaría como
+              // contenido plano en el markdown si no se quita antes.
+              //
+              // Chips de stack/participación e items de "company/location"
+              // (Experience.astro) son <span> pegados uno al otro — la
+              // separación visual la da un `gap` de flexbox, no espacio real
+              // en el HTML — así que Turndown los concatena sin separador
+              // ("Vue 3NestJSPostgreSQL...", "...EconomíaRemoto"). Se exige
+              // que el primer <span> tenga contenido (texto y/o ícono SVG
+              // adentro) para no afectar los puntos decorativos vacíos de
+              // las listas (<span class="...rounded-full"></span> seguido
+              // del <span> con el texto real del ítem).
+              const mainHtml = mainMatch[0]
+                .replace(/<script[\s\S]*?<\/script>/gi, '')
+                .replace(/<style[\s\S]*?<\/style>/gi, '')
+                // (lookahead sin consumir el <span> siguiente: con 3+ chips
+                // seguidos, consumirlo saltaba el límite entre el 2do y 3ro)
+                .replace(/(<span[^>]*>(?:(?!<\/span>)[\s\S])+<\/span>)\s*(?=<span)/gi, '$1, ')
+                // Los contadores animados (About.astro) arrancan en "0" en el
+                // HTML estático y suben con JS en el navegador — el número
+                // real vive en data-target/data-suffix, no en el texto.
+                .replace(
+                  /<p[^>]*\bdata-stat-value\b[^>]*\bdata-target="([^"]*)"[^>]*\bdata-suffix(?:="([^"]*)")?[^>]*>0[^<]*<\/p>/gi,
+                  (_m, target, suffix) => `<p>${target}${suffix || ''}</p>`,
+                );
+
+              const body = turndown.turndown(mainHtml).trim();
+              const title = titleMatch ? decodeEntities(titleMatch[1].trim()) : '';
+              const description = descMatch ? decodeEntities(descMatch[1].trim()) : '';
+
+              const sections = [title && `# ${title}`, description, body].filter(Boolean);
+
+              const mdPath = fullPath.replace(/index\.html$/, 'index.md');
+              await fs.writeFile(mdPath, sections.join('\n\n') + '\n', 'utf-8');
+            }
+          }
+
+          await walk(distDir);
+        },
+      },
+    },
   ],
   vite: {
     plugins: [tailwindcss()],
